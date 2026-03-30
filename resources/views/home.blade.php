@@ -13,6 +13,20 @@
     ];
 
     $sectors = ['Corporate summits', 'Award nights', 'Product launches', 'Hybrid conferences', 'Roadshows', 'Exhibitions'];
+    $operatingPillars = [
+        [
+            'title' => 'End-to-end production',
+            'text' => 'Planning, staging, media, and execution stay connected from the first brief to final breakdown.',
+        ],
+        [
+            'title' => 'Venue-first planning',
+            'text' => 'Every setup is shaped around the room, the audience flow, the schedule, and the technical constraints.',
+        ],
+        [
+            'title' => 'Show-day control',
+            'text' => 'The delivery approach is built to reduce confusion and keep teams aligned when the event goes live.',
+        ],
+    ];
     $contactEmail = (string) config('mail.from.address');
     $hasContactEmail = filled($contactEmail) && $contactEmail !== 'hello@example.com';
     $leadProcess = $ourProcess[0] ?? ['title' => 'Concept', 'text' => 'We shape the event narrative, technical plan, and delivery path before build begins.'];
@@ -46,6 +60,24 @@
         @media (max-width:1100px){.topbar .container,.header .container,.footer .container{flex-wrap:wrap;justify-content:center;text-align:center;padding:.8rem 0}.hero-grid,.proof,.cta,.section-head{grid-template-columns:1fr}.hero h1,.hero p{max-width:none}.float{right:1rem}.stats,.process-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cta-actions{flex-direction:row;flex-wrap:wrap;min-width:0}}
         @media (max-width:820px){.nav{gap:.85rem 1rem}.stage-grid,.services,.stats,.process-grid{grid-template-columns:1fr}.stage-grid{grid-template-rows:auto;min-height:auto}.shot-main{grid-row:span 1}.shot{min-height:14rem}.float{position:static;max-width:none;margin-top:1rem}.process-grid:before{display:none}}
         @media (max-width:560px){.topbar{display:none}.hero h1{font-size:2.35rem}.actions,.cta-actions{flex-direction:column}.btn,.pill{width:100%}}
+        .hero-copy{max-width:39rem}
+        .stat{position:relative;overflow:hidden;min-height:100%}
+        .stat::before{content:"";position:absolute;top:0;left:1.15rem;width:3.2rem;height:4px;border-radius:999px;background:linear-gradient(135deg,#ffd49d,#f08c2c)}
+        .stat-label{display:block;color:#728093;font-size:.74rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:.7rem}
+        .section-head.compact{margin-bottom:1.35rem}
+        .overview{margin-bottom:5.4rem}
+        .overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+        .overview-card{position:relative;overflow:hidden;padding:1.45rem;border-radius:28px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.84));border:1px solid rgba(16,25,47,.08);box-shadow:var(--shadow)}
+        .overview-card::before{content:"";position:absolute;inset:0 auto auto 0;width:100%;height:1px;background:linear-gradient(90deg,rgba(240,140,44,.32),rgba(66,210,189,.18),transparent)}
+        .overview-card strong{display:block;font-size:1.08rem;line-height:1.35;color:var(--ink);margin-bottom:.6rem}
+        .overview-card p{color:var(--muted);line-height:1.72}
+        .card{display:flex;flex-direction:column}
+        .card-body{display:flex;flex-direction:column;gap:.75rem;min-height:15rem}
+        .card-body p{flex:1}
+        .process-section{padding:2rem;border-radius:32px;background:linear-gradient(180deg,rgba(255,255,255,.74),rgba(255,255,255,.94));border:1px solid rgba(16,25,47,.08);box-shadow:var(--shadow)}
+        .process-section .section-head{margin-bottom:1.9rem}
+        .cta-note{margin-top:1rem;color:rgba(255,250,241,.74);font-size:.92rem;line-height:1.6}
+        @media (max-width:1100px){.overview-grid{grid-template-columns:1fr}.process-section{padding:1.5rem}}
     </style>
 </head>
 <body id="top">
@@ -73,20 +105,20 @@
                 <a href="#contact">Next Step</a>
             </nav>
 
-            <a class="pill" href="#services">See Capabilities</a>
+            <a class="pill" href="#contact">Start A Brief</a>
         </div>
     </header>
 
     <section class="hero">
         <div class="container hero-grid">
-            <div>
+            <div class="hero-copy">
                 <span class="eyebrow">PeakExperience Event Production</span>
                 <h1>Professional event production for conferences, launches, exhibitions, and live brand experiences.</h1>
                 <p>PeakExperience supports organisers and brands with disciplined staging, media systems, and on-site delivery that keeps every part of the event clearer, steadier, and more polished.</p>
 
                 <div class="actions">
-                    <a href="#services" class="btn btn-primary">Explore Services</a>
-                    <a href="#process" class="btn btn-secondary">See Delivery Flow</a>
+                    <a href="#contact" class="btn btn-primary">Request A Brief</a>
+                    <a href="#services" class="btn btn-secondary">View Services</a>
                 </div>
 
                 <div class="tags" aria-label="Key services">
@@ -128,33 +160,56 @@
         <div class="container">
             <div class="stats">
                 <article class="stat">
+                    <span class="stat-label">Capabilities</span>
                     <strong>{{ str_pad((string) count($whatWeDo), 2, '0', STR_PAD_LEFT) }}</strong>
-                    <p>Core production services shaped around live event delivery.</p>
+                    <p>Core production capabilities covering staging, event systems, media, and exhibition support.</p>
                 </article>
                 <article class="stat">
+                    <span class="stat-label">Workflow</span>
                     <strong>{{ str_pad((string) count($ourProcess), 2, '0', STR_PAD_LEFT) }}</strong>
-                    <p>Clear project stages from first brief to execution.</p>
+                    <p>Structured project steps from planning and setup through execution and review.</p>
                 </article>
                 <article class="stat">
+                    <span class="stat-label">Coverage</span>
                     <strong>KE</strong>
-                    <p>Designed for Nairobi venues and destination setups.</p>
+                    <p>Built for Nairobi venues, destination setups, and mobile event environments across Kenya.</p>
                 </article>
                 <article class="stat">
+                    <span class="stat-label">Response</span>
                     <strong>48H</strong>
-                    <p>Fast concept direction for active event briefs.</p>
+                    <p>Fast first-step direction for active briefs that need a practical production path quickly.</p>
                 </article>
             </div>
         </div>
     </section>
 
     <main>
+        <section class="overview section container" aria-labelledby="overview-title">
+            <div class="section-head compact">
+                <div>
+                    <span class="label">How We Work</span>
+                    <h2 id="overview-title">Operational clarity without the usual event chaos.</h2>
+                </div>
+                <p>Strong event work depends on more than equipment. The delivery model has to stay coordinated across planning, venue setup, technical execution, and show-day decision making.</p>
+            </div>
+
+            <div class="overview-grid">
+                @foreach ($operatingPillars as $pillar)
+                    <article class="overview-card">
+                        <strong>{{ $pillar['title'] }}</strong>
+                        <p>{{ $pillar['text'] }}</p>
+                    </article>
+                @endforeach
+            </div>
+        </section>
+
         <section class="section container" id="services">
             <div class="section-head">
                 <div>
                     <span class="label">What We Do</span>
                     <h2>Production services built for reliable event delivery.</h2>
                 </div>
-                <p>Your admin-managed homepage items still drive this section. The redesign simply gives each service more presence, clearer hierarchy, and better visual rhythm.</p>
+                <p>Each service card below still uses your admin-managed content, but the layout now presents it in a cleaner commercial structure with better rhythm and clearer scanning.</p>
             </div>
 
             <div class="services">
@@ -224,7 +279,7 @@
             </div>
         </section>
 
-        <section class="section container" id="process">
+        <section class="section container process-section" id="process">
             <div class="section-head">
                 <div>
                     <span class="label">Our Process</span>
@@ -248,14 +303,15 @@
             <div class="cta">
                 <div>
                     <span class="label">Next Step</span>
-                    <h2>Bring a brief. We will shape the production path.</h2>
-                    <p>Whether you are planning a conference build, a launch setup, or a branded exhibition space, the fastest way forward is a clear brief with goals, audience size, and venue context.</p>
+                    <h2>Bring the brief. We will shape the production path.</h2>
+                    <p>Share the event type, city, venue context, audience size, and target date. That is enough to outline the right production approach and the next planning priorities.</p>
                     <div class="cta-list" aria-label="Brief checklist">
                         <span>Event type</span>
                         <span>Venue or city</span>
                         <span>Audience size</span>
                         <span>Target date</span>
                     </div>
+                    <p class="cta-note">Ideal for conferences, launches, exhibitions, gala setups, and hybrid events.</p>
                 </div>
 
                 <div class="cta-actions">
