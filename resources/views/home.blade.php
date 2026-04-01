@@ -6,10 +6,10 @@
     ];
 
     $fallbacks = [
-        'linear-gradient(135deg, #5a5353 0%, #7a7e81 100%)',
-        'linear-gradient(135deg, #10808f 0%, #5a5353 100%)',
-        'linear-gradient(135deg, #e8ff70 0%, #d5ec5f 100%)',
-        'linear-gradient(135deg, #dfe2e5 0%, #f7f8f9 100%)',
+        'linear-gradient(135deg, #273243 0%, #4c5a6a 100%)',
+        'linear-gradient(135deg, #1f5c4d 0%, #273243 100%)',
+        'linear-gradient(135deg, #d0692b 0%, #bd5719 100%)',
+        'linear-gradient(135deg, #efe7dc 0%, #faf6ef 100%)',
     ];
 
     $sectors = ['Conferences', 'Brand launches', 'Exhibitions', 'Award nights', 'Hybrid events', 'Roadshows'];
