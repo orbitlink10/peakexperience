@@ -406,7 +406,7 @@ section[id] {
 
 .hero-stage-title {
     font-family: 'Outfit', sans-serif;
-    font-size: clamp(3.4rem, 11vw, 6.9rem);
+    font-size: clamp(3rem, 9vw, 5.8rem);
     font-weight: 300;
     line-height: 0.92;
     text-transform: uppercase;
@@ -785,7 +785,7 @@ section[id] {
 .intro-copy h2,
 .service-showcase-copy h2,
 .proof-showcase-copy h2 {
-    font-size: clamp(2.8rem, 4.8vw, 5rem);
+    font-size: clamp(2.35rem, 4vw, 4.2rem);
     max-width: 8ch;
 }
 
@@ -836,7 +836,7 @@ section[id] {
 }
 
 .section-copy h2 {
-    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    font-size: clamp(2.1rem, 4.2vw, 3.8rem);
     max-width: 12ch;
 }
 
@@ -1097,7 +1097,7 @@ section[id] {
 }
 
 .contact-copy h2 {
-    font-size: clamp(2.2rem, 4vw, 4rem);
+    font-size: clamp(2rem, 3.6vw, 3.4rem);
     max-width: 12ch;
     margin-bottom: 1rem;
 }
@@ -1337,7 +1337,7 @@ section[id] {
     .service-showcase-copy h2,
     .proof-showcase-copy h2,
     .contact-copy h2 {
-        font-size: clamp(2rem, 11vw, 3rem);
+        font-size: clamp(1.7rem, 8.5vw, 2.5rem);
     }
 
     .service-grid,
@@ -1389,7 +1389,7 @@ section[id] {
     }
 
     .hero-stage-title {
-        font-size: clamp(2.5rem, 12vw, 4rem);
+        font-size: clamp(2.2rem, 10vw, 3.4rem);
         letter-spacing: 0.08em;
     }
 
