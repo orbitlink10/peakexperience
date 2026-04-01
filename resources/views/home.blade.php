@@ -30,6 +30,8 @@
     $footprint = ['Nairobi', 'Destination venues', 'Corporate campuses', 'Exhibition halls', 'Ballrooms', 'Outdoor builds'];
     $contactEmail = (string) config('mail.from.address');
     $hasContactEmail = filled($contactEmail) && $contactEmail !== 'hello@example.com';
+    $logoUrl = (string) data_get($logo ?? [], 'url', '');
+    $hasLogo = filled($logoUrl);
 
     $resolvedImages = [];
     foreach ($whatWeDo as $index => $item) {
@@ -65,14 +67,18 @@
         <header class="site-header">
             <div class="wrap header-row">
                 <a class="brand" href="#top" aria-label="PeakExperience home">
-                    <span class="brand-copy">
-                        <strong>Peak Experience</strong>
-                        <span class="brand-dots" aria-hidden="true">
-                            <i></i>
-                            <i></i>
-                            <i></i>
+                    @if ($hasLogo)
+                        <img class="brand-logo" src="{{ $logoUrl }}" alt="Peak Experience">
+                    @else
+                        <span class="brand-copy">
+                            <strong>Peak Experience</strong>
+                            <span class="brand-dots" aria-hidden="true">
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                            </span>
                         </span>
-                    </span>
+                    @endif
                 </a>
 
                 <nav class="site-nav" aria-label="Primary">
@@ -127,12 +133,16 @@
                         <img class="hero-stage-media" src="{{ $heroImage }}" alt="Peak Experience event production showcase">
 
                         <div class="hero-stage-copy">
-                            <h1 class="hero-stage-title">Peak Experience</h1>
-                            <span class="hero-stage-dots" aria-hidden="true">
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                            </span>
+                            @if ($hasLogo)
+                                <img class="hero-stage-logo" src="{{ $logoUrl }}" alt="Peak Experience">
+                            @else
+                                <h1 class="hero-stage-title">Peak Experience</h1>
+                                <span class="hero-stage-dots" aria-hidden="true">
+                                    <i></i>
+                                    <i></i>
+                                    <i></i>
+                                </span>
+                            @endif
                             <p>Kenya's Creative Event Agency</p>
                         </div>
 

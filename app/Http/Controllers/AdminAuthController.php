@@ -94,6 +94,7 @@ class AdminAuthController extends Controller
         $content = HomepageContent::load();
 
         return view('admin.homepage', $this->sharedData($request, 'Homepage') + [
+            'logo' => $content['logo'],
             'whatWeDo' => $content['what_we_do'],
             'ourProcess' => $content['our_process'],
             'iconOptions' => [
@@ -110,7 +111,11 @@ class AdminAuthController extends Controller
 
     public function updateHomepage(Request $request): RedirectResponse
     {
+        $existingContent = HomepageContent::load();
+
         $request->validate([
+            'logo_file' => ['nullable', 'image', 'max:5120'],
+            'logo_remove' => ['nullable', 'boolean'],
             'what_we_do' => ['required', 'array', 'min:1'],
             'what_we_do.*.title' => ['required', 'string', 'max:120'],
             'what_we_do.*.icon' => ['required', 'string', 'max:80'],
@@ -140,6 +145,21 @@ class AdminAuthController extends Controller
             ];
         }
 
+        $logo = $existingContent['logo'] ?? ['url' => '', 'path' => ''];
+        if ($request->boolean('logo_remove')) {
+            $this->deletePublicAsset((string) ($logo['path'] ?? ''));
+            $logo = ['url' => '', 'path' => ''];
+        }
+
+        if ($request->hasFile('logo_file')) {
+            $this->deletePublicAsset((string) ($logo['path'] ?? ''));
+            $path = $request->file('logo_file')->store('homepage/logo', 'public');
+            $logo = [
+                'url' => Storage::url($path),
+                'path' => $path,
+            ];
+        }
+
         $ourProcess = [];
         foreach ((array) $request->input('our_process', []) as $item) {
             $ourProcess[] = [
@@ -149,6 +169,7 @@ class AdminAuthController extends Controller
         }
 
         HomepageContent::save([
+            'logo' => $logo,
             'what_we_do' => $whatWeDo,
             'our_process' => $ourProcess,
         ]);
@@ -211,5 +232,12 @@ class AdminAuthController extends Controller
             'adminName' => (string) $request->session()->get('admin_username', 'admin'),
             'today' => now()->format('l, d M Y'),
         ];
+    }
+
+    private function deletePublicAsset(string $path): void
+    {
+        if ($path !== '' && Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
     }
 }

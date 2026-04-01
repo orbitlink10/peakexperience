@@ -364,6 +364,51 @@
             overflow-wrap: anywhere;
         }
 
+        .logo-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .logo-preview-wrap {
+            border: 1px dashed #b7c4d8;
+            border-radius: 14px;
+            background: #fff;
+            padding: 1rem;
+            min-height: 180px;
+            display: grid;
+            place-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-preview-wrap img {
+            max-width: 100%;
+            max-height: 120px;
+            object-fit: contain;
+        }
+
+        .logo-preview-empty {
+            color: #6e83a3;
+            font-size: 0.92rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            margin-top: 0.85rem;
+            color: #2c476d;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .checkbox-row input {
+            width: auto;
+        }
+
         @media (max-width: 1480px) {
             .app-shell {
                 grid-template-columns: 300px 1fr;
@@ -405,6 +450,10 @@
             }
 
             .fields.two {
+                grid-template-columns: 1fr;
+            }
+
+            .logo-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -480,15 +529,45 @@
         @endif
 
         @php
+            $logoValue = old('logo', $logo);
             $whatWeDoValues = old('what_we_do', $whatWeDo);
             $ourProcessValues = old('our_process', $ourProcess);
         @endphp
 
         <h1 class="page-title">Homepage</h1>
-        <p class="page-subtitle">Manage the homepage sections: What We Do and Our Process.</p>
+        <p class="page-subtitle">Manage the homepage logo, What We Do cards, and Our Process steps.</p>
 
         <form method="POST" action="{{ route('admin.homepage.update') }}" enctype="multipart/form-data" id="homepage-form">
             @csrf
+
+            <section>
+                <h2 class="section-title">Logo</h2>
+                <p class="section-subtitle">Upload the brand logo used for the homepage header and hero. Prefer a transparent PNG or SVG-like artwork exported as PNG.</p>
+
+                <div class="card">
+                    <div class="logo-grid">
+                        <div class="field">
+                            <label>Upload Logo</label>
+                            <input type="file" name="logo_file" accept="image/*">
+                            <label class="checkbox-row">
+                                <input type="checkbox" name="logo_remove" value="1" @checked(old('logo_remove'))>
+                                <span>Remove current logo</span>
+                            </label>
+                        </div>
+
+                        <div class="logo-preview-wrap">
+                            @if (!empty($logoValue['url']))
+                                <img src="{{ $logoValue['url'] }}" alt="Current homepage logo">
+                                <small class="current-image">Current: {{ $logoValue['url'] }}</small>
+                            @else
+                                <p class="logo-preview-empty">No homepage logo uploaded yet. The site will continue using the text fallback until a logo is added.</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
 
             <section>
                 <h2 class="section-title">What We Do</h2>

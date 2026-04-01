@@ -12,6 +12,7 @@ class HomeController extends Controller
         $content = HomepageContent::load();
 
         return view('home', [
+            'logo' => $content['logo'],
             'whatWeDo' => $content['what_we_do'],
             'ourProcess' => $content['our_process'],
         ]);

@@ -119,6 +119,13 @@ section[id] {
     gap: 0.28rem;
 }
 
+.brand-logo {
+    width: auto;
+    max-width: min(16rem, 22vw);
+    height: 3.5rem;
+    object-fit: contain;
+}
+
 .brand-copy strong {
     font: 500 2.1rem/0.95 'Outfit', sans-serif;
     letter-spacing: 0.05em;
@@ -396,6 +403,14 @@ section[id] {
     transform: translate(-50%, -28%);
     text-align: center;
     color: #ffffff;
+}
+
+.hero-stage-logo {
+    width: min(34rem, 70vw);
+    max-width: 100%;
+    max-height: 10rem;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.18));
 }
 
 .hero-stage-title {
@@ -1269,6 +1284,11 @@ section[id] {
         font-size: 1.45rem;
     }
 
+    .brand-logo {
+        max-width: 11rem;
+        height: 2.8rem;
+    }
+
     .site-header {
         position: sticky;
     }
@@ -1319,6 +1339,11 @@ section[id] {
     .hero-stage-title {
         font-size: clamp(2.5rem, 12vw, 4rem);
         letter-spacing: 0.08em;
+    }
+
+    .hero-stage-logo {
+        width: min(16rem, 68vw);
+        max-height: 5rem;
     }
 
     .hero-stage-copy {

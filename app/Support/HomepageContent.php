@@ -9,6 +9,7 @@ class HomepageContent
 {
     /**
      * @return array{
+     *     logo: array{url:string,path:string},
      *     what_we_do: array<int, array{title:string,icon:string,text:string,link_url:string,image:string}>,
      *     our_process: array<int, array{title:string,text:string}>
      * }
@@ -22,11 +23,11 @@ class HomepageContent
         }
 
         $settings = HomepageSetting::query()
-            ->whereIn('key', ['what_we_do', 'our_process'])
+            ->whereIn('key', ['logo', 'what_we_do', 'our_process'])
             ->get()
             ->keyBy('key');
 
-        foreach (['what_we_do', 'our_process'] as $key) {
+        foreach (['logo', 'what_we_do', 'our_process'] as $key) {
             if ($settings->has($key) && is_array($settings[$key]->value)) {
                 $defaults[$key] = $settings[$key]->value;
             }
@@ -37,12 +38,18 @@ class HomepageContent
 
     /**
      * @param  array{
+     *     logo: array{url:string,path:string},
      *     what_we_do: array<int, array{title:string,icon:string,text:string,link_url:string,image:string}>,
      *     our_process: array<int, array{title:string,text:string}>
      * }  $data
      */
     public static function save(array $data): void
     {
+        HomepageSetting::query()->updateOrCreate(
+            ['key' => 'logo'],
+            ['value' => $data['logo']]
+        );
+
         HomepageSetting::query()->updateOrCreate(
             ['key' => 'what_we_do'],
             ['value' => array_values($data['what_we_do'])]
@@ -56,6 +63,7 @@ class HomepageContent
 
     /**
      * @return array{
+     *     logo: array{url:string,path:string},
      *     what_we_do: array<int, array{title:string,icon:string,text:string,link_url:string,image:string}>,
      *     our_process: array<int, array{title:string,text:string}>
      * }
@@ -63,6 +71,10 @@ class HomepageContent
     public static function defaults(): array
     {
         return [
+            'logo' => [
+                'url' => '',
+                'path' => '',
+            ],
             'what_we_do' => [
                 [
                     'title' => 'Staging',
