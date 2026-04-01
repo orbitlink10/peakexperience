@@ -238,37 +238,15 @@
                 </div>
             </section>
 
-            <section class="section" id="proof">
-                <div class="wrap section-layout">
-                    <div class="section-rail">
-                        <strong>03</strong>
-                        <span>Why PeakExperience</span>
-                    </div>
+            <section class="section section-proof" id="proof">
+                <div class="wrap proof-stage reveal reveal-delay-2">
+                    <img src="{{ $ambientImage }}" alt="PeakExperience event production showcase">
 
-                    <div class="spotlight">
-                        <article class="spotlight-panel">
-                            <img src="{{ $ambientImage }}" alt="">
-                            <div class="spotlight-copy">
-                                <span class="section-prefix">Designed for important moments</span>
-                                <h2>When the room matters, every detail needs a production spine.</h2>
-                                <p>PeakExperience keeps creative direction, venue logic, timing, and technical delivery aligned so the audience sees one polished experience instead of backstage complexity.</p>
-
-                                <ul class="detail-list" aria-label="Event types">
-                                    @foreach ($sectors as $sector)
-                                        <li>{{ $sector }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </article>
-
-                        <div class="pillar-stack">
-                            @foreach ($operatingPillars as $pillar)
-                                <article class="pillar-card">
-                                    <strong>{{ $pillar['title'] }}</strong>
-                                    <p>{{ $pillar['text'] }}</p>
-                                </article>
-                            @endforeach
-                        </div>
+                    <div class="proof-copy">
+                        <span class="proof-kicker">Innovative. Impactful. Seamless.</span>
+                        <h2>Our Work</h2>
+                        <p>Learn more about the prestigious clients we have partnered with and the diverse briefs we bring to life. Explore how PeakExperience transforms concepts into polished, story-driven productions across conferences, launches, exhibitions, and high-stakes live environments.</p>
+                        <a class="button button-secondary proof-button" href="#process">Discover More</a>
                     </div>
                 </div>
             </section>
