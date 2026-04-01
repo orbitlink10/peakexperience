@@ -395,6 +395,7 @@ section[id] {
     position: absolute;
     inset: 0;
     overflow: hidden;
+    background: #2a2527;
     filter: saturate(0.92) contrast(1.02);
 }
 
@@ -402,13 +403,19 @@ section[id] {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 100vw;
-    height: 56.25vw;
-    min-width: 100%;
-    min-height: 100%;
+    width: 177.77777778%;
+    height: 100%;
     border: 0;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1.08);
+    transform-origin: center;
     pointer-events: none;
+}
+
+@media (min-aspect-ratio: 16 / 9) {
+    .hero-stage-embed {
+        width: 100%;
+        height: 177.77777778%;
+    }
 }
 
 .hero-stage-copy {
