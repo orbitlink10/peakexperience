@@ -58,7 +58,7 @@ section[id] {
 }
 
 .wrap {
-    width: min(var(--max), calc(100vw - 2.6rem));
+    width: min(var(--max), calc(100% - 4rem));
     margin: 0 auto;
 }
 
@@ -1324,7 +1324,7 @@ section[id] {
 
 @media (max-width: 720px) {
     .wrap {
-        width: min(var(--max), calc(100vw - 1.5rem));
+        width: min(var(--max), calc(100% - 2rem));
     }
 
     .brand-logo {
