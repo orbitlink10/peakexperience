@@ -4,6 +4,7 @@ namespace App\Support;
 
 use App\Models\HomepageSetting;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class HomepageContent
 {
@@ -124,5 +125,33 @@ class HomepageContent
                 ],
             ],
         ];
+    }
+
+    public static function assetUrl(?string $value): string
+    {
+        $path = self::storedPath($value);
+        if ($path !== '') {
+            return route('homepage.asset', ['path' => $path]);
+        }
+
+        return trim((string) $value);
+    }
+
+    public static function storedPath(?string $value): string
+    {
+        $value = trim((string) $value);
+        if ($value === '' || Str::startsWith($value, ['http://', 'https://', 'data:'])) {
+            return '';
+        }
+
+        if (preg_match('#/storage/(.+)$#', $value, $matches) === 1) {
+            return ltrim((string) ($matches[1] ?? ''), '/');
+        }
+
+        if (Str::startsWith($value, 'storage/')) {
+            return ltrim(Str::after($value, 'storage/'), '/');
+        }
+
+        return ltrim($value, '/');
     }
 }

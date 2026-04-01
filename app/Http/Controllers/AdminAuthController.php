@@ -132,8 +132,9 @@ class AdminAuthController extends Controller
         foreach ((array) $request->input('what_we_do', []) as $index => $item) {
             $storedImage = trim((string) ($item['image'] ?? ''));
             if ($request->hasFile("what_we_do.$index.image_file")) {
+                $this->deletePublicAsset(HomepageContent::storedPath($storedImage));
                 $path = $request->file("what_we_do.$index.image_file")->store('homepage', 'public');
-                $storedImage = Storage::url($path);
+                $storedImage = $path;
             }
 
             $whatWeDo[] = [
@@ -147,15 +148,15 @@ class AdminAuthController extends Controller
 
         $logo = $existingContent['logo'] ?? ['url' => '', 'path' => ''];
         if ($request->boolean('logo_remove')) {
-            $this->deletePublicAsset((string) ($logo['path'] ?? ''));
+            $this->deletePublicAsset(HomepageContent::storedPath((string) ($logo['path'] ?? '')));
             $logo = ['url' => '', 'path' => ''];
         }
 
         if ($request->hasFile('logo_file')) {
-            $this->deletePublicAsset((string) ($logo['path'] ?? ''));
+            $this->deletePublicAsset(HomepageContent::storedPath((string) ($logo['path'] ?? '')));
             $path = $request->file('logo_file')->store('homepage/logo', 'public');
             $logo = [
-                'url' => Storage::url($path),
+                'url' => '',
                 'path' => $path,
             ];
         }

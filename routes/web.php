@@ -5,6 +5,9 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('/homepage-assets/{path}', [HomeController::class, 'asset'])
+    ->where('path', '.*')
+    ->name('homepage.asset');
 
 Route::get('/admin', function () {
     return redirect()->route(session('admin_authenticated') ? 'admin.gallery' : 'admin.login');

@@ -530,6 +530,9 @@
 
         @php
             $logoValue = old('logo', $logo);
+            $currentLogoUrl = \App\Support\HomepageContent::assetUrl(
+                (string) data_get($logoValue ?? [], 'path', data_get($logoValue ?? [], 'url', ''))
+            );
             $whatWeDoValues = old('what_we_do', $whatWeDo);
             $ourProcessValues = old('our_process', $ourProcess);
         @endphp
@@ -556,9 +559,9 @@
                         </div>
 
                         <div class="logo-preview-wrap">
-                            @if (!empty($logoValue['url']))
-                                <img src="{{ $logoValue['url'] }}" alt="Current homepage logo">
-                                <small class="current-image">Current: {{ $logoValue['url'] }}</small>
+                            @if ($currentLogoUrl !== '')
+                                <img src="{{ $currentLogoUrl }}" alt="Current homepage logo">
+                                <small class="current-image">Current: {{ $currentLogoUrl }}</small>
                             @else
                                 <p class="logo-preview-empty">No homepage logo uploaded yet. The site will continue using the text fallback until a logo is added.</p>
                             @endif

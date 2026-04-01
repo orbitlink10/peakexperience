@@ -30,12 +30,16 @@
     $footprint = ['Nairobi', 'Destination venues', 'Corporate campuses', 'Exhibition halls', 'Ballrooms', 'Outdoor builds'];
     $contactEmail = (string) config('mail.from.address');
     $hasContactEmail = filled($contactEmail) && $contactEmail !== 'hello@example.com';
-    $logoUrl = (string) data_get($logo ?? [], 'url', '');
+    $logoUrl = \App\Support\HomepageContent::assetUrl(
+        (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
+    );
     $hasLogo = filled($logoUrl);
 
     $resolvedImages = [];
     foreach ($whatWeDo as $index => $item) {
-        $resolvedImages[$index] = ! empty($item['image']) ? $item['image'] : $showcaseImages[$index % count($showcaseImages)];
+        $resolvedImages[$index] = ! empty($item['image'])
+            ? \App\Support\HomepageContent::assetUrl((string) $item['image'])
+            : $showcaseImages[$index % count($showcaseImages)];
     }
 
     $heroPrimary = $whatWeDo[0] ?? [
