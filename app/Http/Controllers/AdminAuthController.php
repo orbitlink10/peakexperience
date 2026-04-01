@@ -95,6 +95,7 @@ class AdminAuthController extends Controller
 
         return view('admin.homepage', $this->sharedData($request, 'Homepage') + [
             'logo' => $content['logo'],
+            'heroVideo' => $content['hero_video'],
             'whatWeDo' => $content['what_we_do'],
             'ourProcess' => $content['our_process'],
             'iconOptions' => [
@@ -116,6 +117,7 @@ class AdminAuthController extends Controller
         $request->validate([
             'logo_file' => ['nullable', 'image', 'max:5120'],
             'logo_remove' => ['nullable', 'boolean'],
+            'hero_video.url' => ['nullable', 'string', 'max:255'],
             'what_we_do' => ['required', 'array', 'min:1'],
             'what_we_do.*.title' => ['required', 'string', 'max:120'],
             'what_we_do.*.icon' => ['required', 'string', 'max:80'],
@@ -161,6 +163,10 @@ class AdminAuthController extends Controller
             ];
         }
 
+        $heroVideo = [
+            'url' => trim((string) data_get($request->input('hero_video', []), 'url', '')),
+        ];
+
         $ourProcess = [];
         foreach ((array) $request->input('our_process', []) as $item) {
             $ourProcess[] = [
@@ -171,6 +177,7 @@ class AdminAuthController extends Controller
 
         HomepageContent::save([
             'logo' => $logo,
+            'hero_video' => $heroVideo,
             'what_we_do' => $whatWeDo,
             'our_process' => $ourProcess,
         ]);

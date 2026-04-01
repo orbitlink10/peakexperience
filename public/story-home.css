@@ -391,6 +391,26 @@ section[id] {
     filter: saturate(0.92) contrast(1.02);
 }
 
+.hero-stage-video {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    filter: saturate(0.92) contrast(1.02);
+}
+
+.hero-stage-embed {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw;
+    min-width: 100%;
+    min-height: 100%;
+    border: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
 .hero-stage-copy {
     position: absolute;
     inset: 50% auto auto 50%;

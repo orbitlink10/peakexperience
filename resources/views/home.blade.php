@@ -29,6 +29,14 @@
     }
 
     $heroImage = $showcaseImages[0];
+    $heroVideoSource = \App\Support\HomepageContent::videoSource(
+        (string) data_get($heroVideo ?? [], 'url', '')
+    );
+    if ($heroVideoSource['type'] === '') {
+        $heroVideoSource = \App\Support\HomepageContent::videoSource(
+            (string) data_get($whatWeDo, '0.link_url', '')
+        );
+    }
     $introImage = $resolvedImages[1] ?? $showcaseImages[1];
     $serviceShowcaseImage = $resolvedImages[0] ?? $showcaseImages[2];
     $ambientImage = $resolvedImages[2] ?? $showcaseImages[2];
@@ -113,7 +121,24 @@
             <section class="hero">
                 <div class="wrap">
                     <div class="hero-stage reveal">
-                        <img class="hero-stage-media" src="{{ $heroImage }}" alt="Peak Experience event production showcase">
+                        @if ($heroVideoSource['type'] === 'file')
+                            <video class="hero-stage-media" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+                                <source src="{{ $heroVideoSource['url'] }}">
+                            </video>
+                        @elseif (in_array($heroVideoSource['type'], ['youtube', 'vimeo'], true))
+                            <div class="hero-stage-video" aria-hidden="true">
+                                <iframe
+                                    class="hero-stage-embed"
+                                    src="{{ $heroVideoSource['url'] }}"
+                                    title=""
+                                    tabindex="-1"
+                                    allow="autoplay; encrypted-media; picture-in-picture"
+                                    referrerpolicy="strict-origin-when-cross-origin"
+                                ></iframe>
+                            </div>
+                        @else
+                            <img class="hero-stage-media" src="{{ $heroImage }}" alt="Peak Experience event production showcase">
+                        @endif
 
                         <div class="hero-stage-copy">
                             <h1 class="hero-stage-title">Peak Experience</h1>

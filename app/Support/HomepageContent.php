@@ -11,6 +11,7 @@ class HomepageContent
     /**
      * @return array{
      *     logo: array{url:string,path:string},
+     *     hero_video: array{url:string},
      *     what_we_do: array<int, array{title:string,icon:string,text:string,link_url:string,image:string}>,
      *     our_process: array<int, array{title:string,text:string}>
      * }
@@ -24,11 +25,11 @@ class HomepageContent
         }
 
         $settings = HomepageSetting::query()
-            ->whereIn('key', ['logo', 'what_we_do', 'our_process'])
+            ->whereIn('key', ['logo', 'hero_video', 'what_we_do', 'our_process'])
             ->get()
             ->keyBy('key');
 
-        foreach (['logo', 'what_we_do', 'our_process'] as $key) {
+        foreach (['logo', 'hero_video', 'what_we_do', 'our_process'] as $key) {
             if ($settings->has($key) && is_array($settings[$key]->value)) {
                 $defaults[$key] = $settings[$key]->value;
             }
@@ -40,6 +41,7 @@ class HomepageContent
     /**
      * @param  array{
      *     logo: array{url:string,path:string},
+     *     hero_video: array{url:string},
      *     what_we_do: array<int, array{title:string,icon:string,text:string,link_url:string,image:string}>,
      *     our_process: array<int, array{title:string,text:string}>
      * }  $data
@@ -49,6 +51,11 @@ class HomepageContent
         HomepageSetting::query()->updateOrCreate(
             ['key' => 'logo'],
             ['value' => $data['logo']]
+        );
+
+        HomepageSetting::query()->updateOrCreate(
+            ['key' => 'hero_video'],
+            ['value' => $data['hero_video']]
         );
 
         HomepageSetting::query()->updateOrCreate(
@@ -65,6 +72,7 @@ class HomepageContent
     /**
      * @return array{
      *     logo: array{url:string,path:string},
+     *     hero_video: array{url:string},
      *     what_we_do: array<int, array{title:string,icon:string,text:string,link_url:string,image:string}>,
      *     our_process: array<int, array{title:string,text:string}>
      * }
@@ -75,6 +83,9 @@ class HomepageContent
             'logo' => [
                 'url' => '',
                 'path' => '',
+            ],
+            'hero_video' => [
+                'url' => '',
             ],
             'what_we_do' => [
                 [
@@ -153,5 +164,67 @@ class HomepageContent
         }
 
         return ltrim($value, '/');
+    }
+
+    /**
+     * @return array{type:string,url:string}
+     */
+    public static function videoSource(?string $value): array
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return ['type' => '', 'url' => ''];
+        }
+
+        $youtubeId = self::youtubeVideoId($value);
+        if ($youtubeId !== '') {
+            return [
+                'type' => 'youtube',
+                'url' => 'https://www.youtube.com/embed/' . $youtubeId
+                    . '?autoplay=1&mute=1&controls=0&loop=1&playlist=' . $youtubeId
+                    . '&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3',
+            ];
+        }
+
+        $vimeoId = self::vimeoVideoId($value);
+        if ($vimeoId !== '') {
+            return [
+                'type' => 'vimeo',
+                'url' => 'https://player.vimeo.com/video/' . $vimeoId
+                    . '?autoplay=1&muted=1&loop=1&background=1',
+            ];
+        }
+
+        $assetUrl = self::assetUrl($value);
+        $path = (string) parse_url($assetUrl, PHP_URL_PATH);
+        $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+        if (in_array($extension, ['mp4', 'webm', 'ogg', 'ogv', 'm4v', 'mov'], true)) {
+            return ['type' => 'file', 'url' => $assetUrl];
+        }
+
+        return ['type' => '', 'url' => ''];
+    }
+
+    private static function youtubeVideoId(string $value): string
+    {
+        if (preg_match(
+            '#(?:youtube\.com/(?:watch\?.*v=|embed/|shorts/)|youtu\.be/)([A-Za-z0-9_-]{11})#i',
+            $value,
+            $matches
+        ) === 1) {
+            return (string) ($matches[1] ?? '');
+        }
+
+        return '';
+    }
+
+    private static function vimeoVideoId(string $value): string
+    {
+        if (preg_match('#vimeo\.com/(?:video/)?([0-9]+)#i', $value, $matches) === 1) {
+            return (string) ($matches[1] ?? '');
+        }
+
+        return '';
     }
 }

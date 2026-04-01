@@ -565,12 +565,14 @@
             $currentLogoUrl = \App\Support\HomepageContent::assetUrl(
                 (string) data_get($logoValue ?? [], 'path', data_get($logoValue ?? [], 'url', ''))
             );
+            $heroVideoValue = old('hero_video', $heroVideo ?? ['url' => '']);
             $whatWeDoValues = old('what_we_do', $whatWeDo);
             $ourProcessValues = old('our_process', $ourProcess);
+            $heroVideoUrl = trim((string) data_get($heroVideoValue, 'url', ''));
         @endphp
 
         <h1 class="page-title">Homepage</h1>
-        <p class="page-subtitle">Manage the homepage logo, What We Do cards, and Our Process steps.</p>
+        <p class="page-subtitle">Manage the homepage logo, hero video, What We Do cards, and Our Process steps.</p>
 
         <form method="POST" action="{{ route('admin.homepage.update') }}" enctype="multipart/form-data" id="homepage-form">
             @csrf
@@ -598,6 +600,20 @@
                                 <p class="logo-preview-empty">No homepage logo uploaded yet. The site will continue using the text fallback until a logo is added.</p>
                             @endif
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <section>
+                <h2 class="section-title">Hero Video</h2>
+                <p class="section-subtitle">Paste a YouTube, Vimeo, or direct video URL to replace the hero image with a video. If this is empty, the first What We Do link will still be used when it points to a video.</p>
+
+                <div class="card">
+                    <div class="field">
+                        <label>Video URL</label>
+                        <input type="url" name="hero_video[url]" value="{{ $heroVideoUrl }}" placeholder="https://...">
                     </div>
                 </div>
             </section>

@@ -15,6 +15,7 @@ class HomeController extends Controller
 
         return view('home', [
             'logo' => $content['logo'],
+            'heroVideo' => $content['hero_video'],
             'whatWeDo' => $content['what_we_do'],
             'ourProcess' => $content['our_process'],
         ]);
