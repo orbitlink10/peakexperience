@@ -42,16 +42,7 @@
             : $showcaseImages[$index % count($showcaseImages)];
     }
 
-    $heroPrimary = $whatWeDo[0] ?? [
-        'title' => 'Creative Event Production',
-        'icon' => 'Production',
-        'text' => 'Story-led live event delivery for brands, teams, and audiences that expect polish.',
-        'link_url' => '',
-        'image' => '',
-    ];
-    $heroSecondary = $whatWeDo[1] ?? $heroPrimary;
-    $heroImage = $resolvedImages[0] ?? $showcaseImages[0];
-    $secondaryImage = $resolvedImages[1] ?? $showcaseImages[1];
+    $heroImage = $showcaseImages[0];
     $ambientImage = $resolvedImages[2] ?? $showcaseImages[2];
 @endphp
 <!DOCTYPE html>
