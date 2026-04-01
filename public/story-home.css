@@ -481,7 +481,7 @@ section[id] {
 .intro-copy h2,
 .service-showcase-copy h2,
 .section-copy h2,
-.proof-copy h2,
+.proof-showcase-copy h2,
 .contact-copy h2 {
     font-family: 'Outfit', sans-serif;
     color: var(--ink-strong);
@@ -500,7 +500,7 @@ section[id] {
 .intro-copy p,
 .service-showcase-copy p,
 .section-copy p,
-.proof-copy p,
+.proof-showcase-copy p,
 .process-lead,
 .contact-copy p,
 .footer-copy p {
@@ -1051,75 +1051,82 @@ section[id] {
 }
 
 .section-proof {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.4rem);
     padding-top: 4.8rem;
 }
 
-.proof-stage {
-    position: relative;
+.proof-intro {
+    display: grid;
+    justify-items: center;
+    gap: 1.6rem;
+    text-align: center;
+}
+
+.proof-intro-kicker {
+    font: 600 0.82rem/1.2 'Outfit', sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #73849b;
+}
+
+.proof-intro-copy {
+    max-width: 68rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2.6rem, 4.2vw, 4.45rem);
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+}
+
+.proof-showcase {
+    display: grid;
+    grid-template-columns: minmax(0, 1.16fr) minmax(300px, 0.84fr);
+    gap: clamp(1.8rem, 4vw, 3.3rem);
+    align-items: stretch;
+}
+
+.proof-showcase-media {
     overflow: hidden;
-    min-height: 41rem;
+    min-height: 34rem;
     border-radius: var(--radius-lg);
-    background: #141c28;
+    background: #2a2527;
     box-shadow: var(--shadow);
 }
 
-.proof-stage::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(90deg, rgba(8, 17, 31, 0.7) 0%, rgba(8, 17, 31, 0.52) 42%, rgba(93, 46, 22, 0.34) 100%),
-        radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent 46%);
-}
-
-.proof-stage img {
-    position: absolute;
-    inset: 0;
+.proof-showcase-media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: saturate(0.95) contrast(1.03);
+    filter: saturate(0.95) contrast(1.02);
 }
 
-.proof-copy {
-    position: absolute;
-    inset: 50% auto auto 50%;
-    z-index: 1;
+.proof-showcase-copy {
     display: grid;
-    justify-items: center;
-    gap: 1.25rem;
-    width: min(calc(100% - 3rem), 58rem);
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: #ffffff;
+    align-content: center;
+    gap: 1.5rem;
+    padding: 1rem 0;
 }
 
-.proof-kicker {
-    font: 600 0.8rem/1.2 'Outfit', sans-serif;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.94);
+.proof-showcase-copy h2 {
+    font-size: clamp(2.8rem, 4.8vw, 5rem);
+    max-width: 8ch;
 }
 
-.proof-copy h2 {
-    font-size: clamp(3rem, 6vw, 5.2rem);
-    color: #ffffff;
-    letter-spacing: 0.03em;
-}
-
-.proof-copy p {
-    max-width: 44rem;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: clamp(1.04rem, 1.3vw, 1.22rem);
-    line-height: 1.72;
+.proof-showcase-copy p {
+    max-width: 35rem;
+    font-size: clamp(1.02rem, 1.15vw, 1.18rem);
+    line-height: 1.82;
 }
 
 .proof-button {
-    margin-top: 0.5rem;
-    min-height: 4.6rem;
-    padding-inline: 2rem;
-    background: rgba(255, 255, 255, 0.96);
-    border-color: rgba(255, 255, 255, 0.96);
+    width: fit-content;
+    min-height: 4.2rem;
+    padding-inline: 1.7rem;
+    align-self: start;
+    background: rgba(255, 255, 255, 0.88);
+    border-color: rgba(122, 126, 129, 0.18);
     color: var(--ink);
 }
 
@@ -1340,6 +1347,7 @@ section[id] {
 
     .intro-showcase,
     .service-showcase,
+    .proof-showcase,
     .contact-shell,
     .footer-panel {
         grid-template-columns: 1fr;
@@ -1353,8 +1361,8 @@ section[id] {
         min-height: 31rem;
     }
 
-    .proof-stage {
-        min-height: 36rem;
+    .proof-showcase-media {
+        min-height: 30rem;
     }
 
     .intro-copy {
@@ -1391,8 +1399,8 @@ section[id] {
         min-height: 26rem;
     }
 
-    .proof-stage {
-        min-height: 31rem;
+    .proof-showcase-media {
+        min-height: 25rem;
     }
 
     .intro-copy h2 {
@@ -1434,7 +1442,7 @@ section[id] {
     .section-copy h2,
     .intro-copy h2,
     .service-showcase-copy h2,
-    .proof-copy h2,
+    .proof-showcase-copy h2,
     .contact-copy h2 {
         font-size: clamp(2rem, 11vw, 3rem);
     }
@@ -1454,8 +1462,17 @@ section[id] {
         border-radius: 1.2rem;
     }
 
-    .proof-stage {
-        min-height: 28rem;
+    .proof-intro {
+        gap: 1rem;
+    }
+
+    .proof-intro-copy {
+        font-size: clamp(1.9rem, 8vw, 2.8rem);
+        line-height: 1.42;
+    }
+
+    .proof-showcase-media {
+        min-height: 22rem;
         border-radius: 1.2rem;
     }
 
@@ -1467,12 +1484,7 @@ section[id] {
         font-size: 1rem;
     }
 
-    .proof-copy {
-        width: min(calc(100% - 2rem), 30rem);
-        gap: 1rem;
-    }
-
-    .proof-copy p {
+    .proof-showcase-copy p {
         font-size: 0.98rem;
     }
 

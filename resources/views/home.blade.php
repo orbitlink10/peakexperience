@@ -239,14 +239,24 @@
             </section>
 
             <section class="section section-proof" id="proof">
-                <div class="wrap proof-stage reveal reveal-delay-2">
-                    <img src="{{ $ambientImage }}" alt="PeakExperience event production showcase">
+                <div class="wrap proof-intro reveal reveal-delay-2">
+                    <span class="proof-intro-kicker">Tell your story through unforgettable events</span>
+                    <p class="proof-intro-copy">Bring your brand, message, and audience to life through events that feel immersive, intentional, and memorable. Whether you are launching something new, building stronger connections, or creating momentum around an important moment, PeakExperience shapes every detail into an experience people genuinely remember.</p>
+                </div>
 
-                    <div class="proof-copy">
-                        <span class="proof-kicker">Innovative. Impactful. Seamless.</span>
-                        <h2>Our Work</h2>
-                        <p>Learn more about the prestigious clients we have partnered with and the diverse briefs we bring to life. Explore how PeakExperience transforms concepts into polished, story-driven productions across conferences, launches, exhibitions, and high-stakes live environments.</p>
-                        <a class="button button-secondary proof-button" href="#process">Discover More</a>
+                <div class="wrap proof-showcase reveal reveal-delay-3">
+                    <figure class="proof-showcase-media">
+                        <img src="{{ $ambientImage }}" alt="PeakExperience event production showcase">
+                    </figure>
+
+                    <div class="proof-showcase-copy">
+                        <div>
+                            <span class="section-prefix">Creative event management</span>
+                            <h2>Our Work</h2>
+                        </div>
+
+                        <p>Our work spans conferences, launches, exhibitions, executive gatherings, and hybrid experiences, all delivered with the same balance of creativity, technical control, and production calm. We turn ambitious ideas into polished event environments that feel seamless from the first guest arrival to the final cue.</p>
+                        <a class="button button-secondary proof-button" href="#process">Discover Our Work</a>
                     </div>
                 </div>
             </section>
