@@ -137,16 +137,12 @@
                         <img class="hero-stage-media" src="{{ $heroImage }}" alt="Peak Experience event production showcase">
 
                         <div class="hero-stage-copy">
-                            @if ($hasLogo)
-                                <img class="hero-stage-logo" src="{{ $logoUrl }}" alt="Peak Experience">
-                            @else
-                                <h1 class="hero-stage-title">Peak Experience</h1>
-                                <span class="hero-stage-dots" aria-hidden="true">
-                                    <i></i>
-                                    <i></i>
-                                    <i></i>
-                                </span>
-                            @endif
+                            <h1 class="hero-stage-title">Peak Experience</h1>
+                            <span class="hero-stage-dots" aria-hidden="true">
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                            </span>
                             <p>Kenya's Creative Event Agency</p>
                         </div>
 

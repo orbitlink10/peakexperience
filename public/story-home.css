@@ -107,7 +107,7 @@ section[id] {
 
 .brand {
     display: inline-grid;
-    justify-items: center;
+    justify-items: start;
     align-items: center;
     text-decoration: none;
     min-width: 0;
@@ -115,14 +115,14 @@ section[id] {
 
 .brand-copy {
     display: grid;
-    justify-items: center;
+    justify-items: start;
     gap: 0.28rem;
 }
 
 .brand-logo {
     width: auto;
-    max-width: min(16rem, 22vw);
-    height: 3.5rem;
+    max-width: min(13.5rem, 17vw);
+    height: 2.8rem;
     object-fit: contain;
 }
 
@@ -403,14 +403,6 @@ section[id] {
     transform: translate(-50%, -28%);
     text-align: center;
     color: #ffffff;
-}
-
-.hero-stage-logo {
-    width: min(34rem, 70vw);
-    max-width: 100%;
-    max-height: 10rem;
-    object-fit: contain;
-    filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.18));
 }
 
 .hero-stage-title {
@@ -1285,8 +1277,8 @@ section[id] {
     }
 
     .brand-logo {
-        max-width: 11rem;
-        height: 2.8rem;
+        max-width: 10.5rem;
+        height: 2.3rem;
     }
 
     .site-header {
@@ -1339,11 +1331,6 @@ section[id] {
     .hero-stage-title {
         font-size: clamp(2.5rem, 12vw, 4rem);
         letter-spacing: 0.08em;
-    }
-
-    .hero-stage-logo {
-        width: min(16rem, 68vw);
-        max-height: 5rem;
     }
 
     .hero-stage-copy {
