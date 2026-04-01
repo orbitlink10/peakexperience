@@ -44,7 +44,7 @@
 
         .site-header-inner {
             width: min(1780px, 94vw);
-            min-height: 96px;
+            min-height: 112px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -55,40 +55,40 @@
         .brand {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 1rem;
             text-decoration: none;
             color: var(--ink);
             white-space: nowrap;
         }
 
         .brand-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 10px;
-            border: 3px solid var(--brand);
+            width: 66px;
+            height: 66px;
+            border-radius: 12px;
+            border: 4px solid var(--brand);
             color: var(--brand);
             display: grid;
             place-items: center;
             font-weight: 800;
-            font-size: 1.45rem;
+            font-size: 1.85rem;
             line-height: 1;
         }
 
         .brand-word {
-            font-size: 2rem;
+            font-size: clamp(2.35rem, 1.2rem + 1.8vw, 2.8rem);
             font-weight: 700;
             letter-spacing: 0.01em;
-            line-height: 0.9;
+            line-height: 0.88;
         }
 
         .brand-sub {
             display: block;
-            font-size: 0.72rem;
+            font-size: 0.82rem;
             letter-spacing: 0.22em;
             text-transform: uppercase;
             color: #7e8da8;
             font-weight: 700;
-            margin-top: 0.35rem;
+            margin-top: 0.42rem;
         }
 
         .top-nav {
@@ -402,6 +402,20 @@
                 flex-wrap: wrap;
             }
 
+            .brand-icon {
+                width: 58px;
+                height: 58px;
+                font-size: 1.65rem;
+            }
+
+            .brand-word {
+                font-size: 2.2rem;
+            }
+
+            .brand-sub {
+                font-size: 0.76rem;
+            }
+
             .top-nav {
                 width: 100%;
                 justify-content: flex-start;
@@ -431,6 +445,24 @@
         @media (max-width: 780px) {
             .page-head {
                 flex-direction: column;
+            }
+
+            .brand {
+                gap: 0.8rem;
+            }
+
+            .brand-icon {
+                width: 52px;
+                height: 52px;
+                font-size: 1.45rem;
+            }
+
+            .brand-word {
+                font-size: 1.95rem;
+            }
+
+            .brand-sub {
+                font-size: 0.7rem;
             }
 
             .header-actions {
