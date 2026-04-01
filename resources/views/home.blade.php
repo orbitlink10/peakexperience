@@ -62,8 +62,6 @@
 </head>
 <body id="top">
     <div class="page-shell">
-        <a class="floating-enquire" href="#contact">Enquire</a>
-
         <header class="site-header">
             <div class="wrap header-row">
                 <a class="brand" href="#top" aria-label="PeakExperience home">
@@ -76,17 +74,16 @@
 
                 <nav class="site-nav" aria-label="Primary">
                     <ul>
-                        <li><a href="#intro">About</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#proof">Why Us</a></li>
-                        <li><a href="#process">Process</a></li>
-                        <li><a href="#contact">Enquiry</a></li>
+                        <li><a class="nav-link--caret" href="#services">What We Do</a></li>
+                        <li><a href="#proof">Our Work</a></li>
+                        <li><a href="#services">Our Services</a></li>
+                        <li><a href="#process">Our Stories</a></li>
+                        <li><a class="nav-link--caret" href="#intro">About Us</a></li>
                     </ul>
                 </nav>
 
                 <div class="header-utility">
-                    <span class="header-note">Kenya-wide event delivery</span>
-                    <a class="button button-secondary" href="#contact">Start Brief</a>
+                    <a class="button button-nav-cta" href="#contact">Enquire</a>
                 </div>
 
                 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>
@@ -102,16 +99,16 @@
                 <div class="nav-panel" id="mobile-nav" data-nav-panel>
                     <nav aria-label="Mobile">
                         <ul>
-                            <li><a href="#intro">About</a></li>
-                            <li><a href="#services">Services</a></li>
-                            <li><a href="#proof">Why Us</a></li>
-                            <li><a href="#process">Process</a></li>
-                            <li><a href="#contact">Enquiry</a></li>
+                            <li><a href="#services">What We Do</a></li>
+                            <li><a href="#proof">Our Work</a></li>
+                            <li><a href="#services">Our Services</a></li>
+                            <li><a href="#process">Our Stories</a></li>
+                            <li><a href="#intro">About Us</a></li>
+                            <li><a href="#contact">Enquire</a></li>
                         </ul>
                     </nav>
 
                     <div class="nav-meta">
-                        <a href="#contact">Start Your Brief</a>
                         @if ($hasContactEmail)
                             <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
                         @endif
