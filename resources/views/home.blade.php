@@ -186,7 +186,7 @@
 
                         <p>PeakExperience combines creative direction, staging, media systems, and venue execution so audiences experience one coherent story instead of a room full of disconnected details. From venue planning and show flow to media support and live delivery, every layer is built to feel polished, calm, and intentional from the first arrival to the final cue.</p>
 
-                        <a class="button button-secondary intro-button" href="#proof">Discover Our Work</a>
+                        <a class="button button-primary intro-button" href="#proof">Discover Our Work</a>
                     </div>
                 </div>
             </section>
@@ -277,7 +277,7 @@
                         </div>
 
                         <p>Our work spans conferences, launches, exhibitions, executive gatherings, and hybrid experiences, all delivered with the same balance of creativity, technical control, and production calm. We turn ambitious ideas into polished event environments that feel seamless from the first guest arrival to the final cue.</p>
-                        <a class="button button-secondary proof-button" href="#process">Discover Our Work</a>
+                        <a class="button button-primary proof-button" href="#process">Discover Our Work</a>
                     </div>
                 </div>
             </section>
