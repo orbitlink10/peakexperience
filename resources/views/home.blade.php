@@ -168,6 +168,10 @@
 
             <section class="section section-services" id="services">
                 <div class="wrap service-showcase reveal reveal-delay-1">
+                    <figure class="service-showcase-media">
+                        <img src="{{ $serviceShowcaseImage }}" alt="PeakExperience team planning event services">
+                    </figure>
+
                     <div class="service-showcase-copy">
                         <div>
                             <span class="section-prefix">Tools to craft any experience</span>
@@ -175,14 +179,11 @@
                         </div>
 
                         <p>We deliver seamless event production, staging, media systems, and exhibition support through one coordinated team. From the first planning session to live show-day execution, every service is shaped to keep your event polished, engaging, and technically steady.</p>
+                        <a class="button button-secondary service-showcase-button" href="#services-detail">Explore Services</a>
                     </div>
-
-                    <figure class="service-showcase-media">
-                        <img src="{{ $serviceShowcaseImage }}" alt="PeakExperience team planning event services">
-                    </figure>
                 </div>
 
-                <div class="wrap service-stack service-stack--detail">
+                <div class="wrap service-stack service-stack--detail" id="services-detail">
                     <div class="section-copy service-section-copy">
                         <div>
                             <span class="section-prefix">Capabilities built for live delivery</span>
@@ -239,12 +240,7 @@
             </section>
 
             <section class="section section-proof" id="proof">
-                <div class="wrap proof-intro reveal reveal-delay-2">
-                    <span class="proof-intro-kicker">Tell your story through unforgettable events</span>
-                    <p class="proof-intro-copy">Bring your brand, message, and audience to life through events that feel immersive, intentional, and memorable. Whether you are launching something new, building stronger connections, or creating momentum around an important moment, PeakExperience shapes every detail into an experience people genuinely remember.</p>
-                </div>
-
-                <div class="wrap proof-showcase reveal reveal-delay-3">
+                <div class="wrap proof-showcase reveal reveal-delay-2">
                     <figure class="proof-showcase-media">
                         <img src="{{ $ambientImage }}" alt="PeakExperience event production showcase">
                     </figure>
