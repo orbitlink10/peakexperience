@@ -102,7 +102,7 @@ section[id] {
     grid-template-columns: auto 1fr auto auto;
     align-items: center;
     gap: 1.5rem;
-    min-height: 5.4rem;
+    min-height: 6.25rem;
 }
 
 .brand {
@@ -121,8 +121,8 @@ section[id] {
 
 .brand-logo {
     width: auto;
-    max-width: min(10.5rem, 13vw);
-    height: 2.15rem;
+    max-width: min(18rem, 22vw);
+    height: clamp(3.25rem, 3vw, 3.9rem);
     object-fit: contain;
 }
 
@@ -479,6 +479,8 @@ section[id] {
 }
 
 .hero-copy h1,
+.intro-copy h2,
+.service-showcase-copy h2,
 .section-copy h2,
 .spotlight-copy h2,
 .contact-copy h2 {
@@ -496,6 +498,8 @@ section[id] {
 }
 
 .hero-copy p,
+.intro-copy p,
+.service-showcase-copy p,
 .section-copy p,
 .spotlight-copy p,
 .process-lead,
@@ -744,6 +748,55 @@ section[id] {
     border-bottom: 1px solid rgba(122, 126, 129, 0.12);
 }
 
+.intro-showcase {
+    display: grid;
+    grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
+    gap: clamp(1.6rem, 4vw, 3.2rem);
+    align-items: stretch;
+}
+
+.intro-media {
+    overflow: hidden;
+    min-height: 33rem;
+    border-radius: var(--radius-lg);
+    background: #2a2527;
+    box-shadow: var(--shadow);
+}
+
+.intro-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.92) contrast(1.02);
+}
+
+.intro-copy {
+    display: grid;
+    align-content: center;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.intro-copy h2 {
+    font-size: clamp(2.7rem, 4.4vw, 4.8rem);
+    max-width: 8ch;
+}
+
+.intro-copy p {
+    max-width: 34rem;
+    font-size: clamp(1.02rem, 1.15vw, 1.18rem);
+    line-height: 1.78;
+}
+
+.intro-button {
+    width: fit-content;
+    min-height: 4.2rem;
+    padding-inline: 1.65rem;
+    align-self: start;
+    background: rgba(255, 255, 255, 0.88);
+    border-color: rgba(122, 126, 129, 0.18);
+}
+
 .section-layout {
     display: grid;
     grid-template-columns: 11rem minmax(0, 1fr);
@@ -835,9 +888,61 @@ section[id] {
     margin-top: 0.7rem;
 }
 
+.section-services {
+    display: grid;
+    gap: clamp(1.8rem, 4vw, 3rem);
+}
+
+.service-showcase {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+    gap: clamp(1.8rem, 4vw, 3.5rem);
+    align-items: center;
+}
+
+.service-showcase-copy {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 35rem;
+}
+
+.service-showcase-copy h2 {
+    font-size: clamp(2.8rem, 4.8vw, 5rem);
+    max-width: 8ch;
+}
+
+.service-showcase-copy p {
+    max-width: 33rem;
+    font-size: clamp(1.02rem, 1.15vw, 1.18rem);
+    line-height: 1.8;
+}
+
+.service-showcase-media {
+    overflow: hidden;
+    min-height: 41rem;
+    border-radius: var(--radius-lg);
+    background: #2a2527;
+    box-shadow: var(--shadow);
+}
+
+.service-showcase-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.92) contrast(1.02);
+}
+
 .service-stack {
     display: grid;
     gap: 1.2rem;
+}
+
+.service-stack--detail {
+    gap: 1.35rem;
+}
+
+.service-section-copy {
+    max-width: 46rem;
 }
 
 .service-grid {
@@ -852,20 +957,10 @@ section[id] {
     background: rgba(255, 255, 255, 0.8);
 }
 
-.service-card--featured {
-    grid-column: span 2;
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
-}
-
 .service-media {
     position: relative;
     min-height: 18rem;
     background: var(--bg-soft);
-}
-
-.service-card--featured .service-media {
-    min-height: 100%;
 }
 
 .service-number {
@@ -1222,7 +1317,7 @@ section[id] {
         grid-template-columns: auto auto;
         justify-content: space-between;
         gap: 1rem;
-        min-height: 5.6rem;
+        min-height: 5.9rem;
     }
 
     .site-nav,
@@ -1234,10 +1329,24 @@ section[id] {
         display: inline-flex;
     }
 
+    .intro-showcase,
+    .service-showcase,
     .spotlight,
     .contact-shell,
     .footer-panel {
         grid-template-columns: 1fr;
+    }
+
+    .intro-media {
+        min-height: 30rem;
+    }
+
+    .service-showcase-media {
+        min-height: 31rem;
+    }
+
+    .intro-copy {
+        padding: 0;
     }
 
     .section-layout {
@@ -1262,14 +1371,16 @@ section[id] {
         padding-top: 0.75rem;
     }
 
-    .service-grid,
-    .brief-fields {
-        grid-template-columns: 1fr;
+    .intro-media {
+        min-height: 26rem;
     }
 
-    .service-card--featured {
-        grid-column: span 1;
-        grid-template-columns: 1fr;
+    .service-showcase-media {
+        min-height: 26rem;
+    }
+
+    .intro-copy h2 {
+        max-width: 10ch;
     }
 
     .brand-copy strong {
@@ -1277,8 +1388,8 @@ section[id] {
     }
 
     .brand-logo {
-        max-width: 8.6rem;
-        height: 1.95rem;
+        max-width: min(14rem, 42vw);
+        height: 2.9rem;
     }
 
     .site-header {
@@ -1299,10 +1410,40 @@ section[id] {
         width: min(var(--max), calc(100vw - 1.5rem));
     }
 
+    .brand-logo {
+        max-width: min(11.5rem, 46vw);
+        height: 2.45rem;
+    }
+
     .section-copy h2,
+    .intro-copy h2,
+    .service-showcase-copy h2,
     .spotlight-copy h2,
     .contact-copy h2 {
         font-size: clamp(2rem, 11vw, 3rem);
+    }
+
+    .service-grid,
+    .brief-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .intro-media {
+        min-height: 22rem;
+        border-radius: 1.2rem;
+    }
+
+    .service-showcase-media {
+        min-height: 21rem;
+        border-radius: 1.2rem;
+    }
+
+    .intro-copy p {
+        font-size: 1rem;
+    }
+
+    .service-showcase-copy p {
+        font-size: 1rem;
     }
 
     .signal-grid,

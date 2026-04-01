@@ -13,20 +13,6 @@
     ];
 
     $sectors = ['Conferences', 'Brand launches', 'Exhibitions', 'Award nights', 'Hybrid events', 'Roadshows'];
-    $operatingPillars = [
-        [
-            'title' => 'Creative direction stays connected to delivery.',
-            'text' => 'Concept, staging, media, and show flow are shaped as one experience rather than a chain of separate suppliers.',
-        ],
-        [
-            'title' => 'Venue realities are handled early.',
-            'text' => 'Room layout, access windows, audience flow, and technical limits are planned before they become costly surprises.',
-        ],
-        [
-            'title' => 'Show-day decisions stay calm and clear.',
-            'text' => 'Our production rhythm is built to reduce confusion when timing, talent, and audience attention matter most.',
-        ],
-    ];
     $footprint = ['Nairobi', 'Destination venues', 'Corporate campuses', 'Exhibition halls', 'Ballrooms', 'Outdoor builds'];
     $contactEmail = (string) config('mail.from.address');
     $hasContactEmail = filled($contactEmail) && $contactEmail !== 'hello@example.com';
@@ -43,6 +29,8 @@
     }
 
     $heroImage = $showcaseImages[0];
+    $introImage = $resolvedImages[1] ?? $showcaseImages[1];
+    $serviceShowcaseImage = $resolvedImages[0] ?? $showcaseImages[2];
     $ambientImage = $resolvedImages[2] ?? $showcaseImages[2];
 @endphp
 <!DOCTYPE html>
@@ -160,92 +148,92 @@
             </section>
 
             <section class="section" id="intro">
-                <div class="wrap section-layout">
-                    <div class="section-rail">
-                        <strong>01</strong>
-                        <span>The PeakExperience Approach</span>
-                    </div>
+                <div class="wrap intro-showcase reveal">
+                    <figure class="intro-media">
+                        <img src="{{ $introImage }}" alt="PeakExperience event production setup">
+                    </figure>
 
-                    <div class="section-copy">
+                    <div class="intro-copy">
                         <div>
                             <span class="section-prefix">Story-led event management</span>
-                            <h2>Every arrival, transition, and show moment should feel intentional.</h2>
+                            <h2>The PeakExperience approach</h2>
                         </div>
 
-                        <p>PeakExperience combines creative direction, staging, media systems, and venue execution so audiences experience one coherent story instead of a room full of disconnected details.</p>
+                        <p>PeakExperience combines creative direction, staging, media systems, and venue execution so audiences experience one coherent story instead of a room full of disconnected details. From venue planning and show flow to media support and live delivery, every layer is built to feel polished, calm, and intentional from the first arrival to the final cue.</p>
 
-                        <div class="signal-grid">
-                            @foreach ($operatingPillars as $pillar)
-                                <article class="signal-card">
-                                    <strong>{{ $pillar['title'] }}</strong>
-                                    <p>{{ $pillar['text'] }}</p>
-                                </article>
-                            @endforeach
-                        </div>
+                        <a class="button button-secondary intro-button" href="#proof">Discover Our Work</a>
                     </div>
                 </div>
             </section>
 
-            <section class="section" id="services">
-                <div class="wrap section-layout">
-                    <div class="section-rail">
-                        <strong>02</strong>
-                        <span>What We Do</span>
+            <section class="section section-services" id="services">
+                <div class="wrap service-showcase reveal reveal-delay-1">
+                    <div class="service-showcase-copy">
+                        <div>
+                            <span class="section-prefix">Tools to craft any experience</span>
+                            <h2>Our Services</h2>
+                        </div>
+
+                        <p>We deliver seamless event production, staging, media systems, and exhibition support through one coordinated team. From the first planning session to live show-day execution, every service is shaped to keep your event polished, engaging, and technically steady.</p>
                     </div>
 
-                    <div class="service-stack">
-                        <div class="section-copy">
-                            <div>
-                                <span class="section-prefix">Tools to shape the experience</span>
-                                <h2>Creative production capabilities built for polished, immersive events.</h2>
-                            </div>
+                    <figure class="service-showcase-media">
+                        <img src="{{ $serviceShowcaseImage }}" alt="PeakExperience team planning event services">
+                    </figure>
+                </div>
 
-                            <p>From the first concept note to the final breakdown, each service supports the same goal: a live experience that feels composed, branded, and technically steady.</p>
+                <div class="wrap service-stack service-stack--detail">
+                    <div class="section-copy service-section-copy">
+                        <div>
+                            <span class="section-prefix">Capabilities built for live delivery</span>
+                            <h2>Services that carry the idea all the way to the audience.</h2>
                         </div>
 
-                        <div class="service-grid">
-                            @foreach ($whatWeDo as $item)
-                                @php
-                                    $background = $fallbacks[$loop->index % count($fallbacks)];
-                                    $serviceImage = $resolvedImages[$loop->index] ?? $showcaseImages[$loop->index % count($showcaseImages)];
-                                @endphp
-                                <article class="service-card {{ $loop->first ? 'service-card--featured' : '' }}">
-                                    <div class="service-media" @if (empty($item['image'])) style="background: {{ $background }};" @endif>
-                                        <img src="{{ $serviceImage }}" alt="{{ $item['title'] }}">
-                                        <span class="service-number">{{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                                    </div>
+                        <p>Each capability is designed to work with the others, so your venue, visuals, sound, staging, and audience journey feel like one complete experience rather than separate moving parts.</p>
+                    </div>
 
-                                    <div class="service-body">
-                                        <span class="section-prefix">Capability</span>
-                                        <h3>{{ $item['title'] }}</h3>
-                                        <p>{{ $item['text'] }}</p>
-                                        @if (! empty($item['link_url']))
-                                            <a class="service-link" href="{{ $item['link_url'] }}">Explore More</a>
-                                        @else
-                                            <span class="service-link">Production Ready</span>
-                                        @endif
-                                    </div>
-                                </article>
-                            @endforeach
-                        </div>
+                    <div class="service-grid">
+                        @foreach ($whatWeDo as $item)
+                            @php
+                                $background = $fallbacks[$loop->index % count($fallbacks)];
+                                $serviceImage = $resolvedImages[$loop->index] ?? $showcaseImages[$loop->index % count($showcaseImages)];
+                            @endphp
+                            <article class="service-card">
+                                <div class="service-media" @if (empty($item['image'])) style="background: {{ $background }};" @endif>
+                                    <img src="{{ $serviceImage }}" alt="{{ $item['title'] }}">
+                                    <span class="service-number">{{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                </div>
 
-                        <div class="kpi-grid">
-                            <article class="kpi-card">
-                                <span class="kpi-label">Capabilities</span>
-                                <strong>{{ str_pad((string) count($whatWeDo), 2, '0', STR_PAD_LEFT) }}</strong>
-                                <p>Core service pillars covering staging, production, media systems, and exhibition environments.</p>
+                                <div class="service-body">
+                                    <span class="section-prefix">Capability</span>
+                                    <h3>{{ $item['title'] }}</h3>
+                                    <p>{{ $item['text'] }}</p>
+                                    @if (! empty($item['link_url']))
+                                        <a class="service-link" href="{{ $item['link_url'] }}">Explore More</a>
+                                    @else
+                                        <span class="service-link">Production Ready</span>
+                                    @endif
+                                </div>
                             </article>
-                            <article class="kpi-card">
-                                <span class="kpi-label">Workflow</span>
-                                <strong>{{ str_pad((string) count($ourProcess), 2, '0', STR_PAD_LEFT) }}</strong>
-                                <p>A defined project rhythm from concept and setup through show-day operation and review.</p>
-                            </article>
-                            <article class="kpi-card">
-                                <span class="kpi-label">Coverage</span>
-                                <strong>Kenya</strong>
-                                <p>Built for Nairobi venues, destination briefs, mobile setups, and high-stakes corporate spaces.</p>
-                            </article>
-                        </div>
+                        @endforeach
+                    </div>
+
+                    <div class="kpi-grid">
+                        <article class="kpi-card">
+                            <span class="kpi-label">Capabilities</span>
+                            <strong>{{ str_pad((string) count($whatWeDo), 2, '0', STR_PAD_LEFT) }}</strong>
+                            <p>Core service pillars covering staging, production, media systems, and exhibition environments.</p>
+                        </article>
+                        <article class="kpi-card">
+                            <span class="kpi-label">Workflow</span>
+                            <strong>{{ str_pad((string) count($ourProcess), 2, '0', STR_PAD_LEFT) }}</strong>
+                            <p>A defined project rhythm from concept and setup through show-day operation and review.</p>
+                        </article>
+                        <article class="kpi-card">
+                            <span class="kpi-label">Coverage</span>
+                            <strong>Kenya</strong>
+                            <p>Built for Nairobi venues, destination briefs, mobile setups, and high-stakes corporate spaces.</p>
+                        </article>
                     </div>
                 </div>
             </section>
