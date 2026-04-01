@@ -65,10 +65,13 @@
         <header class="site-header">
             <div class="wrap header-row">
                 <a class="brand" href="#top" aria-label="PeakExperience home">
-                    <span class="brand-mark">PX</span>
                     <span class="brand-copy">
-                        <strong>PeakExperience</strong>
-                        <span>Creative Event Production Kenya</span>
+                        <strong>Peak Experience</strong>
+                        <span class="brand-dots" aria-hidden="true">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </span>
                     </span>
                 </a>
 
@@ -119,63 +122,23 @@
 
         <main>
             <section class="hero">
-                <div class="wrap hero-grid">
-                    <div class="hero-copy reveal">
-                        <span class="eyebrow">Creative Event Production In Kenya</span>
-                        <h1>Make the room feel as strong as the message.</h1>
-                        <p>PeakExperience designs and delivers conferences, launches, exhibitions, and live brand experiences with story-led production, disciplined staging, and calm show-day control.</p>
+                <div class="wrap">
+                    <div class="hero-stage reveal">
+                        <img class="hero-stage-media" src="{{ $heroImage }}" alt="Peak Experience event production showcase">
 
-                        <div class="hero-actions reveal reveal-delay-1">
-                            <a class="button button-primary" href="#contact">Start An Enquiry</a>
-                            <a class="button button-secondary" href="#services">Discover Services</a>
+                        <div class="hero-stage-copy">
+                            <h1 class="hero-stage-title">Peak Experience</h1>
+                            <span class="hero-stage-dots" aria-hidden="true">
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                            </span>
+                            <p>Kenya's Creative Event Agency</p>
                         </div>
 
-                        <ul class="hero-tags reveal reveal-delay-2" aria-label="Core capabilities">
-                            @foreach (array_slice($whatWeDo, 0, min(4, count($whatWeDo))) as $item)
-                                <li><span>{{ $item['icon'] ?: $item['title'] }}</span></li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                    <div class="hero-visual reveal reveal-delay-1" aria-hidden="true">
-                        <div class="visual-shell">
-                            <div class="visual-main">
-                                <img src="{{ $heroImage }}" alt="">
-                                <div class="visual-overlay">
-                                    <span>Signature delivery</span>
-                                    <strong>{{ $heroPrimary['title'] }}</strong>
-                                </div>
-                            </div>
-
-                            <div class="visual-card">
-                                <img src="{{ $secondaryImage }}" alt="">
-                            </div>
-
-                            <aside class="hero-note hero-note--top">
-                                <span>Production focus</span>
-                                <strong>{{ $heroSecondary['title'] }}</strong>
-                                <p>{{ $heroSecondary['text'] }}</p>
-                            </aside>
-
-                            <aside class="hero-note hero-note--bottom">
-                                <span>Built for</span>
-                                <strong>Briefs that need clarity, atmosphere, and confidence.</strong>
-                                <p>Launches, conferences, exhibition environments, awards, and hybrid moments where presentation quality matters.</p>
-                            </aside>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="wrap hero-bottom reveal reveal-delay-3">
-                    <a class="discover-link" href="#intro">Discover More</a>
-
-                    <div class="search-card">
-                        <strong>What kind of experience are you planning?</strong>
-                        <ul>
-                            @foreach ($sectors as $sector)
-                                <li>{{ $sector }}</li>
-                            @endforeach
-                        </ul>
+                        <a class="hero-scroll" href="#intro" aria-label="Scroll to the next section">
+                            <span></span>
+                        </a>
                     </div>
                 </div>
             </section>
