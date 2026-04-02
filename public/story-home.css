@@ -836,6 +836,9 @@ section[id] {
     min-height: 4.2rem;
     padding-inline: 1.7rem;
     align-self: start;
+}
+
+.service-showcase-button {
     background: rgba(255, 253, 248, 0.92);
     border-color: rgba(31, 92, 77, 0.18);
     color: var(--brand-green);
