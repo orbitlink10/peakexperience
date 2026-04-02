@@ -1077,46 +1077,111 @@ section[id] {
 
 .process-shell {
     display: grid;
-    gap: 1.6rem;
+    gap: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.process-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(19rem, 0.8fr);
+    gap: clamp(1rem, 2.4vw, 2rem);
+    align-items: end;
+}
+
+.process-copy {
+    gap: 1rem;
+}
+
+.process-copy h2 {
+    max-width: 15ch;
+    font-size: clamp(2.5rem, 4.8vw, 4.9rem);
+}
+
+.process-summary {
+    display: grid;
+    gap: 0.95rem;
+    align-content: start;
+    padding: 1.45rem 1.5rem;
+    border: 1px solid rgba(31, 92, 77, 0.12);
+    border-radius: var(--radius-md);
+    background:
+        radial-gradient(circle at top right, rgba(208, 105, 43, 0.16), transparent 34%),
+        linear-gradient(180deg, rgba(255, 253, 248, 0.96), rgba(250, 244, 236, 0.88));
+    box-shadow: var(--shadow);
+}
+
+.process-summary-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--brand-green);
+    font: 600 0.72rem/1 'Outfit', sans-serif;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.process-summary-label::before {
+    content: "";
+    width: 2.4rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.45;
 }
 
 .process-lead {
-    max-width: 42rem;
+    max-width: none;
+    font-size: clamp(1rem, 1.25vw, 1.14rem);
+    line-height: 1.8;
 }
 
 .process-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem;
 }
 
 .process-card {
     position: relative;
     overflow: hidden;
-    padding-top: 4.2rem;
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+    min-height: 16.5rem;
+    padding: 1.55rem;
+    background:
+        linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(250, 244, 236, 0.88));
 }
 
 .process-card::before {
     content: "";
     position: absolute;
-    top: 1.3rem;
-    left: 1.3rem;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 12px 24px var(--accent-glow);
+    inset: 0 0 auto;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), rgba(208, 105, 43, 0.12));
 }
 
 .process-index {
-    position: absolute;
-    top: 2.02rem;
-    left: 2rem;
-    z-index: 1;
-    color: var(--ink-strong);
-    font: 600 0.8rem/1 'Outfit', sans-serif;
-    letter-spacing: 0.14em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.1rem;
+    height: 3.1rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    box-shadow: 0 14px 28px rgba(208, 105, 43, 0.2);
+    color: #ffffff;
+    font: 700 0.86rem/1 'Outfit', sans-serif;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
+}
+
+.process-card h3 {
+    font-size: clamp(1.45rem, 1.85vw, 2rem);
+    max-width: 12ch;
+}
+
+.process-card p {
+    max-width: 34ch;
+    margin-top: 0;
 }
 
 .contact-shell {
@@ -1321,6 +1386,15 @@ section[id] {
         align-items: center;
     }
 
+    .process-intro {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .process-summary {
+        max-width: 42rem;
+    }
+
     .signal-grid,
     .kpi-grid,
     .process-grid {
@@ -1414,6 +1488,10 @@ section[id] {
     .kpi-grid,
     .process-grid {
         grid-template-columns: 1fr;
+    }
+
+    .process-card {
+        min-height: auto;
     }
 
     .contact-actions {

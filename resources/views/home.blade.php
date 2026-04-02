@@ -290,13 +290,18 @@
                     </div>
 
                     <div class="process-shell">
-                        <div class="section-copy">
-                            <div>
-                                <span class="section-prefix">Clear checkpoints</span>
-                                <h2>From first brief to final cue, the delivery path stays visible.</h2>
+                        <div class="process-intro">
+                            <div class="section-copy process-copy">
+                                <div>
+                                    <span class="section-prefix">Clear checkpoints</span>
+                                    <h2>From first brief to final cue, the delivery path stays visible.</h2>
+                                </div>
                             </div>
 
-                            <p class="process-lead">Each phase of the project is designed to reduce ambiguity, tighten approvals, and keep setup and show-day decisions easier to manage.</p>
+                            <aside class="process-summary">
+                                <span class="process-summary-label">Why it works</span>
+                                <p class="process-lead">Each phase of the project is designed to reduce ambiguity, tighten approvals, and keep setup and show-day decisions easier to manage.</p>
+                            </aside>
                         </div>
 
                         <div class="process-grid">
