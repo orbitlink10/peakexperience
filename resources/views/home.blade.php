@@ -204,7 +204,7 @@
                         </div>
 
                         <p>We deliver seamless event production, staging, media systems, and exhibition support through one coordinated team. From the first planning session to live show-day execution, every service is shaped to keep your event polished, engaging, and technically steady.</p>
-                        <a class="button button-secondary service-showcase-button" href="#services-detail">Explore Services</a>
+                        <a class="button button-primary service-showcase-button" href="#services-detail">Explore Services</a>
                     </div>
                 </div>
 

@@ -838,12 +838,6 @@ section[id] {
     align-self: start;
 }
 
-.service-showcase-button {
-    background: rgba(255, 253, 248, 0.92);
-    border-color: rgba(31, 92, 77, 0.18);
-    color: var(--brand-green);
-}
-
 .section-layout {
     display: grid;
     grid-template-columns: 11rem minmax(0, 1fr);
