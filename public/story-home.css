@@ -107,7 +107,7 @@ section[id] {
     grid-template-columns: auto 1fr auto auto;
     align-items: center;
     gap: 1.5rem;
-    min-height: 6.25rem;
+    min-height: 7rem;
 }
 
 .brand {
@@ -126,8 +126,8 @@ section[id] {
 
 .brand-logo {
     width: auto;
-    max-width: min(18rem, 22vw);
-    height: clamp(3.25rem, 3vw, 3.9rem);
+    max-width: min(23rem, 30vw);
+    height: clamp(4.1rem, 4.2vw, 5rem);
     object-fit: contain;
 }
 
@@ -1335,8 +1335,8 @@ section[id] {
     }
 
     .brand-logo {
-        max-width: min(14rem, 42vw);
-        height: 2.9rem;
+        max-width: min(18rem, 50vw);
+        height: 3.5rem;
     }
 
     .site-header {
@@ -1358,8 +1358,8 @@ section[id] {
     }
 
     .brand-logo {
-        max-width: min(11.5rem, 46vw);
-        height: 2.45rem;
+        max-width: min(15rem, 60vw);
+        height: 3rem;
     }
 
     .section-copy h2,
