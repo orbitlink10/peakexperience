@@ -945,23 +945,37 @@ section[id] {
 
 .service-section-copy {
     max-width: 46rem;
+    margin-inline: auto;
+    justify-items: center;
+    text-align: center;
+}
+
+.service-section-copy > div {
+    display: grid;
+    justify-items: center;
 }
 
 .service-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.2rem;
+    align-items: stretch;
 }
 
 .service-card {
+    display: grid;
+    grid-template-rows: minmax(22rem, 24rem) 1fr;
     overflow: hidden;
+    height: 100%;
     border-radius: calc(var(--radius-lg) - 4px);
     background: rgba(255, 253, 248, 0.84);
 }
 
 .service-media {
     position: relative;
-    min-height: 18rem;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
     background: var(--bg-soft);
 }
 
@@ -993,6 +1007,7 @@ section[id] {
 .service-body {
     display: grid;
     gap: 0.95rem;
+    height: 100%;
     padding: 1.45rem;
     align-content: start;
 }
