@@ -13,9 +13,13 @@
     ];
 
     $sectors = ['Conferences', 'Brand launches', 'Exhibitions', 'Award nights', 'Hybrid events', 'Roadshows'];
-    $footprint = ['Nairobi', 'Destination venues', 'Corporate campuses', 'Exhibition halls', 'Ballrooms', 'Outdoor builds'];
-    $contactEmail = (string) config('mail.from.address');
-    $hasContactEmail = filled($contactEmail) && $contactEmail !== 'hello@example.com';
+    $footprint = ['Outdoor builds'];
+    $contactEmail = 'info@peakexperience.co.ke';
+    $hasContactEmail = filled($contactEmail);
+    $contactPhones = [
+        ['display' => '+254 119857961', 'dial' => '+254119857961'],
+        ['display' => '+254 792243400', 'dial' => '+254792243400'],
+    ];
     $logoUrl = \App\Support\HomepageContent::assetUrl(
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
@@ -46,8 +50,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PeakExperience | Creative Event Production in Kenya</title>
-    <meta name="description" content="PeakExperience delivers conferences, launches, exhibitions, and live brand events with creative production, staging, and show-day precision across Kenya.">
+    <title>Peak Experience | Creative Event Production in Kenya</title>
+    <meta name="description" content="Peak Experience delivers conferences, launches, exhibitions, and live brand events with creative production, staging, and show-day precision across Kenya.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -57,7 +61,7 @@
     <div class="page-shell">
         <header class="site-header">
             <div class="wrap header-row">
-                <a class="brand" href="#top" aria-label="PeakExperience home">
+                <a class="brand" href="#top" aria-label="Peak Experience home">
                     @if ($hasLogo)
                         <img class="brand-logo" src="{{ $logoUrl }}" alt="Peak Experience">
                     @else
@@ -83,7 +87,7 @@
                 </nav>
 
                 <div class="header-utility">
-                    <a class="button button-nav-cta" href="#contact">Enquire</a>
+                    <a class="button button-nav-cta" href="#contact">Contact Us</a>
                 </div>
 
                 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>
@@ -104,7 +108,7 @@
                             <li><a href="#services">Our Services</a></li>
                             <li><a href="#process">Our Stories</a></li>
                             <li><a href="#intro">About Us</a></li>
-                            <li><a href="#contact">Enquire</a></li>
+                            <li><a href="#contact">Contact Us</a></li>
                         </ul>
                     </nav>
 
@@ -112,6 +116,9 @@
                         @if ($hasContactEmail)
                             <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
                         @endif
+                        @foreach ($contactPhones as $phone)
+                            <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -175,16 +182,16 @@
             <section class="section" id="intro">
                 <div class="wrap intro-showcase reveal">
                     <figure class="intro-media">
-                        <img src="{{ $introImage }}" alt="PeakExperience event production setup">
+                        <img src="{{ $introImage }}" alt="Peak Experience event production setup">
                     </figure>
 
                     <div class="intro-copy">
                         <div>
                             <span class="section-prefix">Story-led event management</span>
-                            <h2>The PeakExperience approach</h2>
+                            <h2>The Peak Experience approach</h2>
                         </div>
 
-                        <p>PeakExperience combines creative direction, staging, media systems, and venue execution so audiences experience one coherent story instead of a room full of disconnected details. From venue planning and show flow to media support and live delivery, every layer is built to feel polished, calm, and intentional from the first arrival to the final cue.</p>
+                        <p>Peak Experience combines creative direction, staging, media systems, and venue execution so audiences experience one coherent story instead of a room full of disconnected details. From venue planning and show flow to media support and live delivery, every layer is built to feel polished, calm, and intentional from the first arrival to the final cue.</p>
 
                         <a class="button button-primary intro-button" href="#proof">Discover Our Work</a>
                     </div>
@@ -194,7 +201,7 @@
             <section class="section section-services" id="services">
                 <div class="wrap service-showcase reveal reveal-delay-1">
                     <figure class="service-showcase-media">
-                        <img src="{{ $serviceShowcaseImage }}" alt="PeakExperience team planning event services">
+                        <img src="{{ $serviceShowcaseImage }}" alt="Peak Experience team planning event services">
                     </figure>
 
                     <div class="service-showcase-copy">
@@ -267,7 +274,7 @@
             <section class="section section-proof" id="proof">
                 <div class="wrap proof-showcase reveal reveal-delay-2">
                     <figure class="proof-showcase-media">
-                        <img src="{{ $ambientImage }}" alt="PeakExperience event production showcase">
+                        <img src="{{ $ambientImage }}" alt="Peak Experience event production showcase">
                     </figure>
 
                     <div class="proof-showcase-copy">
@@ -326,9 +333,19 @@
 
                         <div class="contact-actions">
                             @if ($hasContactEmail)
-                                <a class="button button-primary" href="mailto:{{ $contactEmail }}">Email Your Brief</a>
+                                <a class="button button-primary" href="mailto:{{ $contactEmail }}">Email Us</a>
                             @endif
+                            <a class="button button-secondary" href="tel:{{ $contactPhones[0]['dial'] }}">Call Us</a>
                             <a class="button button-secondary" href="#services">Review Services</a>
+                        </div>
+
+                        <div class="contact-details" aria-label="Contact details">
+                            @if ($hasContactEmail)
+                                <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
+                            @endif
+                            @foreach ($contactPhones as $phone)
+                                <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
+                            @endforeach
                         </div>
                     </div>
 
@@ -364,7 +381,7 @@
             <div class="wrap">
                 <div class="footer-panel">
                     <div class="footer-copy">
-                        <span class="footer-kicker">PeakExperience</span>
+                        <span class="footer-kicker">Peak Experience</span>
                         <strong>Creative production for live experiences that need polish.</strong>
                         <p>Event staging, media systems, exhibition builds, and disciplined show-day delivery for brands and organisers across Kenya.</p>
                     </div>
@@ -374,13 +391,16 @@
                         <a href="#services">Services</a>
                         <a href="#proof">Why Us</a>
                         <a href="#process">Process</a>
-                        <a href="#contact">Enquiry</a>
+                        <a href="#contact">Contact Us</a>
                     </nav>
 
                     <div class="footer-links">
                         @if ($hasContactEmail)
                             <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
                         @endif
+                        @foreach ($contactPhones as $phone)
+                            <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
+                        @endforeach
                         <a href="#top">Back To Top</a>
                         <span>Live event delivery across Kenya</span>
                     </div>

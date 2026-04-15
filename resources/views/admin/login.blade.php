@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login | PeakExperience</title>
+    <title>Admin Login | Peak Experience</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -215,11 +215,11 @@
     <main class="shell">
         <section class="brand-pane">
             <div>
-                <span class="eyebrow">PeakExperience Admin</span>
+                <span class="eyebrow">Peak Experience Admin</span>
                 <h1>System Control Room</h1>
                 <p>Manage event operations, monitor platform status, and keep planning teams aligned from one secure dashboard.</p>
             </div>
-            <p class="panel-note">PeakExperience Event Planning | Nairobi, Kenya</p>
+            <p class="panel-note">Peak Experience Event Planning | Nairobi, Kenya</p>
         </section>
 
         <section class="form-pane">

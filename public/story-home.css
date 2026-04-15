@@ -554,6 +554,25 @@ section[id] {
     margin-bottom: 1.8rem;
 }
 
+.contact-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem 1.1rem;
+}
+
+.contact-details a {
+    color: var(--ink-strong);
+    text-decoration: none;
+    font: 700 0.8rem/1.5 'Outfit', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.contact-details a:hover,
+.contact-details a:focus-visible {
+    color: var(--brand-green);
+}
+
 .hero-tags {
     display: flex;
     flex-wrap: wrap;
@@ -1496,6 +1515,11 @@ section[id] {
 
     .contact-actions {
         flex-direction: column;
+    }
+
+    .contact-details {
+        flex-direction: column;
+        gap: 0.55rem;
     }
 
     .button {
