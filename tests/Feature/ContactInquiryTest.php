@@ -13,11 +13,17 @@ class ContactInquiryTest extends TestCase
         Mail::fake();
 
         $payload = [
-            'name' => 'Jane Doe',
+            'first_name' => 'Jane',
+            'last_name' => 'Doe',
             'organization' => 'Peak Client Ltd',
             'email' => 'jane@example.com',
             'phone' => '+254700000000',
-            'event_details' => 'Launch event on August 20, 2026 at Nairobi. 250 guests expected.',
+            'date_of_event' => '2026-08-20',
+            'venue' => 'Nairobi Serena Hotel',
+            'guest_count' => '250',
+            'event_type' => 'Brand Launch',
+            'additional_info' => 'Full staging, show calling, screens, and audio support required.',
+            'consent' => '1',
         ];
 
         $response = $this->post(route('contact.submit'), $payload);
@@ -27,11 +33,17 @@ class ContactInquiryTest extends TestCase
 
         Mail::assertSent(ContactInquiryMail::class, function (ContactInquiryMail $mail) use ($payload) {
             return $mail->hasTo('info@peakexperience.co.ke')
-                && $mail->enquiry['name'] === $payload['name']
+                && $mail->enquiry['name'] === 'Jane Doe'
+                && $mail->enquiry['first_name'] === $payload['first_name']
+                && $mail->enquiry['last_name'] === $payload['last_name']
                 && $mail->enquiry['organization'] === $payload['organization']
                 && $mail->enquiry['email'] === $payload['email']
                 && $mail->enquiry['phone'] === $payload['phone']
-                && $mail->enquiry['event_details'] === $payload['event_details'];
+                && $mail->enquiry['date_of_event'] === $payload['date_of_event']
+                && $mail->enquiry['venue'] === $payload['venue']
+                && $mail->enquiry['guest_count'] === $payload['guest_count']
+                && $mail->enquiry['event_type'] === $payload['event_type']
+                && $mail->enquiry['additional_info'] === $payload['additional_info'];
         });
     }
 
@@ -43,11 +55,15 @@ class ContactInquiryTest extends TestCase
 
         $response->assertRedirect(route('home'));
         $response->assertSessionHasErrors([
-            'name',
+            'first_name',
+            'last_name',
             'organization',
             'email',
             'phone',
-            'event_details',
+            'date_of_event',
+            'venue',
+            'event_type',
+            'consent',
         ]);
 
         Mail::assertNothingSent();

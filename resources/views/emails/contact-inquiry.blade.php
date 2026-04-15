@@ -26,11 +26,27 @@
                 <td style="padding:10px 0; border-top:1px solid #ece6dc; font-weight:700;">Phone</td>
                 <td style="padding:10px 0; border-top:1px solid #ece6dc;">{{ $enquiry['phone'] }}</td>
             </tr>
+            <tr>
+                <td style="padding:10px 0; border-top:1px solid #ece6dc; font-weight:700;">Date of Event</td>
+                <td style="padding:10px 0; border-top:1px solid #ece6dc;">{{ $enquiry['date_of_event'] }}</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; border-top:1px solid #ece6dc; font-weight:700;">Venue</td>
+                <td style="padding:10px 0; border-top:1px solid #ece6dc;">{{ $enquiry['venue'] }}</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; border-top:1px solid #ece6dc; font-weight:700;">Number of Guests</td>
+                <td style="padding:10px 0; border-top:1px solid #ece6dc;">{{ $enquiry['guest_count'] !== '' ? $enquiry['guest_count'] : 'Not provided' }}</td>
+            </tr>
+            <tr>
+                <td style="padding:10px 0; border-top:1px solid #ece6dc; font-weight:700;">Type of Event</td>
+                <td style="padding:10px 0; border-top:1px solid #ece6dc;">{{ $enquiry['event_type'] }}</td>
+            </tr>
         </table>
 
         <div style="margin-top:24px; padding-top:20px; border-top:1px solid #ece6dc;">
-            <p style="margin:0 0 10px; font-weight:700;">Event Details</p>
-            <p style="margin:0; white-space:pre-line; line-height:1.7;">{{ $enquiry['event_details'] }}</p>
+            <p style="margin:0 0 10px; font-weight:700;">Additional Information</p>
+            <p style="margin:0; white-space:pre-line; line-height:1.7;">{{ $enquiry['additional_info'] !== '' ? $enquiry['additional_info'] : 'No additional information provided.' }}</p>
         </div>
     </div>
 </body>

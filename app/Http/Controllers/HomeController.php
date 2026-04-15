@@ -50,26 +50,53 @@ class HomeController extends Controller
     public function submitContact(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:120'],
+            'first_name' => ['required', 'string', 'max:80'],
+            'last_name' => ['required', 'string', 'max:80'],
             'organization' => ['required', 'string', 'max:160'],
             'email' => ['required', 'email', 'max:160'],
             'phone' => ['required', 'string', 'max:40'],
-            'event_details' => ['required', 'string', 'max:3000'],
+            'date_of_event' => ['required', 'date'],
+            'venue' => ['required', 'string', 'max:180'],
+            'guest_count' => ['nullable', 'string', 'max:80'],
+            'event_type' => ['required', 'string', 'max:120'],
+            'additional_info' => ['nullable', 'string', 'max:3000'],
+            'consent' => ['accepted'],
         ], [
-            'name.required' => 'Please enter your full name.',
+            'first_name.required' => 'Please enter the client first name.',
+            'last_name.required' => 'Please enter the client last name.',
             'organization.required' => 'Please enter your organization name.',
             'email.required' => 'Please enter your email address.',
             'email.email' => 'Please enter a valid email address.',
             'phone.required' => 'Please enter your phone number.',
-            'event_details.required' => 'Please share the event details so the team can review your brief.',
+            'date_of_event.required' => 'Please enter the event date.',
+            'venue.required' => 'Please enter the venue or location.',
+            'event_type.required' => 'Please select the event type.',
+            'consent.accepted' => 'Please confirm that we may contact you about this enquiry.',
         ], [
-            'event_details' => 'event details',
+            'date_of_event' => 'event date',
+            'guest_count' => 'number of guests',
+            'event_type' => 'event type',
+            'additional_info' => 'additional information',
         ]);
+
+        $enquiry = [
+            'name' => trim($validated['first_name'] . ' ' . $validated['last_name']),
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'organization' => $validated['organization'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'date_of_event' => $validated['date_of_event'],
+            'venue' => $validated['venue'],
+            'guest_count' => trim((string) ($validated['guest_count'] ?? '')),
+            'event_type' => $validated['event_type'],
+            'additional_info' => trim((string) ($validated['additional_info'] ?? '')),
+        ];
 
         $contactEmail = (string) data_get($this->contactData(), 'contactEmail', '');
 
         try {
-            Mail::to($contactEmail)->send(new ContactInquiryMail($validated));
+            Mail::to($contactEmail)->send(new ContactInquiryMail($enquiry));
         } catch (Throwable $exception) {
             report($exception);
 

@@ -14,6 +14,16 @@
 
     $sectors = ['Conferences', 'Brand launches', 'Exhibitions', 'Award nights', 'Hybrid events', 'Roadshows'];
     $footprint = ['Outdoor builds'];
+    $eventTypeOptions = [
+        'Conference',
+        'Brand Launch',
+        'Exhibition',
+        'Award Night',
+        'Hybrid Event',
+        'Roadshow',
+        'Corporate Celebration',
+        'Other',
+    ];
     $contactEmail = trim((string) ($contactEmail ?? ''));
     $hasContactEmail = filled($contactEmail);
     $contactPhones = is_array($contactPhones ?? null) ? $contactPhones : [];
@@ -332,7 +342,7 @@
                     <aside class="brief-card contact-form-card">
                         <div class="contact-form-header">
                             <h3>Project Enquiry</h3>
-                            <p class="contact-form-note">Share your contact details and a concise event brief. Include dates, venue, audience size, event type, and any production requirements that matter at this stage.</p>
+                            <p class="contact-form-note">Share the project details below and Peak Experience will review the brief and respond with the right next step.</p>
                         </div>
 
                         @if (session('contact_status'))
@@ -352,42 +362,97 @@
 
                             <div class="contact-field-grid">
                                 <div class="contact-field">
-                                    <label for="contact-name">Name</label>
-                                    <input id="contact-name" class="contact-input @error('name') is-invalid @enderror" type="text" name="name" value="{{ old('name') }}" placeholder="Full name" autocomplete="name" required>
-                                    @error('name')
+                                    <label for="contact-first-name">First Name <span>*</span></label>
+                                    <input id="contact-first-name" class="contact-input @error('first_name') is-invalid @enderror" type="text" name="first_name" value="{{ old('first_name') }}" autocomplete="given-name" required>
+                                    @error('first_name')
                                         <p class="field-error">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <div class="contact-field">
-                                    <label for="contact-organization">Organization</label>
-                                    <input id="contact-organization" class="contact-input @error('organization') is-invalid @enderror" type="text" name="organization" value="{{ old('organization') }}" placeholder="Company or organization" autocomplete="organization" required>
+                                    <label for="contact-last-name">Last Name <span>*</span></label>
+                                    <input id="contact-last-name" class="contact-input @error('last_name') is-invalid @enderror" type="text" name="last_name" value="{{ old('last_name') }}" autocomplete="family-name" required>
+                                    @error('last_name')
+                                        <p class="field-error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="contact-field">
+                                    <label for="contact-organization">Company <span>*</span></label>
+                                    <input id="contact-organization" class="contact-input @error('organization') is-invalid @enderror" type="text" name="organization" value="{{ old('organization') }}" autocomplete="organization" required>
                                     @error('organization')
                                         <p class="field-error">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <div class="contact-field">
-                                    <label for="contact-email">Email</label>
-                                    <input id="contact-email" class="contact-input @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" placeholder="name@company.com" autocomplete="email" required>
+                                    <label for="contact-phone">Phone Number <span>*</span></label>
+                                    <input id="contact-phone" class="contact-input @error('phone') is-invalid @enderror" type="text" name="phone" value="{{ old('phone') }}" autocomplete="tel" inputmode="tel" required>
+                                    @error('phone')
+                                        <p class="field-error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="contact-field">
+                                    <label for="contact-email">Email <span>*</span></label>
+                                    <input id="contact-email" class="contact-input @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" autocomplete="email" required>
                                     @error('email')
                                         <p class="field-error">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <div class="contact-field">
-                                    <label for="contact-phone">Phone</label>
-                                    <input id="contact-phone" class="contact-input @error('phone') is-invalid @enderror" type="text" name="phone" value="{{ old('phone') }}" placeholder="+254 ..." autocomplete="tel" inputmode="tel" required>
-                                    @error('phone')
+                                    <label for="contact-date-of-event">Date of Event <span>*</span></label>
+                                    <input id="contact-date-of-event" class="contact-input @error('date_of_event') is-invalid @enderror" type="date" name="date_of_event" value="{{ old('date_of_event') }}" required>
+                                    @error('date_of_event')
+                                        <p class="field-error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="contact-field">
+                                    <label for="contact-guest-count">Number of Guests</label>
+                                    <input id="contact-guest-count" class="contact-input @error('guest_count') is-invalid @enderror" type="text" name="guest_count" value="{{ old('guest_count') }}" inputmode="numeric">
+                                    @error('guest_count')
+                                        <p class="field-error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="contact-field">
+                                    <label for="contact-event-type">Type of Event <span>*</span></label>
+                                    <select id="contact-event-type" class="contact-input contact-select @error('event_type') is-invalid @enderror" name="event_type" required>
+                                        <option value="">Please select</option>
+                                        @foreach ($eventTypeOptions as $option)
+                                            <option value="{{ $option }}" @selected(old('event_type') === $option)>{{ $option }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('event_type')
+                                        <p class="field-error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="contact-field contact-field--full">
+                                    <label for="contact-venue">Venue / Location <span>*</span></label>
+                                    <input id="contact-venue" class="contact-input @error('venue') is-invalid @enderror" type="text" name="venue" value="{{ old('venue') }}" required>
+                                    @error('venue')
                                         <p class="field-error">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="contact-field contact-field--full">
-                                <label for="contact-event-details">Event Details</label>
-                                <textarea id="contact-event-details" class="contact-input contact-textarea @error('event_details') is-invalid @enderror" name="event_details" rows="7" placeholder="For example: corporate conference on September 18, Nairobi, 300 guests, full staging, sound, screens, and event management support." required>{{ old('event_details') }}</textarea>
-                                @error('event_details')
+                                <label for="contact-additional-info">Additional Info</label>
+                                <textarea id="contact-additional-info" class="contact-input contact-textarea @error('additional_info') is-invalid @enderror" name="additional_info" rows="7">{{ old('additional_info') }}</textarea>
+                                @error('additional_info')
+                                    <p class="field-error">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="contact-consent @error('consent') is-invalid @enderror">
+                                <label class="contact-checkbox">
+                                    <input type="checkbox" name="consent" value="1" @checked(old('consent')) required>
+                                    <span>I agree to be contacted by Peak Experience regarding this enquiry and understand that these details will be used to prepare a response.</span>
+                                </label>
+                                @error('consent')
                                     <p class="field-error">{{ $message }}</p>
                                 @enderror
                             </div>

@@ -17,10 +17,16 @@ class ContactInquiryMail extends Mailable
     /**
      * @param  array{
      *   name:string,
+     *   first_name:string,
+     *   last_name:string,
      *   organization:string,
      *   email:string,
      *   phone:string,
-     *   event_details:string
+     *   date_of_event:string,
+     *   venue:string,
+     *   guest_count:string,
+     *   event_type:string,
+     *   additional_info:string
      * }  $enquiry
      */
     public function __construct(public array $enquiry)
