@@ -577,9 +577,23 @@ section[id] {
     gap: 1rem;
 }
 
+.contact-form-header {
+    display: grid;
+    gap: 0.6rem;
+}
+
+.contact-form-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    color: var(--ink-strong);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
 .contact-form-note {
     color: var(--muted);
     line-height: 1.75;
+    max-width: 42rem;
 }
 
 .contact-field-grid {
@@ -599,22 +613,27 @@ section[id] {
 }
 
 .contact-field label {
-    font: 700 0.8rem/1.4 'Outfit', sans-serif;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    display: block;
+    font: 700 0.92rem/1.4 'Manrope', sans-serif;
+    letter-spacing: 0.01em;
     color: var(--ink-strong);
 }
 
 .contact-input {
+    display: block;
     width: 100%;
     border: 1px solid rgba(31, 92, 77, 0.14);
-    border-radius: 0.85rem;
+    border-radius: 0.55rem;
     background: rgba(255, 255, 255, 0.92);
     color: var(--ink-strong);
     font: 500 0.98rem/1.6 'Manrope', sans-serif;
     padding: 0.95rem 1rem;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-input::placeholder {
+    color: #8a919c;
 }
 
 .contact-input:focus {
@@ -633,9 +652,10 @@ section[id] {
 }
 
 .field-error {
+    display: block;
     color: var(--accent-strong);
-    font-size: 0.88rem;
-    line-height: 1.55;
+    font-size: 0.84rem;
+    line-height: 1.5;
 }
 
 .form-alert {

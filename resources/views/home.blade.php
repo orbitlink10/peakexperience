@@ -330,8 +330,10 @@
                     </div>
 
                     <aside class="brief-card contact-form-card">
-                        <h3>Enquiry Form</h3>
-                        <p class="contact-form-note">Include dates, venue, guest numbers, event type, or any other context that will help the team understand the brief.</p>
+                        <div class="contact-form-header">
+                            <h3>Project Enquiry</h3>
+                            <p class="contact-form-note">Share your contact details and a concise event brief. Include dates, venue, audience size, event type, and any production requirements that matter at this stage.</p>
+                        </div>
 
                         @if (session('contact_status'))
                             <div class="form-alert form-alert--success">{{ session('contact_status') }}</div>
@@ -341,13 +343,17 @@
                             <div class="form-alert form-alert--error">{{ session('contact_error') }}</div>
                         @endif
 
+                        @if ($errors->any())
+                            <div class="form-alert form-alert--error">Please review the highlighted fields and submit the enquiry again.</div>
+                        @endif
+
                         <form class="contact-form" method="POST" action="{{ route('contact.submit') }}" novalidate>
                             @csrf
 
                             <div class="contact-field-grid">
                                 <div class="contact-field">
                                     <label for="contact-name">Name</label>
-                                    <input id="contact-name" class="contact-input @error('name') is-invalid @enderror" type="text" name="name" value="{{ old('name') }}" required>
+                                    <input id="contact-name" class="contact-input @error('name') is-invalid @enderror" type="text" name="name" value="{{ old('name') }}" placeholder="Full name" autocomplete="name" required>
                                     @error('name')
                                         <p class="field-error">{{ $message }}</p>
                                     @enderror
@@ -355,7 +361,7 @@
 
                                 <div class="contact-field">
                                     <label for="contact-organization">Organization</label>
-                                    <input id="contact-organization" class="contact-input @error('organization') is-invalid @enderror" type="text" name="organization" value="{{ old('organization') }}" required>
+                                    <input id="contact-organization" class="contact-input @error('organization') is-invalid @enderror" type="text" name="organization" value="{{ old('organization') }}" placeholder="Company or organization" autocomplete="organization" required>
                                     @error('organization')
                                         <p class="field-error">{{ $message }}</p>
                                     @enderror
@@ -363,7 +369,7 @@
 
                                 <div class="contact-field">
                                     <label for="contact-email">Email</label>
-                                    <input id="contact-email" class="contact-input @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" required>
+                                    <input id="contact-email" class="contact-input @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" placeholder="name@company.com" autocomplete="email" required>
                                     @error('email')
                                         <p class="field-error">{{ $message }}</p>
                                     @enderror
@@ -371,7 +377,7 @@
 
                                 <div class="contact-field">
                                     <label for="contact-phone">Phone</label>
-                                    <input id="contact-phone" class="contact-input @error('phone') is-invalid @enderror" type="text" name="phone" value="{{ old('phone') }}" required>
+                                    <input id="contact-phone" class="contact-input @error('phone') is-invalid @enderror" type="text" name="phone" value="{{ old('phone') }}" placeholder="+254 ..." autocomplete="tel" inputmode="tel" required>
                                     @error('phone')
                                         <p class="field-error">{{ $message }}</p>
                                     @enderror
@@ -380,7 +386,7 @@
 
                             <div class="contact-field contact-field--full">
                                 <label for="contact-event-details">Event Details</label>
-                                <textarea id="contact-event-details" class="contact-input contact-textarea @error('event_details') is-invalid @enderror" name="event_details" rows="7" required>{{ old('event_details') }}</textarea>
+                                <textarea id="contact-event-details" class="contact-input contact-textarea @error('event_details') is-invalid @enderror" name="event_details" rows="7" placeholder="For example: corporate conference on September 18, Nairobi, 300 guests, full staging, sound, screens, and event management support." required>{{ old('event_details') }}</textarea>
                                 @error('event_details')
                                     <p class="field-error">{{ $message }}</p>
                                 @enderror

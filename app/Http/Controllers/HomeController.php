@@ -55,6 +55,15 @@ class HomeController extends Controller
             'email' => ['required', 'email', 'max:160'],
             'phone' => ['required', 'string', 'max:40'],
             'event_details' => ['required', 'string', 'max:3000'],
+        ], [
+            'name.required' => 'Please enter your full name.',
+            'organization.required' => 'Please enter your organization name.',
+            'email.required' => 'Please enter your email address.',
+            'email.email' => 'Please enter a valid email address.',
+            'phone.required' => 'Please enter your phone number.',
+            'event_details.required' => 'Please share the event details so the team can review your brief.',
+        ], [
+            'event_details' => 'event details',
         ]);
 
         $contactEmail = (string) data_get($this->contactData(), 'contactEmail', '');
