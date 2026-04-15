@@ -17,6 +17,9 @@
     $contactEmail = trim((string) ($contactEmail ?? ''));
     $hasContactEmail = filled($contactEmail);
     $contactPhones = is_array($contactPhones ?? null) ? $contactPhones : [];
+    $paymentUrl = trim((string) ($paymentUrl ?? ''));
+    $paymentLabel = trim((string) ($paymentLabel ?? 'Make Payment'));
+    $hasPaymentUrl = filled($paymentUrl);
     $logoUrl = \App\Support\HomepageContent::assetUrl(
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
@@ -243,23 +246,6 @@
                         @endforeach
                     </div>
 
-                    <div class="kpi-grid">
-                        <article class="kpi-card">
-                            <span class="kpi-label">Capabilities</span>
-                            <strong>{{ str_pad((string) count($whatWeDo), 2, '0', STR_PAD_LEFT) }}</strong>
-                            <p>Core service pillars covering staging, production, media systems, and exhibition environments.</p>
-                        </article>
-                        <article class="kpi-card">
-                            <span class="kpi-label">Workflow</span>
-                            <strong>{{ str_pad((string) count($ourProcess), 2, '0', STR_PAD_LEFT) }}</strong>
-                            <p>A defined project rhythm from concept and setup through show-day operation and review.</p>
-                        </article>
-                        <article class="kpi-card">
-                            <span class="kpi-label">Coverage</span>
-                            <strong>Kenya</strong>
-                            <p>Built for Nairobi venues, destination briefs, mobile setups, and high-stakes corporate spaces.</p>
-                        </article>
-                    </div>
                 </div>
             </section>
 
@@ -321,14 +307,16 @@
                     <div class="contact-copy">
                         <span class="section-prefix">Start your enquiry</span>
                         <h2>Bring the brief. We will shape the production path around it.</h2>
-                        <p>Share the event type, city, venue context, audience size, and target date. That is enough to map the right production approach and the next planning decisions.</p>
+                        <p>Complete the enquiry form with your contact details and the event context. Your message will be forwarded directly to Peak Experience so the team can respond with the right next steps.</p>
 
                         <div class="contact-actions">
-                            @if ($hasContactEmail)
-                                <a class="button button-primary" href="mailto:{{ $contactEmail }}">Email Us</a>
+                            @if (! empty($contactPhones))
+                                <a class="button button-secondary" href="tel:{{ $contactPhones[0]['dial'] }}">Call Us</a>
                             @endif
-                            <a class="button button-secondary" href="tel:{{ $contactPhones[0]['dial'] }}">Call Us</a>
                             <a class="button button-secondary" href="#services">Review Services</a>
+                            @if ($hasPaymentUrl)
+                                <a class="button button-secondary" href="{{ $paymentUrl }}" target="_blank" rel="noreferrer">{{ $paymentLabel }}</a>
+                            @endif
                         </div>
 
                         <div class="contact-details" aria-label="Contact details">
@@ -341,29 +329,70 @@
                         </div>
                     </div>
 
-                    <aside class="brief-card">
-                        <h3>Recommended brief details</h3>
+                    <aside class="brief-card contact-form-card">
+                        <h3>Enquiry Form</h3>
+                        <p class="contact-form-note">Include dates, venue, guest numbers, event type, or any other context that will help the team understand the brief.</p>
 
-                        <div class="brief-fields">
-                            <article class="brief-field">
-                                <strong>Event Type</strong>
-                                <span>Conference, launch, exhibition, gala, hybrid event, or branded activation.</span>
-                            </article>
-                            <article class="brief-field">
-                                <strong>Location</strong>
-                                <span>Venue name, city, or destination so planning starts with the real setup conditions.</span>
-                            </article>
-                            <article class="brief-field">
-                                <strong>Audience Size</strong>
-                                <span>Guest count, audience flow, and room expectations help define staging and systems.</span>
-                            </article>
-                            <article class="brief-field">
-                                <strong>Timing</strong>
-                                <span>Target date, installation window, and any show-critical milestones.</span>
-                            </article>
-                        </div>
+                        @if (session('contact_status'))
+                            <div class="form-alert form-alert--success">{{ session('contact_status') }}</div>
+                        @endif
 
-                        <p class="brief-note">Ideal for conferences, launches, exhibitions, corporate celebrations, and other live experiences where the technical delivery needs to feel effortless to the audience.</p>
+                        @if (session('contact_error'))
+                            <div class="form-alert form-alert--error">{{ session('contact_error') }}</div>
+                        @endif
+
+                        <form class="contact-form" method="POST" action="{{ route('contact.submit') }}" novalidate>
+                            @csrf
+
+                            <div class="contact-field-grid">
+                                <div class="contact-field">
+                                    <label for="contact-name">Name</label>
+                                    <input id="contact-name" class="contact-input @error('name') is-invalid @enderror" type="text" name="name" value="{{ old('name') }}" required>
+                                    @error('name')
+                                        <p class="field-error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="contact-field">
+                                    <label for="contact-organization">Organization</label>
+                                    <input id="contact-organization" class="contact-input @error('organization') is-invalid @enderror" type="text" name="organization" value="{{ old('organization') }}" required>
+                                    @error('organization')
+                                        <p class="field-error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="contact-field">
+                                    <label for="contact-email">Email</label>
+                                    <input id="contact-email" class="contact-input @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" required>
+                                    @error('email')
+                                        <p class="field-error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="contact-field">
+                                    <label for="contact-phone">Phone</label>
+                                    <input id="contact-phone" class="contact-input @error('phone') is-invalid @enderror" type="text" name="phone" value="{{ old('phone') }}" required>
+                                    @error('phone')
+                                        <p class="field-error">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="contact-field contact-field--full">
+                                <label for="contact-event-details">Event Details</label>
+                                <textarea id="contact-event-details" class="contact-input contact-textarea @error('event_details') is-invalid @enderror" name="event_details" rows="7" required>{{ old('event_details') }}</textarea>
+                                @error('event_details')
+                                    <p class="field-error">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="contact-form-actions">
+                                <button class="button button-primary" type="submit">Send Enquiry</button>
+                                @if ($hasPaymentUrl)
+                                    <a class="button button-secondary" href="{{ $paymentUrl }}" target="_blank" rel="noreferrer">{{ $paymentLabel }}</a>
+                                @endif
+                            </div>
+                        </form>
                     </aside>
                 </div>
             </section>
@@ -402,5 +431,12 @@
     </div>
 
     <script src="{{ asset('story-home.js') }}" defer></script>
+    @if ($errors->any() || session('contact_status') || session('contact_error'))
+        <script>
+            window.addEventListener('load', () => {
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        </script>
+    @endif
 </body>
 </html>

@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'payment' => [
+        'url' => env('PAYMENT_URL', ''),
+        'label' => env('PAYMENT_LABEL', 'Make Payment'),
+    ],
+
 ];
