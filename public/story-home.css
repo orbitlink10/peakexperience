@@ -1059,6 +1059,23 @@ section[id] {
     font-size: 1rem;
 }
 
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 1.15rem;
+    color: var(--brand-green);
+    text-decoration: none;
+    font: 600 0.82rem/1 'Outfit', sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.back-link::before {
+    content: "\2190";
+    font-size: 1rem;
+}
+
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1207,6 +1224,159 @@ section[id] {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(320px, 0.92fr);
     gap: 1.2rem;
+}
+
+.service-article-shell,
+.service-article-grid {
+    display: grid;
+    gap: 1.2rem;
+}
+
+.service-article-shell {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.96fr);
+    align-items: stretch;
+}
+
+.service-article-copy,
+.service-article-media,
+.article-body,
+.article-sidebar-block {
+    padding: clamp(1.5rem, 3vw, 2.2rem);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.78);
+}
+
+.service-article-copy {
+    background:
+        radial-gradient(circle at top right, rgba(208, 105, 43, 0.22), transparent 28%),
+        radial-gradient(circle at 14% 86%, rgba(31, 92, 77, 0.12), transparent 26%),
+        linear-gradient(180deg, rgba(255, 253, 248, 0.92), rgba(255, 251, 246, 0.78));
+    border: 1px solid rgba(31, 92, 77, 0.12);
+    box-shadow: var(--shadow);
+}
+
+.service-article-copy h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4.4rem);
+    color: var(--ink-strong);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 0.94;
+    margin-bottom: 1rem;
+}
+
+.service-article-headline,
+.service-article-summary,
+.article-intro,
+.article-section p,
+.article-contact-block p {
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.service-article-headline {
+    max-width: 34rem;
+    font-size: 1.08rem;
+    margin-bottom: 1rem;
+}
+
+.service-article-summary {
+    max-width: 38rem;
+}
+
+.service-article-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 1.8rem;
+}
+
+.service-article-media {
+    overflow: hidden;
+    border: 1px solid rgba(31, 92, 77, 0.12);
+    box-shadow: var(--shadow);
+}
+
+.service-article-media img {
+    width: 100%;
+    height: 100%;
+    min-height: 28rem;
+    object-fit: cover;
+}
+
+.service-article-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    align-items: start;
+}
+
+.article-body {
+    border: 1px solid rgba(31, 92, 77, 0.12);
+    box-shadow: var(--shadow);
+}
+
+.article-intro {
+    font-size: 1.04rem;
+    margin-bottom: 1.5rem;
+}
+
+.article-section + .article-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(31, 92, 77, 0.12);
+}
+
+.article-section h2,
+.article-sidebar-block h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.25rem;
+    color: var(--ink-strong);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.8rem;
+}
+
+.article-sidebar {
+    display: grid;
+    gap: 1rem;
+}
+
+.article-sidebar-block {
+    border: 1px solid rgba(31, 92, 77, 0.12);
+    box-shadow: var(--shadow);
+}
+
+.article-highlight-list {
+    list-style: none;
+    display: grid;
+    gap: 0.8rem;
+}
+
+.article-highlight-list li {
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    background: rgba(248, 243, 236, 0.96);
+    border: 1px solid rgba(31, 92, 77, 0.12);
+    color: var(--ink-strong);
+    line-height: 1.65;
+}
+
+.article-contact-list {
+    display: grid;
+    gap: 0.7rem;
+    margin-top: 1rem;
+}
+
+.article-contact-list a {
+    color: var(--brand-green);
+    text-decoration: none;
+    font: 700 0.82rem/1.5 'Outfit', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.article-contact-list a:hover,
+.article-contact-list a:focus-visible {
+    color: var(--accent-strong);
 }
 
 .contact-copy,
@@ -1378,6 +1548,8 @@ section[id] {
     .intro-showcase,
     .service-showcase,
     .proof-showcase,
+    .service-article-shell,
+    .service-article-grid,
     .contact-shell,
     .footer-panel {
         grid-template-columns: 1fr;
@@ -1522,12 +1694,20 @@ section[id] {
         gap: 0.55rem;
     }
 
+    .service-article-actions {
+        flex-direction: column;
+    }
+
     .button {
         width: 100%;
     }
 
     .button-nav-cta {
         width: auto;
+    }
+
+    .service-article-copy h1 {
+        font-size: clamp(2rem, 10vw, 3rem);
     }
 
     .hero-stage {

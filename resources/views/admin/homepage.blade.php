@@ -622,7 +622,7 @@
 
             <section>
                 <h2 class="section-title">What We Do</h2>
-                <p class="section-subtitle">These appear as cards on the homepage. Add, remove, and reorder as needed.</p>
+                <p class="section-subtitle">These appear as cards on the homepage. Each card links to an internal service writeup page. Add, remove, and reorder as needed.</p>
 
                 <button type="button" class="mini-btn" id="add-what-item">Add Item</button>
 
@@ -650,7 +650,7 @@
 
                             <div class="fields two">
                                 <div class="field">
-                                    <label>Link URL (optional)</label>
+                                    <label>Media URL for hero fallback (optional)</label>
                                     <input type="url" value="{{ $item['link_url'] ?? '' }}" placeholder="https://..." data-name="link_url">
                                 </div>
                                 <div class="field">
@@ -725,7 +725,7 @@
 
         <div class="fields two">
             <div class="field">
-                <label>Link URL (optional)</label>
+                <label>Media URL for hero fallback (optional)</label>
                 <input type="url" placeholder="https://..." data-name="link_url">
             </div>
             <div class="field">

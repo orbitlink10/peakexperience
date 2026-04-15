@@ -4,7 +4,8 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/services/{service}', [HomeController::class, 'service'])->name('services.show');
 Route::get('/homepage-assets/{path}', [HomeController::class, 'asset'])
     ->where('path', '.*')
     ->name('homepage.asset');

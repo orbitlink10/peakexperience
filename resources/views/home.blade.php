@@ -14,12 +14,9 @@
 
     $sectors = ['Conferences', 'Brand launches', 'Exhibitions', 'Award nights', 'Hybrid events', 'Roadshows'];
     $footprint = ['Outdoor builds'];
-    $contactEmail = 'info@peakexperience.co.ke';
+    $contactEmail = trim((string) ($contactEmail ?? ''));
     $hasContactEmail = filled($contactEmail);
-    $contactPhones = [
-        ['display' => '+254 119857961', 'dial' => '+254119857961'],
-        ['display' => '+254 792243400', 'dial' => '+254792243400'],
-    ];
+    $contactPhones = is_array($contactPhones ?? null) ? $contactPhones : [];
     $logoUrl = \App\Support\HomepageContent::assetUrl(
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
@@ -222,7 +219,7 @@
                             <h2>Services that carry the idea all the way to the audience.</h2>
                         </div>
 
-                        <p>Each capability is designed to work with the others, so your venue, visuals, sound, staging, and audience journey feel like one complete experience rather than separate moving parts.</p>
+                        <p>Each service is designed to work with the others, so your venue, visuals, sound, staging, and audience journey feel like one complete experience rather than separate moving parts.</p>
                     </div>
 
                     <div class="service-grid">
@@ -238,14 +235,9 @@
                                 </div>
 
                                 <div class="service-body">
-                                    <span class="section-prefix">Capability</span>
                                     <h3>{{ $item['title'] }}</h3>
                                     <p>{{ $item['text'] }}</p>
-                                    @if (! empty($item['link_url']))
-                                        <a class="service-link" href="{{ $item['link_url'] }}">Explore More</a>
-                                    @else
-                                        <span class="service-link">Production Ready</span>
-                                    @endif
+                                    <a class="service-link" href="{{ route('services.show', ['service' => $item['slug']]) }}" aria-label="Explore more about {{ $item['title'] }}">Explore More</a>
                                 </div>
                             </article>
                         @endforeach
