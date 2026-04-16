@@ -66,7 +66,7 @@
                     </p>
                 </div>
 
-                <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
+                <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(260px,320px)]">
                     <div>
                         <label for="logo_file" class="admin-label">Upload Logo</label>
                         <input id="logo_file" type="file" name="logo_file" accept="image/*" class="admin-file-input">
@@ -77,14 +77,16 @@
                         </label>
                     </div>
 
-                    <div class="flex min-h-44 items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4">
+                    <div class="flex min-h-44 min-w-0 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4">
                         @if ($currentLogoUrl !== '')
-                            <div class="space-y-3 text-center">
-                                <img src="{{ $currentLogoUrl }}" alt="Current homepage logo" class="mx-auto max-h-28 w-auto object-contain">
-                                <p class="text-xs leading-5 text-slate-500">Current: {{ $currentLogoUrl }}</p>
+                            <div class="grid w-full min-w-0 gap-3 text-center">
+                                <div class="flex min-h-28 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-3">
+                                    <img src="{{ $currentLogoUrl }}" alt="Current homepage logo" class="max-h-24 max-w-full object-contain">
+                                </div>
+                                <p class="break-all text-xs leading-5 text-slate-500">Current: {{ $currentLogoUrl }}</p>
                             </div>
                         @else
-                            <p class="max-w-xs text-center text-sm leading-6 text-slate-500">
+                            <p class="max-w-xs break-words text-center text-sm leading-6 text-slate-500">
                                 No homepage logo uploaded yet. The site will continue using the text fallback until a logo is added.
                             </p>
                         @endif
@@ -108,7 +110,7 @@
                             );
                         @endphp
                         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                            <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_220px]">
+                            <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(240px,280px)]">
                                 <div>
                                     <label class="admin-label">{{ $field['title'] }}</label>
                                     <input type="hidden" name="section_images[{{ $key }}][path]" value="{{ data_get($sectionImageValues, $key . '.path', '') }}">
@@ -127,14 +129,16 @@
                                     </label>
                                 </div>
 
-                                <div class="flex min-h-40 items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-4">
+                                <div class="flex min-h-40 min-w-0 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-slate-300 bg-white p-4">
                                     @if ($currentSectionImage !== '')
-                                        <div class="space-y-3 text-center">
-                                            <img src="{{ $currentSectionImage }}" alt="{{ $field['title'] }}" class="mx-auto max-h-32 w-full rounded-xl object-cover">
-                                            <p class="text-xs leading-5 text-slate-500">Current: {{ $currentSectionImage }}</p>
+                                        <div class="grid w-full min-w-0 gap-3 text-center">
+                                            <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+                                                <img src="{{ $currentSectionImage }}" alt="{{ $field['title'] }}" class="h-40 w-full object-cover">
+                                            </div>
+                                            <p class="break-all text-xs leading-5 text-slate-500">Current: {{ $currentSectionImage }}</p>
                                         </div>
                                     @else
-                                        <p class="max-w-xs text-center text-sm leading-6 text-slate-500">
+                                        <p class="max-w-xs break-words text-center text-sm leading-6 text-slate-500">
                                             No image uploaded yet. The homepage will use its built-in fallback until one is added here.
                                         </p>
                                     @endif
