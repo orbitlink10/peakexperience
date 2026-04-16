@@ -1120,13 +1120,14 @@ section[id] {
 
 .service-section-copy > div {
     display: grid;
-    justify-items: start;
+    justify-items: center;
     gap: 0.35rem;
 }
 
 .service-section-copy h2 {
     max-width: 15ch;
-    font-size: clamp(1.95rem, 3vw, 3.1rem);
+    font-size: clamp(2.1rem, 4.2vw, 3.8rem);
+    text-align: center;
 }
 
 .service-section-copy p {
