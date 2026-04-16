@@ -11,6 +11,12 @@ class HomepageContent
     /**
      * @return array{
      *     logo: array{url:string,path:string},
+     *     section_images: array{
+     *         hero: array{path:string},
+     *         intro: array{path:string},
+     *         services: array{path:string},
+     *         proof: array{path:string}
+     *     },
      *     hero_video: array{url:string},
      *     what_we_do: array<int, array{title:string,icon:string,text:string,link_url:string,image:string}>,
      *     our_process: array<int, array{title:string,text:string}>
@@ -25,11 +31,11 @@ class HomepageContent
         }
 
         $settings = HomepageSetting::query()
-            ->whereIn('key', ['logo', 'hero_video', 'what_we_do', 'our_process'])
+            ->whereIn('key', ['logo', 'section_images', 'hero_video', 'what_we_do', 'our_process'])
             ->get()
             ->keyBy('key');
 
-        foreach (['logo', 'hero_video', 'what_we_do', 'our_process'] as $key) {
+        foreach (['logo', 'section_images', 'hero_video', 'what_we_do', 'our_process'] as $key) {
             if ($settings->has($key) && is_array($settings[$key]->value)) {
                 $defaults[$key] = $settings[$key]->value;
             }
@@ -41,6 +47,12 @@ class HomepageContent
     /**
      * @param  array{
      *     logo: array{url:string,path:string},
+     *     section_images: array{
+     *         hero: array{path:string},
+     *         intro: array{path:string},
+     *         services: array{path:string},
+     *         proof: array{path:string}
+     *     },
      *     hero_video: array{url:string},
      *     what_we_do: array<int, array{title:string,icon:string,text:string,link_url:string,image:string}>,
      *     our_process: array<int, array{title:string,text:string}>
@@ -51,6 +63,11 @@ class HomepageContent
         HomepageSetting::query()->updateOrCreate(
             ['key' => 'logo'],
             ['value' => $data['logo']]
+        );
+
+        HomepageSetting::query()->updateOrCreate(
+            ['key' => 'section_images'],
+            ['value' => $data['section_images']]
         );
 
         HomepageSetting::query()->updateOrCreate(
@@ -72,6 +89,12 @@ class HomepageContent
     /**
      * @return array{
      *     logo: array{url:string,path:string},
+     *     section_images: array{
+     *         hero: array{path:string},
+     *         intro: array{path:string},
+     *         services: array{path:string},
+     *         proof: array{path:string}
+     *     },
      *     hero_video: array{url:string},
      *     what_we_do: array<int, array{title:string,icon:string,text:string,link_url:string,image:string}>,
      *     our_process: array<int, array{title:string,text:string}>
@@ -83,6 +106,12 @@ class HomepageContent
             'logo' => [
                 'url' => '',
                 'path' => '',
+            ],
+            'section_images' => [
+                'hero' => ['path' => ''],
+                'intro' => ['path' => ''],
+                'services' => ['path' => ''],
+                'proof' => ['path' => ''],
             ],
             'hero_video' => [
                 'url' => '',

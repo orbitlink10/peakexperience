@@ -34,6 +34,7 @@
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
     $hasLogo = filled($logoUrl);
+    $sectionImages = is_array($sectionImages ?? null) ? $sectionImages : [];
 
     $resolvedImages = [];
     foreach ($whatWeDo as $index => $item) {
@@ -42,7 +43,10 @@
             : $showcaseImages[$index % count($showcaseImages)];
     }
 
-    $heroImage = $showcaseImages[0];
+    $heroImage = \App\Support\HomepageContent::assetUrl((string) data_get($sectionImages, 'hero.path', ''));
+    if ($heroImage === '') {
+        $heroImage = $showcaseImages[0];
+    }
     $heroVideoSource = \App\Support\HomepageContent::videoSource(
         (string) data_get($heroVideo ?? [], 'url', '')
     );
@@ -51,9 +55,18 @@
             (string) data_get($whatWeDo, '0.link_url', '')
         );
     }
-    $introImage = $resolvedImages[1] ?? $showcaseImages[1];
-    $serviceShowcaseImage = $resolvedImages[0] ?? $showcaseImages[2];
-    $ambientImage = $resolvedImages[2] ?? $showcaseImages[2];
+    $introImage = \App\Support\HomepageContent::assetUrl((string) data_get($sectionImages, 'intro.path', ''));
+    if ($introImage === '') {
+        $introImage = $resolvedImages[1] ?? $showcaseImages[1];
+    }
+    $serviceShowcaseImage = \App\Support\HomepageContent::assetUrl((string) data_get($sectionImages, 'services.path', ''));
+    if ($serviceShowcaseImage === '') {
+        $serviceShowcaseImage = $resolvedImages[0] ?? $showcaseImages[2];
+    }
+    $ambientImage = \App\Support\HomepageContent::assetUrl((string) data_get($sectionImages, 'proof.path', ''));
+    if ($ambientImage === '') {
+        $ambientImage = $resolvedImages[2] ?? $showcaseImages[2];
+    }
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">

@@ -565,6 +565,25 @@
             $currentLogoUrl = \App\Support\HomepageContent::assetUrl(
                 (string) data_get($logoValue ?? [], 'path', data_get($logoValue ?? [], 'url', ''))
             );
+            $sectionImageValues = old('section_images', $sectionImages ?? []);
+            $sectionImageFields = [
+                'hero' => [
+                    'title' => 'Hero Image',
+                    'description' => 'Used as the hero fallback when no video is set.',
+                ],
+                'intro' => [
+                    'title' => 'Peak Experience Approach',
+                    'description' => 'This is the image beside the “The Peak Experience approach” copy.',
+                ],
+                'services' => [
+                    'title' => 'Our Services',
+                    'description' => 'This image appears in the homepage services showcase.',
+                ],
+                'proof' => [
+                    'title' => 'Our Work',
+                    'description' => 'This image appears in the homepage “Our Work” section.',
+                ],
+            ];
             $heroVideoValue = old('hero_video', $heroVideo ?? ['url' => '']);
             $whatWeDoValues = old('what_we_do', $whatWeDo);
             $ourProcessValues = old('our_process', $ourProcess);
@@ -572,7 +591,7 @@
         @endphp
 
         <h1 class="page-title">Homepage</h1>
-        <p class="page-subtitle">Manage the homepage logo, hero video, What We Do cards, and Our Process steps.</p>
+        <p class="page-subtitle">Manage the homepage logo, section images, hero video, What We Do cards, and Our Process steps.</p>
 
         <form method="POST" action="{{ route('admin.homepage.update') }}" enctype="multipart/form-data" id="homepage-form">
             @csrf
@@ -601,6 +620,46 @@
                             @endif
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <section>
+                <h2 class="section-title">Section Images</h2>
+                <p class="section-subtitle">Upload the main images used on the homepage sections directly from this screen.</p>
+
+                <div class="list">
+                    @foreach ($sectionImageFields as $key => $field)
+                        @php
+                            $currentSectionImage = \App\Support\HomepageContent::assetUrl(
+                                (string) data_get($sectionImageValues, $key . '.path', '')
+                            );
+                        @endphp
+                        <div class="card">
+                            <div class="logo-grid">
+                                <div class="field">
+                                    <label>{{ $field['title'] }}</label>
+                                    <input type="hidden" name="section_images[{{ $key }}][path]" value="{{ data_get($sectionImageValues, $key . '.path', '') }}">
+                                    <input type="file" name="section_images[{{ $key }}][file]" accept="image/*">
+                                    <small class="current-image">{{ $field['description'] }}</small>
+                                    <label class="checkbox-row">
+                                        <input type="checkbox" name="section_images[{{ $key }}][remove]" value="1" @checked(old('section_images.' . $key . '.remove'))>
+                                        <span>Remove current image</span>
+                                    </label>
+                                </div>
+
+                                <div class="logo-preview-wrap">
+                                    @if ($currentSectionImage !== '')
+                                        <img src="{{ $currentSectionImage }}" alt="{{ $field['title'] }}">
+                                        <small class="current-image">Current: {{ $currentSectionImage }}</small>
+                                    @else
+                                        <p class="logo-preview-empty">No image uploaded yet. The homepage will use its built-in fallback until one is added here.</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </section>
 

@@ -116,6 +116,7 @@ class AdminAuthController extends Controller
 
         return view('admin.homepage', $this->sharedData($request, 'Homepage') + [
             'logo' => $content['logo'],
+            'sectionImages' => $content['section_images'],
             'heroVideo' => $content['hero_video'],
             'whatWeDo' => $content['what_we_do'],
             'ourProcess' => $content['our_process'],
@@ -138,6 +139,19 @@ class AdminAuthController extends Controller
         $request->validate([
             'logo_file' => ['nullable', 'image', 'max:5120'],
             'logo_remove' => ['nullable', 'boolean'],
+            'section_images' => ['nullable', 'array'],
+            'section_images.hero.path' => ['nullable', 'string', 'max:255'],
+            'section_images.hero.file' => ['nullable', 'image', 'max:5120'],
+            'section_images.hero.remove' => ['nullable', 'boolean'],
+            'section_images.intro.path' => ['nullable', 'string', 'max:255'],
+            'section_images.intro.file' => ['nullable', 'image', 'max:5120'],
+            'section_images.intro.remove' => ['nullable', 'boolean'],
+            'section_images.services.path' => ['nullable', 'string', 'max:255'],
+            'section_images.services.file' => ['nullable', 'image', 'max:5120'],
+            'section_images.services.remove' => ['nullable', 'boolean'],
+            'section_images.proof.path' => ['nullable', 'string', 'max:255'],
+            'section_images.proof.file' => ['nullable', 'image', 'max:5120'],
+            'section_images.proof.remove' => ['nullable', 'boolean'],
             'hero_video.url' => ['nullable', 'string', 'max:255'],
             'what_we_do' => ['required', 'array', 'min:1'],
             'what_we_do.*.title' => ['required', 'string', 'max:120'],
@@ -184,6 +198,29 @@ class AdminAuthController extends Controller
             ];
         }
 
+        $sectionImages = $existingContent['section_images'] ?? HomepageContent::defaults()['section_images'];
+        foreach (['hero', 'intro', 'services', 'proof'] as $key) {
+            $currentPath = trim((string) data_get(
+                $request->input('section_images', []),
+                $key . '.path',
+                data_get($sectionImages, $key . '.path', '')
+            ));
+
+            if ($request->boolean("section_images.$key.remove")) {
+                $this->deletePublicAsset(HomepageContent::storedPath($currentPath));
+                $currentPath = '';
+            }
+
+            if ($request->hasFile("section_images.$key.file")) {
+                $this->deletePublicAsset(HomepageContent::storedPath($currentPath));
+                $currentPath = $request->file("section_images.$key.file")->store('homepage/sections', 'public');
+            }
+
+            $sectionImages[$key] = [
+                'path' => $currentPath,
+            ];
+        }
+
         $heroVideo = [
             'url' => trim((string) data_get($request->input('hero_video', []), 'url', '')),
         ];
@@ -198,6 +235,7 @@ class AdminAuthController extends Controller
 
         HomepageContent::save([
             'logo' => $logo,
+            'section_images' => $sectionImages,
             'hero_video' => $heroVideo,
             'what_we_do' => $whatWeDo,
             'our_process' => $ourProcess,
