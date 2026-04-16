@@ -1109,10 +1109,10 @@ section[id] {
 }
 
 .service-section-copy {
-    grid-template-columns: minmax(0, 1.2fr) minmax(22rem, 0.8fr);
-    align-items: end;
-    gap: clamp(1.25rem, 3vw, 3rem);
-    max-width: none;
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 1rem;
+    max-width: 72rem;
     margin-inline: 0;
     justify-items: stretch;
     text-align: left;
@@ -1121,14 +1121,16 @@ section[id] {
 .service-section-copy > div {
     display: grid;
     justify-items: start;
+    gap: 0.35rem;
 }
 
 .service-section-copy h2 {
-    max-width: none;
+    max-width: 15ch;
+    font-size: clamp(1.95rem, 3vw, 3.1rem);
 }
 
 .service-section-copy p {
-    max-width: none;
+    max-width: 58rem;
 }
 
 .service-grid {
