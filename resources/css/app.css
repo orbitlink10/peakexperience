@@ -9,3 +9,61 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer components {
+    .admin-panel {
+        @apply rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-950/[0.03];
+    }
+
+    .admin-surface {
+        @apply rounded-2xl border border-slate-200/80 bg-white shadow-sm shadow-slate-950/[0.03];
+    }
+
+    .admin-label {
+        @apply block text-sm font-semibold text-slate-700;
+    }
+
+    .admin-input {
+        @apply mt-2 block w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-100;
+    }
+
+    .admin-textarea {
+        @apply mt-2 block min-h-28 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-100;
+    }
+
+    .admin-select {
+        @apply mt-2 block w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 pr-10 text-sm text-slate-900 shadow-sm outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-100;
+    }
+
+    .admin-file-input {
+        @apply mt-2 block w-full text-sm text-slate-600 file:mr-4 file:rounded-xl file:border-0 file:bg-slate-900 file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-white hover:file:bg-slate-800;
+    }
+
+    .admin-checkbox {
+        @apply h-4 w-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500;
+    }
+
+    .admin-help {
+        @apply mt-2 text-sm leading-6 text-slate-500;
+    }
+
+    .admin-btn-primary {
+        @apply inline-flex items-center justify-center rounded-xl bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-700 focus:outline-none focus:ring-4 focus:ring-amber-200;
+    }
+
+    .admin-btn-secondary {
+        @apply inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-200;
+    }
+
+    .admin-btn-danger {
+        @apply inline-flex items-center justify-center rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 focus:outline-none focus:ring-4 focus:ring-rose-200;
+    }
+
+    .admin-alert-success {
+        @apply rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800;
+    }
+
+    .admin-alert-error {
+        @apply rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800;
+    }
+}

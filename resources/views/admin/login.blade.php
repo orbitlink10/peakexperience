@@ -4,259 +4,95 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Login | Peak Experience</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --ink: #1f2530;
-            --fog: #6b7380;
-            --canvas: #f4f2ec;
-            --paper: #ffffff;
-            --accent: #d0692b;
-            --forest: #1f5c4d;
-            --line: #dde0e5;
-            --shadow: 0 24px 45px rgba(31, 37, 48, 0.16);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at 20% 20%, rgba(31, 92, 77, 0.18), transparent 48%),
-                radial-gradient(circle at 90% 10%, rgba(208, 105, 43, 0.2), transparent 45%),
-                linear-gradient(180deg, #f2efe8 0%, #f8fafb 100%);
-            font-family: 'Manrope', sans-serif;
-            color: var(--ink);
-            display: grid;
-            place-items: center;
-            padding: 1rem;
-        }
-
-        .shell {
-            width: min(950px, 100%);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            background: var(--paper);
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .brand-pane {
-            background:
-                linear-gradient(145deg, rgba(17, 22, 30, 0.78), rgba(17, 22, 30, 0.52)),
-                url('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
-            color: #ffffff;
-            padding: clamp(1.8rem, 4vw, 2.4rem);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 560px;
-        }
-
-        .eyebrow {
-            display: inline-block;
-            width: fit-content;
-            font-size: 0.72rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            padding: 0.35rem 0.6rem;
-            border: 1px solid rgba(255, 255, 255, 0.45);
-            border-radius: 999px;
-            margin-bottom: 1rem;
-        }
-
-        .brand-pane h1 {
-            font-family: 'Barlow Condensed', sans-serif;
-            text-transform: uppercase;
-            font-size: clamp(2.1rem, 5vw, 3.3rem);
-            letter-spacing: 0.02em;
-            line-height: 0.95;
-            margin-bottom: 1rem;
-        }
-
-        .brand-pane p {
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.7;
-            max-width: 390px;
-        }
-
-        .panel-note {
-            font-size: 0.88rem;
-            color: rgba(255, 255, 255, 0.86);
-        }
-
-        .form-pane {
-            padding: clamp(1.8rem, 4vw, 2.6rem);
-        }
-
-        .title {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: clamp(2rem, 5vw, 2.7rem);
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-            margin-bottom: 0.5rem;
-        }
-
-        .subtitle {
-            color: var(--fog);
-            margin-bottom: 1.7rem;
-            line-height: 1.6;
-        }
-
-        .alert {
-            border-radius: 10px;
-            padding: 0.75rem 0.9rem;
-            margin-bottom: 1rem;
-            border: 1px solid transparent;
-            font-size: 0.92rem;
-        }
-
-        .alert-status {
-            background: #edf7f4;
-            border-color: #cce7de;
-            color: #1d604e;
-        }
-
-        .alert-error {
-            background: #fff2ef;
-            border-color: #f4ccc5;
-            color: #9a2b2b;
-        }
-
-        .field {
-            margin-bottom: 1rem;
-        }
-
-        .field label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-            color: #273243;
-        }
-
-        .field input {
-            width: 100%;
-            border: 1px solid var(--line);
-            border-radius: 10px;
-            padding: 0.78rem 0.82rem;
-            font-size: 0.96rem;
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .field input:focus {
-            border-color: var(--forest);
-            box-shadow: 0 0 0 3px rgba(31, 92, 77, 0.17);
-        }
-
-        .submit {
-            width: 100%;
-            border: 0;
-            border-radius: 10px;
-            padding: 0.85rem 1rem;
-            font-size: 0.96rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #d0692b, #bd5719);
-            color: #ffffff;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            margin-top: 0.5rem;
-        }
-
-        .submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 24px rgba(208, 105, 43, 0.3);
-        }
-
-        .hint {
-            margin-top: 1rem;
-            padding: 0.8rem;
-            border-radius: 10px;
-            background: #f8f8f8;
-            border: 1px solid #eceff3;
-            color: #4f5968;
-            font-size: 0.88rem;
-            line-height: 1.6;
-        }
-
-        .back {
-            display: inline-block;
-            margin-top: 1rem;
-            color: #4f5968;
-            text-decoration: none;
-            font-size: 0.89rem;
-            font-weight: 600;
-        }
-
-        .back:hover {
-            color: var(--accent);
-        }
-
-        @media (max-width: 860px) {
-            .shell {
-                grid-template-columns: 1fr;
-            }
-
-            .brand-pane {
-                min-height: 300px;
-            }
-        }
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
-    <main class="shell">
-        <section class="brand-pane">
-            <div>
-                <span class="eyebrow">Peak Experience Admin</span>
-                <h1>System Control Room</h1>
-                <p>Manage event operations, monitor platform status, and keep planning teams aligned from one secure dashboard.</p>
-            </div>
-            <p class="panel-note">Peak Experience Event Planning | Nairobi, Kenya</p>
-        </section>
+<body class="min-h-screen bg-slate-100 text-slate-900 antialiased">
+    <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(245,158,11,0.16),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(15,23,42,0.16),_transparent_26%)] px-4 py-10">
+        <main class="mx-auto grid max-w-6xl overflow-hidden rounded-[28px] border border-white/60 bg-white shadow-2xl shadow-slate-950/10 lg:grid-cols-[1.05fr_0.95fr]">
+            <section class="relative flex min-h-[320px] flex-col justify-between overflow-hidden bg-slate-950 px-8 py-10 text-white sm:px-10 lg:min-h-[620px] lg:px-12 lg:py-12">
+                <div class="absolute inset-0 bg-[linear-gradient(160deg,rgba(15,23,42,0.82),rgba(15,23,42,0.45)),url('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1400&q=80')] bg-cover bg-center"></div>
 
-        <section class="form-pane">
-            <h2 class="title">Admin Sign In</h2>
-            <p class="subtitle">Use your administrator credentials to access system management tools.</p>
+                <div class="relative z-10">
+                    <span class="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-white/80">
+                        Peak Experience Admin
+                    </span>
 
-            @if (session('status'))
-                <div class="alert alert-status">{{ session('status') }}</div>
-            @endif
+                    <h1 class="mt-6 max-w-md text-4xl font-semibold uppercase tracking-tight text-white sm:text-5xl">
+                        System Control Room
+                    </h1>
 
-            @if ($errors->any())
-                <div class="alert alert-error">{{ $errors->first() }}</div>
-            @endif
-
-            <form method="POST" action="{{ route('admin.login.submit') }}">
-                @csrf
-                <div class="field">
-                    <label for="username">Username</label>
-                    <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus autocomplete="username">
+                    <p class="mt-6 max-w-md text-sm leading-7 text-white/80 sm:text-base">
+                        Manage event operations, monitor platform status, and keep planning teams aligned from one secure dashboard.
+                    </p>
                 </div>
 
-                <div class="field">
-                    <label for="password">Password</label>
-                    <input id="password" type="password" name="password" required autocomplete="current-password">
+                <p class="relative z-10 text-sm font-medium uppercase tracking-[0.22em] text-white/60">
+                    Peak Experience Event Planning | Nairobi, Kenya
+                </p>
+            </section>
+
+            <section class="p-8 sm:p-10 lg:p-12">
+                <div class="max-w-md">
+                    <p class="text-sm font-semibold uppercase tracking-[0.22em] text-amber-600">Secure Access</p>
+                    <h2 class="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Admin Sign In</h2>
+                    <p class="mt-3 text-sm leading-7 text-slate-600 sm:text-base">
+                        Use your administrator credentials to access system management tools.
+                    </p>
+
+                    @if (session('status'))
+                        <div class="admin-alert-success mt-6">{{ session('status') }}</div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="admin-alert-error mt-4">{{ $errors->first() }}</div>
+                    @endif
+
+                    <form method="POST" action="{{ route('admin.login.submit') }}" class="mt-8 space-y-5">
+                        @csrf
+
+                        <div>
+                            <label for="username" class="admin-label">Username</label>
+                            <input
+                                id="username"
+                                type="text"
+                                name="username"
+                                value="{{ old('username') }}"
+                                required
+                                autofocus
+                                autocomplete="username"
+                                class="admin-input"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="password" class="admin-label">Password</label>
+                            <input
+                                id="password"
+                                type="password"
+                                name="password"
+                                required
+                                autocomplete="current-password"
+                                class="admin-input"
+                            >
+                        </div>
+
+                        <button class="admin-btn-primary w-full" type="submit">Open Dashboard</button>
+                    </form>
+
+                    <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-7 text-slate-600">
+                        <p class="font-semibold text-slate-950">Demo credentials</p>
+                        <p class="mt-2">
+                            <strong>Username:</strong> admin<br>
+                            <strong>Password:</strong> admin123
+                        </p>
+                    </div>
+
+                    <a href="{{ url('/') }}" class="mt-6 inline-flex items-center text-sm font-semibold text-slate-600 transition hover:text-amber-600">
+                        Back to homepage
+                    </a>
                 </div>
-
-                <button class="submit" type="submit">Open Dashboard</button>
-            </form>
-
-            <div class="hint">
-                Demo credentials configured:<br>
-                <strong>Username:</strong> admin<br>
-                <strong>Password:</strong> admin123
-            </div>
-
-            <a class="back" href="{{ url('/') }}">Back to homepage</a>
-        </section>
-    </main>
+            </section>
+        </main>
+    </div>
 </body>
 </html>
