@@ -1125,9 +1125,10 @@ section[id] {
 }
 
 .service-section-copy h2 {
-    max-width: 15ch;
+    max-width: 26ch;
     font-size: clamp(2.1rem, 4.2vw, 3.8rem);
     text-align: center;
+    text-wrap: balance;
 }
 
 .service-section-copy p {
