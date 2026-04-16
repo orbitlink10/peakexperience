@@ -26,6 +26,8 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
             return redirect()->route('admin.gallery');
         })->name('dashboard');
         Route::get('/gallery', [AdminAuthController::class, 'gallery'])->name('gallery');
+        Route::post('/gallery/upload', [AdminAuthController::class, 'uploadGalleryImage'])->name('gallery.upload');
+        Route::post('/gallery/delete', [AdminAuthController::class, 'deleteGalleryImages'])->name('gallery.delete');
         Route::get('/homepage', [AdminAuthController::class, 'showHomepage'])->name('homepage');
         Route::post('/homepage', [AdminAuthController::class, 'updateHomepage'])->name('homepage.update');
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');

@@ -230,6 +230,18 @@
             font-size: 0.9rem;
         }
 
+        .error-banner {
+            border: 1px solid #f1ccd0;
+            background: #fff3f4;
+            color: #9a2f3a;
+            border-radius: 12px;
+            padding: 0.75rem 0.9rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: grid;
+            gap: 0.25rem;
+        }
+
         .page-head {
             display: flex;
             justify-content: space-between;
@@ -250,7 +262,6 @@
         }
 
         .add-btn {
-            text-decoration: none;
             background: var(--brand);
             color: #fff;
             font-weight: 800;
@@ -259,6 +270,21 @@
             box-shadow: 0 10px 20px rgba(228, 151, 0, 0.25);
             margin-top: 0.35rem;
             display: inline-block;
+            border: 0;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .upload-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         .gallery-frame {
@@ -267,6 +293,13 @@
             border-radius: 16px;
             box-shadow: var(--shadow);
             overflow: hidden;
+        }
+
+        .empty-state {
+            padding: 2.4rem 1.4rem;
+            text-align: center;
+            color: #60789a;
+            font-size: 1rem;
         }
 
         .tip-bar {
@@ -535,39 +568,112 @@
             <div class="status-banner">{{ session('status') }}</div>
         @endif
 
+        @if ($errors->any())
+            <div class="error-banner">
+                @foreach ($errors->all() as $error)
+                    <span>{{ $error }}</span>
+                @endforeach
+            </div>
+        @endif
+
         <header class="page-head">
             <div>
                 <h1>Gallery</h1>
                 <p>Manage images displayed on the Gallery page.</p>
             </div>
-            <a href="#" class="add-btn">Add Image</a>
+            <form method="POST" action="{{ route('admin.gallery.upload') }}" enctype="multipart/form-data" id="gallery-upload-form">
+                @csrf
+                <input type="file" name="image_file" accept="image/*" id="gallery-image-file" class="upload-input">
+                <button type="button" class="add-btn" id="gallery-add-btn">Add Image</button>
+            </form>
         </header>
 
         <section class="gallery-frame">
-            <div class="tip-bar">Tip: drag cards to reorder. Order saves automatically.</div>
+            <div class="tip-bar">Use Add Image to upload a file. Select existing items and delete them in one action.</div>
 
-            <div class="action-row">
-                <label class="select-all">
-                    <input type="checkbox" name="select-all">
-                    <span>Select all</span>
-                </label>
-                <button class="delete-btn" type="button">Delete selected</button>
-            </div>
+            <form method="POST" action="{{ route('admin.gallery.delete') }}" id="gallery-delete-form">
+                @csrf
+                <div class="action-row">
+                    <label class="select-all">
+                        <input type="checkbox" name="select-all" id="gallery-select-all">
+                        <span>Select all</span>
+                    </label>
+                    <button class="delete-btn" type="submit">Delete selected</button>
+                </div>
 
-            <div class="gallery-grid">
-                @foreach ($galleryItems as $index => $item)
-                    <article class="card">
-                        <input type="checkbox" class="card-check" name="gallery-item-{{ $index + 1 }}">
-                        <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}">
-                        <div class="caption">
-                            <span class="title">{{ $item['title'] }}</span>
-                            <span class="index">#{{ $index + 1 }}</span>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
+                @if (count($galleryItems) > 0)
+                    <div class="gallery-grid">
+                        @foreach ($galleryItems as $index => $item)
+                            <article class="card">
+                                <input type="checkbox" class="card-check" name="selected[]" value="{{ $index }}">
+                                <img src="{{ \App\Support\HomepageContent::assetUrl($item['image']) }}" alt="{{ $item['title'] }}">
+                                <div class="caption">
+                                    <span class="title">{{ $item['title'] }}</span>
+                                    <span class="index">#{{ $index + 1 }}</span>
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="empty-state">No gallery images uploaded yet.</div>
+                @endif
+            </form>
         </section>
     </section>
 </main>
+<script>
+    (function () {
+        const uploadButton = document.getElementById('gallery-add-btn');
+        const uploadInput = document.getElementById('gallery-image-file');
+        const uploadForm = document.getElementById('gallery-upload-form');
+        const selectAll = document.getElementById('gallery-select-all');
+        const deleteForm = document.getElementById('gallery-delete-form');
+
+        if (uploadButton && uploadInput) {
+            uploadButton.addEventListener('click', () => {
+                uploadInput.click();
+            });
+        }
+
+        if (uploadInput && uploadForm) {
+            uploadInput.addEventListener('change', () => {
+                if (!uploadInput.files || uploadInput.files.length === 0) {
+                    return;
+                }
+
+                uploadForm.requestSubmit();
+            });
+        }
+
+        if (selectAll && deleteForm) {
+            const cardChecks = Array.from(deleteForm.querySelectorAll('.card-check'));
+
+            selectAll.addEventListener('change', () => {
+                cardChecks.forEach((checkbox) => {
+                    checkbox.checked = selectAll.checked;
+                });
+            });
+
+            cardChecks.forEach((checkbox) => {
+                checkbox.addEventListener('change', () => {
+                    selectAll.checked = cardChecks.length > 0 && cardChecks.every((item) => item.checked);
+                });
+            });
+
+            deleteForm.addEventListener('submit', (event) => {
+                const hasSelection = cardChecks.some((checkbox) => checkbox.checked);
+
+                if (!hasSelection) {
+                    event.preventDefault();
+                    return;
+                }
+
+                if (!window.confirm('Delete the selected gallery images?')) {
+                    event.preventDefault();
+                }
+            });
+        }
+    })();
+</script>
 </body>
 </html>

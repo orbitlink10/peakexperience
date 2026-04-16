@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\GalleryContent;
 use App\Support\HomepageContent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -49,44 +51,63 @@ class AdminAuthController extends Controller
 
     public function gallery(Request $request): View
     {
-        $galleryItems = [
-            [
-                'title' => 'Reception Dinner - Africa Fintech Forum',
-                'image' => 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1400&q=80',
-            ],
-            [
-                'title' => 'Stage Render - TowerXchange',
-                'image' => 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&w=1400&q=80',
-            ],
-            [
-                'title' => 'TowerXchange Stage Installation',
-                'image' => 'https://images.unsplash.com/photo-1540317580384-e5d43867caa6?auto=format&fit=crop&w=1400&q=80',
-            ],
-            [
-                'title' => 'ITW Africa Stage Installation',
-                'image' => 'https://images.unsplash.com/photo-1511795409834-432f31197d88?auto=format&fit=crop&w=1400&q=80',
-            ],
-            [
-                'title' => 'Forum Backdrop Setup',
-                'image' => 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1400&q=80',
-            ],
-            [
-                'title' => 'Conference Hall Lighting',
-                'image' => 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=1400&q=80',
-            ],
-            [
-                'title' => 'Expo Booth Delivery',
-                'image' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=80',
-            ],
-            [
-                'title' => 'Crew and Installation Team',
-                'image' => 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1400&q=80',
-            ],
-        ];
+        $galleryItems = GalleryContent::load();
 
         return view('admin.dashboard', $this->sharedData($request, 'Gallery') + [
             'galleryItems' => $galleryItems,
         ]);
+    }
+
+    public function uploadGalleryImage(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'image_file' => ['required', 'image', 'max:5120'],
+        ]);
+
+        $galleryItems = GalleryContent::load();
+        $file = $request->file('image_file');
+        $path = $file->store('homepage/gallery', 'public');
+        $title = Str::of(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
+            ->replace(['-', '_'], ' ')
+            ->squish()
+            ->title()
+            ->value();
+
+        $galleryItems[] = [
+            'title' => $title !== '' ? $title : 'Gallery Image',
+            'image' => $path,
+        ];
+
+        GalleryContent::save($galleryItems);
+
+        return redirect()->route('admin.gallery')->with('status', 'Image added successfully.');
+    }
+
+    public function deleteGalleryImages(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'selected' => ['required', 'array', 'min:1'],
+            'selected.*' => ['integer', 'min:0'],
+        ]);
+
+        $selected = array_flip(array_map('intval', $validated['selected']));
+        $remainingItems = [];
+
+        foreach (GalleryContent::load() as $index => $item) {
+            if (array_key_exists($index, $selected)) {
+                $this->deletePublicAsset(HomepageContent::storedPath((string) ($item['image'] ?? '')));
+                continue;
+            }
+
+            $remainingItems[] = [
+                'title' => trim((string) ($item['title'] ?? '')),
+                'image' => trim((string) ($item['image'] ?? '')),
+            ];
+        }
+
+        GalleryContent::save($remainingItems);
+
+        return redirect()->route('admin.gallery')->with('status', 'Selected images deleted.');
     }
 
     public function showHomepage(Request $request): View
