@@ -633,13 +633,13 @@ section[id] {
 .contact-input {
     display: block;
     width: 100%;
-    min-height: 3.5rem;
+    min-height: 3rem;
     border: 1px solid #ddd8cf;
     border-radius: 0.8rem;
     background: #ffffff;
     color: var(--ink-strong);
-    font: 500 1rem/1.6 'Manrope', sans-serif;
-    padding: 0.95rem 1.05rem;
+    font: 500 0.96rem/1.5 'Manrope', sans-serif;
+    padding: 0.72rem 0.95rem;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -662,7 +662,7 @@ section[id] {
 }
 
 .contact-textarea {
-    min-height: 8.75rem;
+    min-height: 7.5rem;
     resize: vertical;
 }
 
