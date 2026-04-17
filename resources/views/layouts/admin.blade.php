@@ -39,17 +39,13 @@
                         <ul class="space-y-1">
                             @foreach ($sidebarItems as $item)
                                 @php
-                                    $isPlaceholder = $item['href'] === '#';
                                     $linkClasses = $item['active']
                                         ? 'bg-white/10 text-white'
-                                        : ($isPlaceholder
-                                            ? 'cursor-default text-slate-500'
-                                            : 'text-slate-300 hover:bg-white/5 hover:text-white');
+                                        : 'text-slate-300 hover:bg-white/5 hover:text-white';
                                 @endphp
                                 <li>
                                     <a
                                         href="{{ $item['href'] }}"
-                                        @if ($isPlaceholder) aria-disabled="true" @endif
                                         class="block rounded-xl px-4 py-3 text-sm font-medium transition {{ $linkClasses }}"
                                     >
                                         {{ $item['label'] }}

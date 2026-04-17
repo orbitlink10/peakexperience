@@ -13,6 +13,60 @@ use Illuminate\View\View;
 
 class AdminAuthController extends Controller
 {
+    /**
+     * @return array<string, array{label:string,heading:string,description:string}>
+     */
+    private function placeholderSections(): array
+    {
+        return [
+            'overview' => [
+                'label' => 'Overview',
+                'heading' => 'Overview',
+                'description' => 'This section is now connected in the sidebar. Dashboard widgets and summary cards can be added here next.',
+            ],
+            'services' => [
+                'label' => 'Services',
+                'heading' => 'Services',
+                'description' => 'Use this section for service management once those editing tools are added to the admin panel.',
+            ],
+            'team' => [
+                'label' => 'Team',
+                'heading' => 'Team',
+                'description' => 'This area is reserved for team profiles, bios, and related media.',
+            ],
+            'sliders' => [
+                'label' => 'Sliders',
+                'heading' => 'Sliders',
+                'description' => 'Slider controls are not implemented yet, but this menu item now routes correctly.',
+            ],
+            'clients' => [
+                'label' => 'Clients',
+                'heading' => 'Clients',
+                'description' => 'This section can be used for client logos, testimonials, or case study listings.',
+            ],
+            'invoices' => [
+                'label' => 'Invoices',
+                'heading' => 'Invoices',
+                'description' => 'Invoice management has not been built yet, but the admin navigation now opens a real screen.',
+            ],
+            'videos' => [
+                'label' => 'Videos',
+                'heading' => 'Videos',
+                'description' => 'Video library and upload controls can be added here when that workflow is ready.',
+            ],
+            'pages' => [
+                'label' => 'Pages',
+                'heading' => 'Pages',
+                'description' => 'Use this area for standalone page management when those editors are added.',
+            ],
+            'contact-page' => [
+                'label' => 'Contact Page',
+                'heading' => 'Contact Page',
+                'description' => 'Contact page editing is not implemented yet, but the sidebar item now responds correctly.',
+            ],
+        ];
+    }
+
     public function showLogin(): View
     {
         return view('admin.login');
@@ -129,6 +183,19 @@ class AdminAuthController extends Controller
                 'Lighting',
                 'Branding',
             ],
+        ]);
+    }
+
+    public function section(Request $request, string $section): View
+    {
+        $sections = $this->placeholderSections();
+        abort_unless(array_key_exists($section, $sections), 404);
+
+        $page = $sections[$section];
+
+        return view('admin.placeholder', $this->sharedData($request, $page['label']) + [
+            'pageHeading' => $page['heading'],
+            'pageDescription' => $page['description'],
         ]);
     }
 
@@ -275,17 +342,17 @@ class AdminAuthController extends Controller
         ];
 
         $menu = [
-            ['label' => 'Overview', 'href' => '#'],
-            ['label' => 'Services', 'href' => '#'],
-            ['label' => 'Team', 'href' => '#'],
+            ['label' => 'Overview', 'href' => route('admin.section', ['section' => 'overview'])],
+            ['label' => 'Services', 'href' => route('admin.section', ['section' => 'services'])],
+            ['label' => 'Team', 'href' => route('admin.section', ['section' => 'team'])],
             ['label' => 'Gallery', 'href' => route('admin.gallery')],
-            ['label' => 'Sliders', 'href' => '#'],
-            ['label' => 'Clients', 'href' => '#'],
-            ['label' => 'Invoices', 'href' => '#'],
-            ['label' => 'Videos', 'href' => '#'],
-            ['label' => 'Pages', 'href' => '#'],
+            ['label' => 'Sliders', 'href' => route('admin.section', ['section' => 'sliders'])],
+            ['label' => 'Clients', 'href' => route('admin.section', ['section' => 'clients'])],
+            ['label' => 'Invoices', 'href' => route('admin.section', ['section' => 'invoices'])],
+            ['label' => 'Videos', 'href' => route('admin.section', ['section' => 'videos'])],
+            ['label' => 'Pages', 'href' => route('admin.section', ['section' => 'pages'])],
             ['label' => 'Homepage', 'href' => route('admin.homepage')],
-            ['label' => 'Contact Page', 'href' => '#'],
+            ['label' => 'Contact Page', 'href' => route('admin.section', ['section' => 'contact-page'])],
         ];
 
         $sidebarItems = array_map(
