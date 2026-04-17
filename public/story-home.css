@@ -633,13 +633,13 @@ section[id] {
 .contact-input {
     display: block;
     width: 100%;
-    min-height: 3rem;
+    min-height: 2.65rem;
     border: 1px solid #ddd8cf;
     border-radius: 0.8rem;
     background: #ffffff;
     color: var(--ink-strong);
     font: 500 0.96rem/1.5 'Manrope', sans-serif;
-    padding: 0.72rem 0.95rem;
+    padding: 0.56rem 0.9rem;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
