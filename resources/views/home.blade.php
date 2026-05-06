@@ -27,6 +27,7 @@
     $contactEmail = trim((string) ($contactEmail ?? ''));
     $hasContactEmail = filled($contactEmail);
     $contactPhones = is_array($contactPhones ?? null) ? $contactPhones : [];
+    $socialLinks = is_array($socialLinks ?? null) ? $socialLinks : [];
     $paymentUrl = trim((string) ($paymentUrl ?? ''));
     $paymentLabel = trim((string) ($paymentLabel ?? 'Make Payment'));
     $hasPaymentUrl = filled($paymentUrl);
@@ -522,6 +523,9 @@
                         @endif
                         @foreach ($contactPhones as $phone)
                             <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
+                        @endforeach
+                        @foreach ($socialLinks as $socialLink)
+                            <a href="{{ $socialLink['url'] }}" target="_blank" rel="noreferrer">{{ $socialLink['label'] }}</a>
                         @endforeach
                         <a href="#top">Back To Top</a>
                         <span>Live event delivery across Kenya</span>

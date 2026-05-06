@@ -139,6 +139,7 @@ class HomeController extends Controller
      * @return array{
      *   contactEmail: string,
      *   contactPhones: array<int, array{display:string,dial:string}>,
+     *   socialLinks: array<int, array{label:string,url:string}>,
      *   paymentUrl: string,
      *   paymentLabel: string
      * }
@@ -150,6 +151,11 @@ class HomeController extends Controller
             'contactPhones' => [
                 ['display' => '+254 119857961', 'dial' => '+254119857961'],
                 ['display' => '+254 792243400', 'dial' => '+254792243400'],
+            ],
+            'socialLinks' => [
+                ['label' => 'TikTok', 'url' => 'https://www.tiktok.com/@peak_audio_systems'],
+                ['label' => 'Instagram', 'url' => 'https://www.instagram.com/peak_audio_systems/'],
+                ['label' => 'LinkedIn', 'url' => 'https://www.linkedin.com/company/peak-audio/'],
             ],
             'paymentUrl' => trim((string) config('services.payment.url', '')),
             'paymentLabel' => trim((string) config('services.payment.label', 'Make Payment')),

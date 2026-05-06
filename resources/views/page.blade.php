@@ -2,6 +2,7 @@
     $contactEmail = trim((string) ($contactEmail ?? ''));
     $hasContactEmail = filled($contactEmail);
     $contactPhones = is_array($contactPhones ?? null) ? $contactPhones : [];
+    $socialLinks = is_array($socialLinks ?? null) ? $socialLinks : [];
     $logoUrl = \App\Support\HomepageContent::assetUrl(
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
@@ -120,6 +121,9 @@
                         @endif
                         @foreach ($contactPhones as $phone)
                             <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
+                        @endforeach
+                        @foreach ($socialLinks as $socialLink)
+                            <a href="{{ $socialLink['url'] }}" target="_blank" rel="noreferrer">{{ $socialLink['label'] }}</a>
                         @endforeach
                     </div>
                 </div>
