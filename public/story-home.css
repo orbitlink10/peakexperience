@@ -97,6 +97,19 @@ section[id] {
     background: linear-gradient(135deg, var(--accent-strong), #a94c15);
 }
 
+.whatsapp-float {
+    position: fixed;
+    right: 1.2rem;
+    bottom: 1.2rem;
+    z-index: 40;
+    width: auto;
+    max-width: calc(100% - 2.4rem);
+    min-height: 3.45rem;
+    padding-inline: 1.35rem;
+    border-radius: 999px;
+    box-shadow: 0 18px 34px rgba(37, 211, 102, 0.24);
+}
+
 .site-header {
     position: sticky;
     top: 0;
@@ -271,6 +284,17 @@ section[id] {
     background: rgba(255, 253, 248, 0.9);
     border-color: rgba(31, 92, 77, 0.16);
     color: var(--brand-green);
+}
+
+.button-whatsapp {
+    background: linear-gradient(135deg, #25d366, #1faa52);
+    color: #ffffff;
+    box-shadow: 0 16px 28px rgba(37, 211, 102, 0.24);
+}
+
+.button-whatsapp:hover,
+.button-whatsapp:focus-visible {
+    background: linear-gradient(135deg, #1faa52, #178c43);
 }
 
 .button-nav-cta {
@@ -2137,6 +2161,13 @@ section[id] {
 
     .contact-actions {
         flex-direction: column;
+    }
+
+    .whatsapp-float {
+        right: 1rem;
+        bottom: 1rem;
+        min-height: 3.2rem;
+        padding-inline: 1.15rem;
     }
 
     .contact-details {

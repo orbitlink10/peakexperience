@@ -3,6 +3,8 @@
     $hasContactEmail = filled($contactEmail);
     $contactPhones = is_array($contactPhones ?? null) ? $contactPhones : [];
     $socialLinks = is_array($socialLinks ?? null) ? $socialLinks : [];
+    $whatsappUrl = trim((string) ($whatsappUrl ?? ''));
+    $hasWhatsapp = filled($whatsappUrl);
     $logoUrl = \App\Support\HomepageContent::assetUrl(
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
@@ -18,6 +20,7 @@
     @if ($page['meta_description'] !== '')
         <meta name="description" content="{{ $page['meta_description'] }}">
     @endif
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -125,10 +128,19 @@
                         @foreach ($socialLinks as $socialLink)
                             <a href="{{ $socialLink['url'] }}" target="_blank" rel="noreferrer">{{ $socialLink['label'] }}</a>
                         @endforeach
+                        @if ($hasWhatsapp)
+                            <a href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer">WhatsApp</a>
+                        @endif
                     </div>
                 </div>
             </div>
         </footer>
     </div>
+
+    @if ($hasWhatsapp)
+        <a class="button button-whatsapp whatsapp-float" href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer" aria-label="Chat with Peak Experience on WhatsApp">
+            WhatsApp
+        </a>
+    @endif
 </body>
 </html>

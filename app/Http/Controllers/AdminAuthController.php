@@ -172,6 +172,7 @@ class AdminAuthController extends Controller
 
         return view('admin.homepage', $this->sharedData($request, 'homepage') + [
             'logo' => $content['logo'],
+            'contactSettings' => $content['contact'],
             'sectionImages' => $content['section_images'],
             'heroVideo' => $content['hero_video'],
             'whatWeDo' => $content['what_we_do'],
@@ -355,6 +356,7 @@ class AdminAuthController extends Controller
         $request->validate([
             'logo_file' => ['nullable', 'image', 'max:5120'],
             'logo_remove' => ['nullable', 'boolean'],
+            'contact.whatsapp_phone' => ['nullable', 'string', 'max:40'],
             'section_images' => ['nullable', 'array'],
             'section_images.hero.path' => ['nullable', 'string', 'max:255'],
             'section_images.hero.file' => ['nullable', 'image', 'max:5120'],
@@ -417,6 +419,18 @@ class AdminAuthController extends Controller
                 'path' => $path,
             ];
         }
+
+        $contact = array_merge(
+            HomepageContent::defaults()['contact'],
+            (array) ($existingContent['contact'] ?? []),
+            [
+                'whatsapp_phone' => trim((string) data_get(
+                    $request->input('contact', []),
+                    'whatsapp_phone',
+                    data_get($existingContent, 'contact.whatsapp_phone', '')
+                )),
+            ]
+        );
 
         $sectionImages = $existingContent['section_images'] ?? HomepageContent::defaults()['section_images'];
         foreach (['hero', 'intro', 'services', 'proof'] as $key) {
@@ -488,6 +502,7 @@ class AdminAuthController extends Controller
 
         HomepageContent::save([
             'logo' => $logo,
+            'contact' => $contact,
             'section_images' => $sectionImages,
             'hero_video' => $heroVideo,
             'what_we_do' => $whatWeDo,

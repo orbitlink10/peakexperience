@@ -28,6 +28,8 @@
     $hasContactEmail = filled($contactEmail);
     $contactPhones = is_array($contactPhones ?? null) ? $contactPhones : [];
     $socialLinks = is_array($socialLinks ?? null) ? $socialLinks : [];
+    $whatsappUrl = trim((string) ($whatsappUrl ?? ''));
+    $hasWhatsapp = filled($whatsappUrl);
     $paymentUrl = trim((string) ($paymentUrl ?? ''));
     $paymentLabel = trim((string) ($paymentLabel ?? 'Make Payment'));
     $hasPaymentUrl = filled($paymentUrl);
@@ -77,6 +79,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Peak Experience | Creative Event Production in Kenya</title>
     <meta name="description" content="Peak Experience delivers conferences, launches, exhibitions, and live brand events with creative production, staging, and show-day precision across Kenya.">
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -354,6 +357,9 @@
                             @if (! empty($contactPhones))
                                 <a class="button button-secondary" href="tel:{{ $contactPhones[0]['dial'] }}">Call Us</a>
                             @endif
+                            @if ($hasWhatsapp)
+                                <a class="button button-whatsapp" href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer">WhatsApp Us</a>
+                            @endif
                             <a class="button button-secondary" href="#services">Review Services</a>
                             @if ($hasPaymentUrl)
                                 <a class="button button-secondary" href="{{ $paymentUrl }}" target="_blank" rel="noreferrer">{{ $paymentLabel }}</a>
@@ -527,6 +533,9 @@
                         @foreach ($socialLinks as $socialLink)
                             <a href="{{ $socialLink['url'] }}" target="_blank" rel="noreferrer">{{ $socialLink['label'] }}</a>
                         @endforeach
+                        @if ($hasWhatsapp)
+                            <a href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer">WhatsApp</a>
+                        @endif
                         <a href="#top">Back To Top</a>
                         <span>Live event delivery across Kenya</span>
                     </div>
@@ -534,6 +543,12 @@
             </div>
         </footer>
     </div>
+
+    @if ($hasWhatsapp)
+        <a class="button button-whatsapp whatsapp-float" href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer" aria-label="Chat with Peak Experience on WhatsApp">
+            WhatsApp
+        </a>
+    @endif
 
     <script src="{{ asset('story-home.js') }}" defer></script>
     @if ($errors->any() || session('contact_status') || session('contact_error'))

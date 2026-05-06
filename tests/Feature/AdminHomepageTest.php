@@ -179,4 +179,45 @@ class AdminHomepageTest extends TestCase
         $response->assertSee('service-showcase-video-frame', false);
         $response->assertSee('https://www.youtube.com/embed/dQw4w9WgXcQ', false);
     }
+
+    public function test_admin_can_save_homepage_whatsapp_phone(): void
+    {
+        $defaults = HomepageContent::defaults();
+
+        $response = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->post(route('admin.homepage.update'), [
+                'contact' => [
+                    'whatsapp_phone' => '+254700111222',
+                ],
+                'section_images' => $defaults['section_images'],
+                'hero_video' => $defaults['hero_video'],
+                'what_we_do' => $defaults['what_we_do'],
+                'our_process' => $defaults['our_process'],
+            ]);
+
+        $response->assertRedirect(route('admin.homepage'));
+        $response->assertSessionHas('status', 'Homepage updated successfully.');
+
+        $contact = HomepageSetting::query()->where('key', 'contact')->first();
+
+        $this->assertNotNull($contact);
+        $this->assertSame('+254700111222', data_get($contact?->value, 'whatsapp_phone'));
+    }
+
+    public function test_homepage_renders_whatsapp_link_when_phone_is_present(): void
+    {
+        HomepageSetting::query()->create([
+            'key' => 'contact',
+            'value' => [
+                'whatsapp_phone' => '+254700111222',
+            ],
+        ]);
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertSee('https://wa.me/254700111222', false);
+        $response->assertSee('WhatsApp Us');
+    }
 }

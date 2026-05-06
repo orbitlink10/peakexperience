@@ -6,6 +6,7 @@
 @section('content')
     @php
         $logoValue = old('logo', $logo);
+        $contactValues = old('contact', $contactSettings ?? ['whatsapp_phone' => '']);
         $currentLogoUrl = \App\Support\HomepageContent::assetUrl(
             (string) data_get($logoValue ?? [], 'path', data_get($logoValue ?? [], 'url', ''))
         );
@@ -156,6 +157,30 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+            </section>
+
+            <section class="admin-panel space-y-5">
+                <div>
+                    <h2 class="text-xl font-semibold tracking-tight text-slate-950">WhatsApp Messaging</h2>
+                    <p class="mt-2 text-sm leading-6 text-slate-500">
+                        Enter the WhatsApp number the site should use for chat buttons and messaging links. Use the number in international format.
+                    </p>
+                </div>
+
+                <div class="grid gap-4 lg:max-w-xl">
+                    <div>
+                        <label for="contact_whatsapp_phone" class="admin-label">WhatsApp Phone Number</label>
+                        <input
+                            id="contact_whatsapp_phone"
+                            type="text"
+                            name="contact[whatsapp_phone]"
+                            value="{{ data_get($contactValues, 'whatsapp_phone', '') }}"
+                            placeholder="+2547XXXXXXXX"
+                            class="admin-input"
+                        >
+                        <p class="admin-help">Example: <code>+254712345678</code> or <code>254712345678</code>.</p>
+                    </div>
                 </div>
             </section>
 

@@ -11,6 +11,7 @@ class HomepageContent
     /**
      * @return array{
      *     logo: array{url:string,path:string},
+     *     contact: array{whatsapp_phone:string},
      *     section_images: array{
      *         hero: array{path:string},
      *         intro: array{path:string},
@@ -31,11 +32,11 @@ class HomepageContent
         }
 
         $settings = HomepageSetting::query()
-            ->whereIn('key', ['logo', 'section_images', 'hero_video', 'what_we_do', 'our_process'])
+            ->whereIn('key', ['logo', 'contact', 'section_images', 'hero_video', 'what_we_do', 'our_process'])
             ->get()
             ->keyBy('key');
 
-        foreach (['logo', 'section_images', 'hero_video', 'what_we_do', 'our_process'] as $key) {
+        foreach (['logo', 'contact', 'section_images', 'hero_video', 'what_we_do', 'our_process'] as $key) {
             if ($settings->has($key) && is_array($settings[$key]->value)) {
                 $defaults[$key] = $settings[$key]->value;
             }
@@ -47,6 +48,7 @@ class HomepageContent
     /**
      * @param  array{
      *     logo: array{url:string,path:string},
+     *     contact: array{whatsapp_phone:string},
      *     section_images: array{
      *         hero: array{path:string},
      *         intro: array{path:string},
@@ -63,6 +65,11 @@ class HomepageContent
         HomepageSetting::query()->updateOrCreate(
             ['key' => 'logo'],
             ['value' => $data['logo']]
+        );
+
+        HomepageSetting::query()->updateOrCreate(
+            ['key' => 'contact'],
+            ['value' => $data['contact']]
         );
 
         HomepageSetting::query()->updateOrCreate(
@@ -89,6 +96,7 @@ class HomepageContent
     /**
      * @return array{
      *     logo: array{url:string,path:string},
+     *     contact: array{whatsapp_phone:string},
      *     section_images: array{
      *         hero: array{path:string},
      *         intro: array{path:string},
@@ -106,6 +114,9 @@ class HomepageContent
             'logo' => [
                 'url' => '',
                 'path' => '',
+            ],
+            'contact' => [
+                'whatsapp_phone' => '+254119857961',
             ],
             'section_images' => [
                 'hero' => ['path' => ''],
@@ -274,6 +285,23 @@ class HomepageContent
         }
 
         return ['type' => '', 'url' => ''];
+    }
+
+    public static function whatsappUrl(?string $phone, ?string $message = null): string
+    {
+        $digits = preg_replace('/\D+/', '', trim((string) $phone));
+        if ($digits === null || $digits === '') {
+            return '';
+        }
+
+        $url = 'https://wa.me/' . $digits;
+        $message = trim((string) $message);
+
+        if ($message !== '') {
+            $url .= '?text=' . rawurlencode($message);
+        }
+
+        return $url;
     }
 
     private static function youtubeVideoId(string $value): string

@@ -25,7 +25,7 @@ class HomeController extends Controller
             'heroVideo' => $content['hero_video'],
             'whatWeDo' => HomepageContent::services($content['what_we_do']),
             'ourProcess' => $content['our_process'],
-        ] + $this->contactData());
+        ] + $this->contactData($content));
     }
 
     public function service(string $service): View
@@ -46,7 +46,7 @@ class HomeController extends Controller
         return view('service', [
             'logo' => $content['logo'],
             'service' => $serviceItem,
-        ] + $this->contactData());
+        ] + $this->contactData($content));
     }
 
     public function page(string $page): View
@@ -59,7 +59,7 @@ class HomeController extends Controller
         return view('page', [
             'logo' => $content['logo'],
             'page' => $pageItem,
-        ] + $this->contactData());
+        ] + $this->contactData($content));
     }
 
     public function submitContact(Request $request): RedirectResponse
@@ -140,12 +140,17 @@ class HomeController extends Controller
      *   contactEmail: string,
      *   contactPhones: array<int, array{display:string,dial:string}>,
      *   socialLinks: array<int, array{label:string,url:string}>,
+     *   whatsappPhone: string,
+     *   whatsappUrl: string,
      *   paymentUrl: string,
      *   paymentLabel: string
      * }
      */
-    private function contactData(): array
+    private function contactData(?array $content = null): array
     {
+        $content ??= HomepageContent::load();
+        $whatsappPhone = trim((string) data_get($content, 'contact.whatsapp_phone', '+254119857961'));
+
         return [
             'contactEmail' => 'info@peakexperience.co.ke',
             'contactPhones' => [
@@ -157,6 +162,11 @@ class HomeController extends Controller
                 ['label' => 'Instagram', 'url' => 'https://www.instagram.com/peak_audio_systems/'],
                 ['label' => 'LinkedIn', 'url' => 'https://www.linkedin.com/company/peak-audio/'],
             ],
+            'whatsappPhone' => $whatsappPhone,
+            'whatsappUrl' => HomepageContent::whatsappUrl(
+                $whatsappPhone,
+                'Hello Peak Experience, I would like to enquire about your event services.'
+            ),
             'paymentUrl' => trim((string) config('services.payment.url', '')),
             'paymentLabel' => trim((string) config('services.payment.label', 'Make Payment')),
         ];
