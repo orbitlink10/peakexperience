@@ -104,6 +104,38 @@ class AdminHomepageTest extends TestCase
         Storage::disk('public')->assertExists($storedPath);
     }
 
+    public function test_admin_can_save_homepage_services_video_url(): void
+    {
+        $defaults = HomepageContent::defaults();
+
+        $response = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->post(route('admin.homepage.update'), [
+                'section_images' => [
+                    'hero' => ['path' => ''],
+                    'intro' => ['path' => ''],
+                    'services' => [
+                        'path' => '',
+                        'video_path' => '',
+                        'video_url' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                    ],
+                    'proof' => ['path' => ''],
+                ],
+                'hero_video' => $defaults['hero_video'],
+                'what_we_do' => $defaults['what_we_do'],
+                'our_process' => $defaults['our_process'],
+            ]);
+
+        $response->assertRedirect(route('admin.homepage'));
+        $response->assertSessionHas('status', 'Homepage updated successfully.');
+
+        $sectionImages = HomepageSetting::query()->where('key', 'section_images')->first();
+
+        $this->assertNotNull($sectionImages);
+        $storedValue = (string) data_get($sectionImages?->value, 'services.video_path', '');
+        $this->assertSame('https://www.youtube.com/watch?v=dQw4w9WgXcQ', $storedValue);
+    }
+
     public function test_homepage_prefers_uploaded_services_video_when_present(): void
     {
         HomepageSetting::query()->create([
@@ -124,5 +156,27 @@ class AdminHomepageTest extends TestCase
         $response->assertOk();
         $response->assertSee('service-showcase-video', false);
         $response->assertSee(route('homepage.asset', ['path' => 'homepage/sections/services-video.mp4']), false);
+    }
+
+    public function test_homepage_renders_services_youtube_video_when_present(): void
+    {
+        HomepageSetting::query()->create([
+            'key' => 'section_images',
+            'value' => [
+                'hero' => ['path' => 'homepage/sections/hero.png'],
+                'intro' => ['path' => 'homepage/sections/intro.png'],
+                'services' => [
+                    'path' => 'homepage/sections/services.png',
+                    'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                ],
+                'proof' => ['path' => 'homepage/sections/proof.png'],
+            ],
+        ]);
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertSee('service-showcase-video-frame', false);
+        $response->assertSee('https://www.youtube.com/embed/dQw4w9WgXcQ', false);
     }
 }

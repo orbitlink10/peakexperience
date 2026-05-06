@@ -32,6 +32,11 @@
         $whatWeDoValues = old('what_we_do', $whatWeDo);
         $ourProcessValues = old('our_process', $ourProcess);
         $heroVideoUrl = trim((string) data_get($heroVideoValue, 'url', ''));
+        $servicesVideoUrl = trim((string) data_get(
+            $sectionImageValues,
+            'services.video_url',
+            data_get($sectionImageValues, 'services.video_path', '')
+        ));
         $currentServicesVideo = \App\Support\HomepageContent::videoSource(
             (string) data_get($sectionImageValues, 'services.video_path', '')
         );
@@ -158,14 +163,25 @@
                 <div>
                     <h2 class="text-xl font-semibold tracking-tight text-slate-950">Our Services Video</h2>
                     <p class="mt-2 text-sm leading-6 text-slate-500">
-                        Upload a looping showcase video for the homepage services section. When this is present, it replaces the services image on the live site.
+                        Paste a YouTube, Vimeo, or direct video URL for the homepage services section, or upload a video file below. When this is present, it replaces the services image on the live site.
                     </p>
                 </div>
 
                 <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(260px,320px)]">
                     <div>
-                        <label for="services_video_file" class="admin-label">Upload Video</label>
+                        <label for="services_video_url" class="admin-label">Video URL</label>
                         <input type="hidden" name="section_images[services][video_path]" value="{{ data_get($sectionImageValues, 'services.video_path', '') }}">
+                        <input
+                            id="services_video_url"
+                            type="url"
+                            name="section_images[services][video_url]"
+                            value="{{ $servicesVideoUrl }}"
+                            placeholder="https://..."
+                            class="admin-input"
+                        >
+                        <p class="admin-help">Paste a YouTube, Vimeo, or direct video URL here. If you also upload a file below, the uploaded file will be used.</p>
+
+                        <label for="services_video_file" class="admin-label mt-5">Upload Video</label>
                         <input
                             id="services_video_file"
                             type="file"
@@ -191,14 +207,27 @@
                         @if ($currentServicesVideo['url'] !== '')
                             <div class="grid w-full min-w-0 gap-3 text-center">
                                 <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
-                                    <video
-                                        src="{{ $currentServicesVideo['url'] }}"
-                                        controls
-                                        muted
-                                        playsinline
-                                        preload="metadata"
-                                        class="h-44 w-full object-cover"
-                                    ></video>
+                                    @if ($currentServicesVideo['type'] === 'file')
+                                        <video
+                                            src="{{ $currentServicesVideo['url'] }}"
+                                            controls
+                                            muted
+                                            playsinline
+                                            preload="metadata"
+                                            class="h-44 w-full object-cover"
+                                        ></video>
+                                    @else
+                                        <div class="relative h-44 overflow-hidden bg-slate-900">
+                                            <iframe
+                                                src="{{ $currentServicesVideo['url'] }}"
+                                                title=""
+                                                tabindex="-1"
+                                                allow="autoplay; encrypted-media; picture-in-picture"
+                                                referrerpolicy="strict-origin-when-cross-origin"
+                                                class="absolute left-1/2 top-1/2 h-full w-[177.77777778%] -translate-x-1/2 -translate-y-1/2 scale-[1.08] border-0"
+                                            ></iframe>
+                                        </div>
+                                    @endif
                                 </div>
                                 <p class="break-all text-xs leading-5 text-slate-500">Current: {{ $currentServicesVideo['url'] }}</p>
                             </div>

@@ -229,6 +229,17 @@
                             <video class="service-showcase-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
                                 <source src="{{ $serviceShowcaseVideo['url'] }}">
                             </video>
+                        @elseif (in_array($serviceShowcaseVideo['type'], ['youtube', 'vimeo'], true))
+                            <div class="service-showcase-video-frame" aria-hidden="true">
+                                <iframe
+                                    class="service-showcase-video-embed"
+                                    src="{{ $serviceShowcaseVideo['url'] }}"
+                                    title=""
+                                    tabindex="-1"
+                                    allow="autoplay; encrypted-media; picture-in-picture"
+                                    referrerpolicy="strict-origin-when-cross-origin"
+                                ></iframe>
+                            </div>
                         @else
                             <img src="{{ $serviceShowcaseImage }}" alt="Peak Experience team planning event services">
                         @endif

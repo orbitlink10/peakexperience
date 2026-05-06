@@ -366,6 +366,7 @@ class AdminAuthController extends Controller
             'section_images.services.file' => ['nullable', 'image', 'max:5120'],
             'section_images.services.remove' => ['nullable', 'boolean'],
             'section_images.services.video_path' => ['nullable', 'string', 'max:255'],
+            'section_images.services.video_url' => ['nullable', 'url', 'max:255'],
             'section_images.services.video_file' => ['nullable', 'file', 'mimes:mp4,webm,ogg,ogv,m4v,mov', 'max:51200'],
             'section_images.services.video_remove' => ['nullable', 'boolean'],
             'section_images.proof.path' => ['nullable', 'string', 'max:255'],
@@ -445,10 +446,23 @@ class AdminAuthController extends Controller
             'services.video_path',
             data_get($sectionImages, 'services.video_path', '')
         ));
+        $servicesVideoUrl = trim((string) data_get(
+            $request->input('section_images', []),
+            'services.video_url',
+            ''
+        ));
 
         if ($request->boolean('section_images.services.video_remove')) {
             $this->deletePublicAsset(HomepageContent::storedPath($servicesVideoPath));
             $servicesVideoPath = '';
+        }
+
+        if ($servicesVideoUrl !== '') {
+            if ($servicesVideoPath !== '' && $servicesVideoPath !== $servicesVideoUrl) {
+                $this->deletePublicAsset(HomepageContent::storedPath($servicesVideoPath));
+            }
+
+            $servicesVideoPath = $servicesVideoUrl;
         }
 
         if ($request->hasFile('section_images.services.video_file')) {
