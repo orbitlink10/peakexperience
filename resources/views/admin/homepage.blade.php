@@ -32,6 +32,9 @@
         $whatWeDoValues = old('what_we_do', $whatWeDo);
         $ourProcessValues = old('our_process', $ourProcess);
         $heroVideoUrl = trim((string) data_get($heroVideoValue, 'url', ''));
+        $currentServicesVideo = \App\Support\HomepageContent::videoSource(
+            (string) data_get($sectionImageValues, 'services.video_path', '')
+        );
     @endphp
 
     <div class="space-y-6">
@@ -98,7 +101,7 @@
                 <div>
                     <h2 class="text-xl font-semibold tracking-tight text-slate-950">Section Media</h2>
                     <p class="mt-2 text-sm leading-6 text-slate-500">
-                        Upload the main images used on the homepage sections directly from this screen. The Our Services section can also use an uploaded video.
+                        Upload the main images used on the homepage sections directly from this screen.
                     </p>
                 </div>
 
@@ -108,9 +111,6 @@
                             $currentSectionImage = \App\Support\HomepageContent::assetUrl(
                                 (string) data_get($sectionImageValues, $key . '.path', '')
                             );
-                            $currentSectionVideo = $key === 'services'
-                                ? \App\Support\HomepageContent::videoSource((string) data_get($sectionImageValues, $key . '.video_path', ''))
-                                : ['type' => '', 'url' => ''];
                         @endphp
                         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                             <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(240px,280px)]">
@@ -130,72 +130,84 @@
                                         >
                                         <span>Remove current image</span>
                                     </label>
-
-                                    @if ($key === 'services')
-                                        <div class="mt-6 border-t border-slate-200 pt-5">
-                                            <label class="admin-label">Our Services Video</label>
-                                            <input type="hidden" name="section_images[{{ $key }}][video_path]" value="{{ data_get($sectionImageValues, $key . '.video_path', '') }}">
-                                            <input
-                                                type="file"
-                                                name="section_images[{{ $key }}][video_file]"
-                                                accept="video/mp4,video/webm,video/ogg,video/quicktime,.mp4,.webm,.ogg,.ogv,.m4v,.mov"
-                                                class="admin-file-input"
-                                            >
-                                            <p class="admin-help">Upload a looping showcase video for the homepage services section. When a video exists, it is shown instead of the image.</p>
-
-                                            <label class="mt-4 inline-flex items-center gap-3 text-sm font-medium text-slate-700">
-                                                <input
-                                                    type="checkbox"
-                                                    name="section_images[{{ $key }}][video_remove]"
-                                                    value="1"
-                                                    @checked(old('section_images.' . $key . '.video_remove'))
-                                                    class="admin-checkbox"
-                                                >
-                                                <span>Remove current video</span>
-                                            </label>
-                                        </div>
-                                    @endif
                                 </div>
 
                                 <div class="flex min-h-40 min-w-0 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-slate-300 bg-white p-4">
-                                    @if ($currentSectionImage !== '' || $currentSectionVideo['url'] !== '')
+                                    @if ($currentSectionImage !== '')
                                         <div class="grid w-full min-w-0 gap-4 text-center">
-                                            @if ($currentSectionVideo['url'] !== '')
-                                                <div class="grid gap-2">
-                                                    <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-                                                        <video
-                                                            src="{{ $currentSectionVideo['url'] }}"
-                                                            controls
-                                                            muted
-                                                            playsinline
-                                                            preload="metadata"
-                                                            class="h-40 w-full object-cover"
-                                                        ></video>
-                                                    </div>
-                                                    <p class="break-all text-xs leading-5 text-slate-500">Current video: {{ $currentSectionVideo['url'] }}</p>
+                                            <div class="grid gap-2">
+                                                <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+                                                    <img src="{{ $currentSectionImage }}" alt="{{ $field['title'] }}" class="h-40 w-full object-cover">
                                                 </div>
-                                            @endif
-
-                                            @if ($currentSectionImage !== '')
-                                                <div class="grid gap-2">
-                                                    <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-                                                        <img src="{{ $currentSectionImage }}" alt="{{ $field['title'] }}" class="h-40 w-full object-cover">
-                                                    </div>
-                                                    <p class="break-all text-xs leading-5 text-slate-500">
-                                                        {{ $currentSectionVideo['url'] !== '' ? 'Fallback image:' : 'Current:' }} {{ $currentSectionImage }}
-                                                    </p>
-                                                </div>
-                                            @endif
+                                                <p class="break-all text-xs leading-5 text-slate-500">Current: {{ $currentSectionImage }}</p>
+                                            </div>
                                         </div>
                                     @else
                                         <p class="max-w-xs break-words text-center text-sm leading-6 text-slate-500">
-                                            No media uploaded yet. The homepage will use its built-in fallback until an image or, for Our Services, a video is added here.
+                                            No image uploaded yet. The homepage will use its built-in fallback until one is added here.
                                         </p>
                                     @endif
                                 </div>
                             </div>
                         </div>
                     @endforeach
+                </div>
+            </section>
+
+            <section class="admin-panel space-y-5">
+                <div>
+                    <h2 class="text-xl font-semibold tracking-tight text-slate-950">Our Services Video</h2>
+                    <p class="mt-2 text-sm leading-6 text-slate-500">
+                        Upload a looping showcase video for the homepage services section. When this is present, it replaces the services image on the live site.
+                    </p>
+                </div>
+
+                <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(260px,320px)]">
+                    <div>
+                        <label for="services_video_file" class="admin-label">Upload Video</label>
+                        <input type="hidden" name="section_images[services][video_path]" value="{{ data_get($sectionImageValues, 'services.video_path', '') }}">
+                        <input
+                            id="services_video_file"
+                            type="file"
+                            name="section_images[services][video_file]"
+                            accept="video/mp4,video/webm,video/ogg,video/quicktime,.mp4,.webm,.ogg,.ogv,.m4v,.mov"
+                            class="admin-file-input"
+                        >
+                        <p class="admin-help">Supported formats include MP4, WebM, OGG, MOV, and M4V.</p>
+
+                        <label class="mt-4 inline-flex items-center gap-3 text-sm font-medium text-slate-700">
+                            <input
+                                type="checkbox"
+                                name="section_images[services][video_remove]"
+                                value="1"
+                                @checked(old('section_images.services.video_remove'))
+                                class="admin-checkbox"
+                            >
+                            <span>Remove current video</span>
+                        </label>
+                    </div>
+
+                    <div class="flex min-h-44 min-w-0 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4">
+                        @if ($currentServicesVideo['url'] !== '')
+                            <div class="grid w-full min-w-0 gap-3 text-center">
+                                <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                                    <video
+                                        src="{{ $currentServicesVideo['url'] }}"
+                                        controls
+                                        muted
+                                        playsinline
+                                        preload="metadata"
+                                        class="h-44 w-full object-cover"
+                                    ></video>
+                                </div>
+                                <p class="break-all text-xs leading-5 text-slate-500">Current: {{ $currentServicesVideo['url'] }}</p>
+                            </div>
+                        @else
+                            <p class="max-w-xs break-words text-center text-sm leading-6 text-slate-500">
+                                No services video uploaded yet. The homepage will continue using the services image until a video is added here.
+                            </p>
+                        @endif
+                    </div>
                 </div>
             </section>
 
