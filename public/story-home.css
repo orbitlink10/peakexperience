@@ -1341,6 +1341,48 @@ section[id] {
     color: var(--ink-strong);
 }
 
+.page-content-shell {
+    display: grid;
+    gap: 1.35rem;
+}
+
+.page-content-body {
+    display: grid;
+    gap: 1rem;
+    padding: 1.4rem 1.5rem;
+    border: 1px solid rgba(31, 92, 77, 0.12);
+    border-radius: var(--radius-md);
+    background: rgba(255, 253, 248, 0.92);
+    box-shadow: var(--shadow);
+}
+
+.page-content-body p,
+.page-content-body li {
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.page-content-body h2,
+.page-content-body h3,
+.page-content-body h4 {
+    font-family: 'Outfit', sans-serif;
+    color: var(--ink-strong);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+}
+
+.page-content-body ul,
+.page-content-body ol {
+    display: grid;
+    gap: 0.55rem;
+    padding-left: 1.25rem;
+}
+
+.page-content-body a {
+    color: var(--brand-green);
+}
+
 .process-shell {
     display: grid;
     gap: clamp(1.25rem, 2.4vw, 1.9rem);

@@ -66,4 +66,242 @@
     .admin-alert-error {
         @apply rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800;
     }
+
+    .pages-admin-shell {
+        font-family: 'Nunito Sans', ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .pages-admin-hero {
+        @apply rounded-[30px] bg-slate-100/80 px-8 py-10;
+    }
+
+    .pages-admin-hero h1 {
+        @apply text-[3rem] font-extrabold tracking-tight text-slate-950;
+        line-height: 1.05;
+    }
+
+    .pages-admin-hero p {
+        @apply mt-3 text-[1.15rem] text-slate-500;
+    }
+
+    .pages-admin-card {
+        @apply overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm;
+    }
+
+    .pages-admin-card-header {
+        @apply flex flex-col gap-4 border-b border-slate-200 px-8 py-5 sm:flex-row sm:items-center sm:justify-between;
+    }
+
+    .pages-admin-card-header h2 {
+        @apply text-[2rem] font-extrabold tracking-tight text-slate-950;
+    }
+
+    .pages-add-button {
+        @apply inline-flex items-center justify-center rounded-full bg-slate-100 px-6 py-3 text-[1.1rem] font-extrabold text-blue-600 transition hover:bg-slate-200;
+    }
+
+    .pages-bulk-form {
+        @apply px-8 py-6;
+    }
+
+    .pages-bulk-toolbar {
+        @apply mb-6 flex flex-col gap-3 sm:flex-row sm:items-center;
+    }
+
+    .pages-bulk-select {
+        @apply h-12 min-w-44 rounded-xl border border-slate-300 bg-white px-4 text-[1rem] text-slate-700 shadow-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100;
+    }
+
+    .pages-bulk-apply {
+        @apply inline-flex h-12 items-center justify-center rounded-full bg-blue-600 px-7 text-[1.1rem] font-extrabold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-100;
+    }
+
+    .pages-table {
+        @apply min-w-full border-separate border-spacing-0;
+    }
+
+    .pages-table thead th {
+        @apply border-y border-slate-200 bg-slate-100 px-5 py-5 text-left text-[1rem] font-extrabold uppercase tracking-[0.22em] text-slate-500;
+    }
+
+    .pages-table tbody td {
+        @apply border-b border-slate-200 px-5 py-5 align-middle text-[1.1rem] text-slate-900;
+    }
+
+    .pages-table-checkbox {
+        @apply w-16;
+    }
+
+    .pages-table-checkbox input {
+        @apply h-6 w-6 rounded border-slate-300 text-blue-600 focus:ring-blue-500;
+    }
+
+    .pages-table-image {
+        @apply h-36 w-56 rounded-none object-cover;
+    }
+
+    .pages-table-image-placeholder {
+        @apply flex items-center justify-center bg-slate-100 text-sm font-semibold uppercase tracking-[0.18em] text-slate-400;
+    }
+
+    .pages-table-title {
+        @apply font-semibold text-slate-950;
+    }
+
+    .pages-actions {
+        @apply flex min-w-36 flex-col gap-3;
+    }
+
+    .pages-action {
+        @apply inline-flex items-center justify-center rounded-full border px-5 py-2 text-[1rem] font-bold transition;
+    }
+
+    .pages-action-preview {
+        @apply border-sky-500 text-sky-500 hover:bg-sky-50;
+    }
+
+    .pages-action-update {
+        @apply border-amber-500 text-amber-500 hover:bg-amber-50;
+    }
+
+    .pages-action-delete {
+        @apply border-rose-500 bg-transparent text-rose-500 hover:bg-rose-50;
+    }
+
+    .pages-empty-state {
+        @apply px-5 py-12 text-center text-[1.05rem] text-slate-500;
+    }
+
+    .pages-form-shell {
+        @apply overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm;
+    }
+
+    .pages-form-banner {
+        @apply bg-blue-600 px-8 py-6;
+    }
+
+    .pages-form-banner h1 {
+        @apply text-[2.2rem] font-extrabold tracking-tight text-slate-950;
+    }
+
+    .pages-form-body {
+        @apply space-y-7 px-8 py-8;
+    }
+
+    .pages-form-group {
+        @apply space-y-3;
+    }
+
+    .pages-form-label {
+        @apply block text-[1.2rem] font-extrabold text-slate-950;
+    }
+
+    .pages-form-input {
+        @apply block h-14 w-full rounded-[22px] border border-slate-200 bg-white px-5 text-[1rem] text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100;
+    }
+
+    .pages-form-select {
+        @apply pr-12;
+    }
+
+    .pages-form-file-input {
+        @apply block w-full text-[1rem] text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-900 file:px-5 file:py-3 file:text-[0.95rem] file:font-bold file:text-white hover:file:bg-slate-800;
+    }
+
+    .pages-image-preview {
+        @apply mt-4 grid max-w-sm gap-2;
+    }
+
+    .pages-image-preview img {
+        @apply h-44 w-full rounded-2xl object-cover;
+    }
+
+    .pages-image-preview p {
+        @apply text-sm font-semibold text-slate-500;
+    }
+
+    .pages-form-checkbox {
+        @apply mt-4 inline-flex items-center gap-3 text-[1rem] font-semibold text-slate-700;
+    }
+
+    .pages-form-checkbox input {
+        @apply h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500;
+    }
+
+    .pages-editor {
+        @apply overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-sm;
+    }
+
+    .pages-editor-menubar {
+        @apply flex flex-wrap gap-6 border-b border-slate-200 px-8 py-5 text-[1rem] text-slate-800;
+    }
+
+    .pages-editor-toolbar {
+        @apply flex flex-wrap items-center gap-2 border-b border-slate-200 px-6 py-4;
+    }
+
+    .pages-editor-toolbar button {
+        @apply inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl px-3 text-[1rem] font-semibold text-slate-700 transition hover:bg-slate-100;
+    }
+
+    .pages-editor-surface {
+        @apply min-h-[22rem] px-6 py-5 text-[1.05rem] text-slate-900 outline-none;
+        line-height: 1.8;
+    }
+
+    .pages-editor-surface:empty::before {
+        content: "Start writing page content...";
+        color: rgb(148 163 184);
+    }
+
+    .pages-editor-textarea {
+        position: absolute;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .pages-form-actions {
+        @apply flex flex-col gap-3 pt-2 sm:flex-row;
+    }
+
+    .pages-save-button {
+        @apply inline-flex h-12 items-center justify-center rounded-full bg-blue-600 px-7 text-[1rem] font-extrabold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-100;
+    }
+
+    .pages-cancel-button {
+        @apply inline-flex h-12 items-center justify-center rounded-full border border-slate-300 px-7 text-[1rem] font-bold text-slate-700 transition hover:bg-slate-50;
+    }
+
+    @media (max-width: 768px) {
+        .pages-admin-hero {
+            @apply px-6 py-8;
+        }
+
+        .pages-admin-hero h1 {
+            @apply text-[2.3rem];
+        }
+
+        .pages-admin-card-header,
+        .pages-bulk-form,
+        .pages-form-banner,
+        .pages-form-body {
+            @apply px-5;
+        }
+
+        .pages-table thead th,
+        .pages-table tbody td {
+            @apply px-3 py-4 text-[0.95rem];
+        }
+
+        .pages-table-image {
+            @apply h-24 w-36;
+        }
+
+        .pages-form-banner h1 {
+            @apply text-[1.85rem];
+        }
+    }
 }

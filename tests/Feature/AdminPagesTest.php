@@ -1,0 +1,167 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\HomepageSetting;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
+
+class AdminPagesTest extends TestCase
+{
+    use RefreshDatabase;
+
+    private const TINY_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+yf9sAAAAASUVORK5CYII=';
+
+    public function test_pages_section_displays_page_list_interface(): void
+    {
+        HomepageSetting::query()->create([
+            'key' => 'pages',
+            'value' => [
+                [
+                    'id' => 'page-1',
+                    'slug' => 'starlink-in-kenya',
+                    'meta_title' => 'Starlink in Kenya',
+                    'meta_description' => 'Manage Starlink page',
+                    'title' => 'Starlink in Kenya',
+                    'image' => '',
+                    'image_alt' => 'Starlink Dish',
+                    'heading_two' => 'Why Starlink matters',
+                    'type' => 'Post',
+                    'description' => '<p>Body copy</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+            ],
+        ]);
+
+        $response = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->get(route('admin.section', ['section' => 'pages']));
+
+        $response->assertOk();
+        $response->assertSee('Post List');
+        $response->assertSee('Add Page');
+        $response->assertSee('Starlink in Kenya');
+    }
+
+    public function test_admin_can_create_page_from_pages_template(): void
+    {
+        Storage::fake('public');
+
+        $response = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->post(route('admin.pages.store'), [
+                'meta_title' => 'Starlink Nairobi Meta',
+                'meta_description' => 'Starlink Nairobi meta description',
+                'title' => 'Starlink Nairobi',
+                'image_file' => UploadedFile::fake()->createWithContent('starlink.png', base64_decode(self::TINY_PNG)),
+                'image_alt' => 'Starlink Nairobi',
+                'heading_two' => 'Starlink Nairobi Heading',
+                'type' => 'Post',
+                'description' => '<p>Detailed page description.</p>',
+            ]);
+
+        $response->assertRedirect(route('admin.section', ['section' => 'pages']));
+        $response->assertSessionHas('status', 'Page created successfully.');
+
+        $pages = HomepageSetting::query()->where('key', 'pages')->first();
+
+        $this->assertNotNull($pages);
+        $this->assertIsArray($pages->value);
+        $this->assertCount(1, $pages->value);
+        $this->assertSame('starlink-nairobi', $pages->value[0]['slug']);
+        $this->assertStringStartsWith('homepage/pages/', $pages->value[0]['image']);
+        Storage::disk('public')->assertExists($pages->value[0]['image']);
+    }
+
+    public function test_admin_can_update_and_delete_pages(): void
+    {
+        Storage::fake('public');
+
+        $imagePath = UploadedFile::fake()
+            ->createWithContent('existing.png', base64_decode(self::TINY_PNG))
+            ->store('homepage/pages', 'public');
+
+        HomepageSetting::query()->create([
+            'key' => 'pages',
+            'value' => [
+                [
+                    'id' => 'page-1',
+                    'slug' => 'old-slug',
+                    'meta_title' => 'Old Meta',
+                    'meta_description' => 'Old description',
+                    'title' => 'Old Title',
+                    'image' => $imagePath,
+                    'image_alt' => 'Old alt',
+                    'heading_two' => 'Old heading',
+                    'type' => 'Post',
+                    'description' => '<p>Old body</p>',
+                    'created_at' => now()->subDay()->toIso8601String(),
+                    'updated_at' => now()->subDay()->toIso8601String(),
+                ],
+            ],
+        ]);
+
+        $updateResponse = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->put(route('admin.pages.update', ['pageId' => 'page-1']), [
+                'meta_title' => 'Updated Meta',
+                'meta_description' => 'Updated description',
+                'title' => 'Updated Title',
+                'image_path' => $imagePath,
+                'image_alt' => 'Updated alt',
+                'heading_two' => 'Updated heading',
+                'type' => 'Page',
+                'description' => '<p>Updated body</p>',
+            ]);
+
+        $updateResponse->assertRedirect(route('admin.section', ['section' => 'pages']));
+
+        $pages = HomepageSetting::query()->where('key', 'pages')->first();
+        $this->assertSame('updated-title', $pages->value[0]['slug']);
+        $this->assertSame('Page', $pages->value[0]['type']);
+
+        $deleteResponse = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->delete(route('admin.pages.delete', ['pageId' => 'page-1']));
+
+        $deleteResponse->assertRedirect(route('admin.section', ['section' => 'pages']));
+        $deleteResponse->assertSessionHas('status', 'Page deleted successfully.');
+
+        $pages = HomepageSetting::query()->where('key', 'pages')->first();
+        $this->assertSame([], $pages?->value);
+        Storage::disk('public')->assertMissing($imagePath);
+    }
+
+    public function test_public_page_preview_renders_saved_content(): void
+    {
+        HomepageSetting::query()->create([
+            'key' => 'pages',
+            'value' => [
+                [
+                    'id' => 'page-1',
+                    'slug' => 'starlink-nairobi',
+                    'meta_title' => 'Starlink Nairobi Meta',
+                    'meta_description' => 'Starlink Nairobi description',
+                    'title' => 'Starlink Nairobi',
+                    'image' => '',
+                    'image_alt' => 'Starlink Nairobi',
+                    'heading_two' => 'Stay connected in Nairobi',
+                    'type' => 'Post',
+                    'description' => '<p>Rendered page content</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+            ],
+        ]);
+
+        $response = $this->get(route('pages.show', ['page' => 'starlink-nairobi']));
+
+        $response->assertOk();
+        $response->assertSee('Starlink Nairobi');
+        $response->assertSee('Stay connected in Nairobi');
+        $response->assertSee('Rendered page content', false);
+    }
+}
