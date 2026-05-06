@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Support\GalleryContent;
 use App\Support\HomepageContent;
+use App\Support\PageContent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -186,8 +188,155 @@ class AdminAuthController extends Controller
         ]);
     }
 
+    public function pages(Request $request): View
+    {
+        return view('admin.pages.index', $this->sharedData($request, 'pages') + [
+            'pages' => PageContent::load(),
+        ]);
+    }
+
+    public function createPage(Request $request): View
+    {
+        return view('admin.pages.form', $this->sharedData($request, 'pages') + [
+            'pageData' => PageContent::defaults(),
+            'pageTypes' => $this->pageTypes(),
+            'formMode' => 'create',
+        ]);
+    }
+
+    public function storePage(Request $request): RedirectResponse
+    {
+        $pages = PageContent::load();
+        $payload = $this->validatedPagePayload($request);
+        $imagePath = $this->storePageImage($request, '');
+        $timestamp = now()->toIso8601String();
+
+        array_unshift($pages, [
+            'id' => (string) Str::uuid(),
+            'slug' => $this->uniquePageSlug($payload['title'], $pages),
+            'meta_title' => $payload['meta_title'],
+            'meta_description' => $payload['meta_description'],
+            'title' => $payload['title'],
+            'image' => $imagePath,
+            'image_alt' => $payload['image_alt'],
+            'heading_two' => $payload['heading_two'],
+            'type' => $payload['type'],
+            'description' => $payload['description'],
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
+        ]);
+
+        PageContent::save($pages);
+
+        return redirect()->route('admin.section', ['section' => 'pages'])->with('status', 'Page created successfully.');
+    }
+
+    public function editPage(Request $request, string $pageId): View
+    {
+        $page = PageContent::findById($pageId);
+        abort_unless(is_array($page), 404);
+
+        return view('admin.pages.form', $this->sharedData($request, 'pages') + [
+            'pageData' => $page,
+            'pageTypes' => $this->pageTypes(),
+            'formMode' => 'edit',
+        ]);
+    }
+
+    public function updatePage(Request $request, string $pageId): RedirectResponse
+    {
+        $pages = PageContent::load();
+        $page = null;
+
+        foreach ($pages as $index => $item) {
+            if ($item['id'] === $pageId) {
+                $page = $item;
+                break;
+            }
+        }
+
+        abort_unless(is_array($page), 404);
+
+        $payload = $this->validatedPagePayload($request);
+        $imagePath = $this->storePageImage($request, (string) ($page['image'] ?? ''));
+        $updatedPage = [
+            'id' => $page['id'],
+            'slug' => $this->uniquePageSlug($payload['title'], $pages, $page['id']),
+            'meta_title' => $payload['meta_title'],
+            'meta_description' => $payload['meta_description'],
+            'title' => $payload['title'],
+            'image' => $imagePath,
+            'image_alt' => $payload['image_alt'],
+            'heading_two' => $payload['heading_two'],
+            'type' => $payload['type'],
+            'description' => $payload['description'],
+            'created_at' => (string) ($page['created_at'] ?? now()->toIso8601String()),
+            'updated_at' => now()->toIso8601String(),
+        ];
+
+        $pages[$index] = $updatedPage;
+
+        PageContent::save($pages);
+
+        return redirect()->route('admin.section', ['section' => 'pages'])->with('status', 'Page updated successfully.');
+    }
+
+    public function deletePage(Request $request, string $pageId): RedirectResponse
+    {
+        $pages = [];
+        $deleted = false;
+
+        foreach (PageContent::load() as $page) {
+            if ($page['id'] === $pageId) {
+                $this->deletePublicAsset(HomepageContent::storedPath((string) ($page['image'] ?? '')));
+                $deleted = true;
+                continue;
+            }
+
+            $pages[] = $page;
+        }
+
+        abort_unless($deleted, 404);
+
+        PageContent::save($pages);
+
+        return redirect()->route('admin.section', ['section' => 'pages'])->with('status', 'Page deleted successfully.');
+    }
+
+    public function bulkDeletePages(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'bulk_action' => ['required', Rule::in(['delete'])],
+            'selected' => ['required', 'array', 'min:1'],
+            'selected.*' => ['required', 'string'],
+        ], [
+            'bulk_action.required' => 'Choose a bulk action first.',
+            'selected.required' => 'Select at least one page to apply the action.',
+        ]);
+
+        $selected = array_flip(array_map('strval', $validated['selected']));
+        $remainingPages = [];
+
+        foreach (PageContent::load() as $page) {
+            if (array_key_exists((string) $page['id'], $selected)) {
+                $this->deletePublicAsset(HomepageContent::storedPath((string) ($page['image'] ?? '')));
+                continue;
+            }
+
+            $remainingPages[] = $page;
+        }
+
+        PageContent::save($remainingPages);
+
+        return redirect()->route('admin.section', ['section' => 'pages'])->with('status', 'Selected pages deleted.');
+    }
+
     public function section(Request $request, string $section): View
     {
+        if ($section === 'pages') {
+            return $this->pages($request);
+        }
+
         $sections = $this->placeholderSections();
         abort_unless(array_key_exists($section, $sections), 404);
 
@@ -216,6 +365,9 @@ class AdminAuthController extends Controller
             'section_images.services.path' => ['nullable', 'string', 'max:255'],
             'section_images.services.file' => ['nullable', 'image', 'max:5120'],
             'section_images.services.remove' => ['nullable', 'boolean'],
+            'section_images.services.video_path' => ['nullable', 'string', 'max:255'],
+            'section_images.services.video_file' => ['nullable', 'file', 'mimes:mp4,webm,ogg,ogv,m4v,mov', 'max:51200'],
+            'section_images.services.video_remove' => ['nullable', 'boolean'],
             'section_images.proof.path' => ['nullable', 'string', 'max:255'],
             'section_images.proof.file' => ['nullable', 'image', 'max:5120'],
             'section_images.proof.remove' => ['nullable', 'boolean'],
@@ -283,10 +435,30 @@ class AdminAuthController extends Controller
                 $currentPath = $request->file("section_images.$key.file")->store('homepage/sections', 'public');
             }
 
-            $sectionImages[$key] = [
+            $sectionImages[$key] = array_merge((array) data_get($sectionImages, $key, []), [
                 'path' => $currentPath,
-            ];
+            ]);
         }
+
+        $servicesVideoPath = trim((string) data_get(
+            $request->input('section_images', []),
+            'services.video_path',
+            data_get($sectionImages, 'services.video_path', '')
+        ));
+
+        if ($request->boolean('section_images.services.video_remove')) {
+            $this->deletePublicAsset(HomepageContent::storedPath($servicesVideoPath));
+            $servicesVideoPath = '';
+        }
+
+        if ($request->hasFile('section_images.services.video_file')) {
+            $this->deletePublicAsset(HomepageContent::storedPath($servicesVideoPath));
+            $servicesVideoPath = $request->file('section_images.services.video_file')->store('homepage/sections', 'public');
+        }
+
+        $sectionImages['services'] = array_merge((array) ($sectionImages['services'] ?? []), [
+            'video_path' => $servicesVideoPath,
+        ]);
 
         $heroVideo = [
             'url' => trim((string) data_get($request->input('hero_video', []), 'url', '')),
@@ -318,6 +490,92 @@ class AdminAuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('admin.login')->with('status', 'Logged out successfully.');
+    }
+
+    /**
+     * @return array{
+     *   meta_title:string,
+     *   meta_description:string,
+     *   title:string,
+     *   image_alt:string,
+     *   heading_two:string,
+     *   type:string,
+     *   description:string
+     * }
+     */
+    private function validatedPagePayload(Request $request): array
+    {
+        $validated = $request->validate([
+            'meta_title' => ['required', 'string', 'max:160'],
+            'meta_description' => ['required', 'string', 'max:320'],
+            'title' => ['required', 'string', 'max:180'],
+            'image_path' => ['nullable', 'string', 'max:255'],
+            'image_file' => ['nullable', 'image', 'max:5120'],
+            'image_remove' => ['nullable', 'boolean'],
+            'image_alt' => ['nullable', 'string', 'max:180'],
+            'heading_two' => ['required', 'string', 'max:220'],
+            'type' => ['required', Rule::in($this->pageTypes())],
+            'description' => ['required', 'string'],
+        ]);
+
+        return [
+            'meta_title' => trim((string) $validated['meta_title']),
+            'meta_description' => trim((string) $validated['meta_description']),
+            'title' => trim((string) $validated['title']),
+            'image_alt' => trim((string) ($validated['image_alt'] ?? '')),
+            'heading_two' => trim((string) $validated['heading_two']),
+            'type' => trim((string) $validated['type']),
+            'description' => trim((string) $validated['description']),
+        ];
+    }
+
+    private function storePageImage(Request $request, string $existingPath): string
+    {
+        $imagePath = trim((string) $request->input('image_path', $existingPath));
+
+        if ($request->boolean('image_remove')) {
+            $this->deletePublicAsset(HomepageContent::storedPath($imagePath));
+            $imagePath = '';
+        }
+
+        if ($request->hasFile('image_file')) {
+            $this->deletePublicAsset(HomepageContent::storedPath($imagePath));
+            $imagePath = $request->file('image_file')->store('homepage/pages', 'public');
+        }
+
+        return $imagePath;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function pageTypes(): array
+    {
+        return ['Post', 'Page'];
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $pages
+     */
+    private function uniquePageSlug(string $title, array $pages, ?string $ignoreId = null): string
+    {
+        $base = Str::slug($title);
+        if ($base === '') {
+            $base = 'page';
+        }
+
+        $slug = $base;
+        $suffix = 2;
+
+        while (collect($pages)->contains(function (array $page) use ($slug, $ignoreId): bool {
+            return (string) ($page['slug'] ?? '') === $slug
+                && (string) ($page['id'] ?? '') !== (string) $ignoreId;
+        })) {
+            $slug = $base . '-' . $suffix;
+            $suffix++;
+        }
+
+        return $slug;
     }
 
     /**

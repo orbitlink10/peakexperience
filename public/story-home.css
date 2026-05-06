@@ -967,8 +967,10 @@ section[id] {
 }
 
 .intro-media img,
+.service-showcase-video,
 .service-showcase-media img,
 .proof-showcase-media img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;

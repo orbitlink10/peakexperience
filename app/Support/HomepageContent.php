@@ -14,7 +14,7 @@ class HomepageContent
      *     section_images: array{
      *         hero: array{path:string},
      *         intro: array{path:string},
-     *         services: array{path:string},
+     *         services: array{path:string,video_path:string},
      *         proof: array{path:string}
      *     },
      *     hero_video: array{url:string},
@@ -50,7 +50,7 @@ class HomepageContent
      *     section_images: array{
      *         hero: array{path:string},
      *         intro: array{path:string},
-     *         services: array{path:string},
+     *         services: array{path:string,video_path:string},
      *         proof: array{path:string}
      *     },
      *     hero_video: array{url:string},
@@ -92,7 +92,7 @@ class HomepageContent
      *     section_images: array{
      *         hero: array{path:string},
      *         intro: array{path:string},
-     *         services: array{path:string},
+     *         services: array{path:string,video_path:string},
      *         proof: array{path:string}
      *     },
      *     hero_video: array{url:string},
@@ -110,7 +110,7 @@ class HomepageContent
             'section_images' => [
                 'hero' => ['path' => ''],
                 'intro' => ['path' => ''],
-                'services' => ['path' => ''],
+                'services' => ['path' => '', 'video_path' => ''],
                 'proof' => ['path' => ''],
             ],
             'hero_video' => [

@@ -56,7 +56,7 @@ class AdminHomepageTest extends TestCase
             'value' => [
                 'hero' => ['path' => 'homepage/sections/hero.png'],
                 'intro' => ['path' => 'homepage/sections/intro.png'],
-                'services' => ['path' => 'homepage/sections/services.png'],
+                'services' => ['path' => 'homepage/sections/services.png', 'video_path' => ''],
                 'proof' => ['path' => 'homepage/sections/proof.png'],
             ],
         ]);
@@ -67,5 +67,62 @@ class AdminHomepageTest extends TestCase
         $response->assertSee(route('homepage.asset', ['path' => 'homepage/sections/intro.png']), false);
         $response->assertSee(route('homepage.asset', ['path' => 'homepage/sections/services.png']), false);
         $response->assertSee(route('homepage.asset', ['path' => 'homepage/sections/proof.png']), false);
+    }
+
+    public function test_admin_can_upload_homepage_services_video(): void
+    {
+        Storage::fake('public');
+
+        $defaults = HomepageContent::defaults();
+
+        $response = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->post(route('admin.homepage.update'), [
+                'section_images' => [
+                    'hero' => ['path' => ''],
+                    'intro' => ['path' => ''],
+                    'services' => [
+                        'path' => '',
+                        'video_path' => '',
+                        'video_file' => UploadedFile::fake()->create('services-showcase.mp4', 256, 'video/mp4'),
+                    ],
+                    'proof' => ['path' => ''],
+                ],
+                'hero_video' => $defaults['hero_video'],
+                'what_we_do' => $defaults['what_we_do'],
+                'our_process' => $defaults['our_process'],
+            ]);
+
+        $response->assertRedirect(route('admin.homepage'));
+        $response->assertSessionHas('status', 'Homepage updated successfully.');
+
+        $sectionImages = HomepageSetting::query()->where('key', 'section_images')->first();
+
+        $this->assertNotNull($sectionImages);
+        $storedPath = (string) data_get($sectionImages?->value, 'services.video_path', '');
+        $this->assertStringStartsWith('homepage/sections/', $storedPath);
+        Storage::disk('public')->assertExists($storedPath);
+    }
+
+    public function test_homepage_prefers_uploaded_services_video_when_present(): void
+    {
+        HomepageSetting::query()->create([
+            'key' => 'section_images',
+            'value' => [
+                'hero' => ['path' => 'homepage/sections/hero.png'],
+                'intro' => ['path' => 'homepage/sections/intro.png'],
+                'services' => [
+                    'path' => 'homepage/sections/services.png',
+                    'video_path' => 'homepage/sections/services-video.mp4',
+                ],
+                'proof' => ['path' => 'homepage/sections/proof.png'],
+            ],
+        ]);
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertSee('service-showcase-video', false);
+        $response->assertSee(route('homepage.asset', ['path' => 'homepage/sections/services-video.mp4']), false);
     }
 }

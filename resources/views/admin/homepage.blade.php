@@ -21,7 +21,7 @@
             ],
             'services' => [
                 'title' => 'Our Services',
-                'description' => 'This image appears in the homepage services showcase.',
+                'description' => 'This image appears in the homepage services showcase when no services video is uploaded.',
             ],
             'proof' => [
                 'title' => 'Our Work',
@@ -51,7 +51,7 @@
             <p class="text-sm font-semibold uppercase tracking-[0.24em] text-amber-600">Content Management</p>
             <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Homepage Settings</h1>
             <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
-                Manage the homepage logo, section images, hero video, What We Do cards, and Our Process steps.
+                Manage the homepage logo, section media, hero video, What We Do cards, and Our Process steps.
             </p>
         </div>
 
@@ -96,9 +96,9 @@
 
             <section class="admin-panel space-y-5">
                 <div>
-                    <h2 class="text-xl font-semibold tracking-tight text-slate-950">Section Images</h2>
+                    <h2 class="text-xl font-semibold tracking-tight text-slate-950">Section Media</h2>
                     <p class="mt-2 text-sm leading-6 text-slate-500">
-                        Upload the main images used on the homepage sections directly from this screen.
+                        Upload the main images used on the homepage sections directly from this screen. The Our Services section can also use an uploaded video.
                     </p>
                 </div>
 
@@ -108,6 +108,9 @@
                             $currentSectionImage = \App\Support\HomepageContent::assetUrl(
                                 (string) data_get($sectionImageValues, $key . '.path', '')
                             );
+                            $currentSectionVideo = $key === 'services'
+                                ? \App\Support\HomepageContent::videoSource((string) data_get($sectionImageValues, $key . '.video_path', ''))
+                                : ['type' => '', 'url' => ''];
                         @endphp
                         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                             <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(240px,280px)]">
@@ -127,19 +130,66 @@
                                         >
                                         <span>Remove current image</span>
                                     </label>
+
+                                    @if ($key === 'services')
+                                        <div class="mt-6 border-t border-slate-200 pt-5">
+                                            <label class="admin-label">Our Services Video</label>
+                                            <input type="hidden" name="section_images[{{ $key }}][video_path]" value="{{ data_get($sectionImageValues, $key . '.video_path', '') }}">
+                                            <input
+                                                type="file"
+                                                name="section_images[{{ $key }}][video_file]"
+                                                accept="video/mp4,video/webm,video/ogg,video/quicktime,.mp4,.webm,.ogg,.ogv,.m4v,.mov"
+                                                class="admin-file-input"
+                                            >
+                                            <p class="admin-help">Upload a looping showcase video for the homepage services section. When a video exists, it is shown instead of the image.</p>
+
+                                            <label class="mt-4 inline-flex items-center gap-3 text-sm font-medium text-slate-700">
+                                                <input
+                                                    type="checkbox"
+                                                    name="section_images[{{ $key }}][video_remove]"
+                                                    value="1"
+                                                    @checked(old('section_images.' . $key . '.video_remove'))
+                                                    class="admin-checkbox"
+                                                >
+                                                <span>Remove current video</span>
+                                            </label>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div class="flex min-h-40 min-w-0 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-slate-300 bg-white p-4">
-                                    @if ($currentSectionImage !== '')
-                                        <div class="grid w-full min-w-0 gap-3 text-center">
-                                            <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-                                                <img src="{{ $currentSectionImage }}" alt="{{ $field['title'] }}" class="h-40 w-full object-cover">
-                                            </div>
-                                            <p class="break-all text-xs leading-5 text-slate-500">Current: {{ $currentSectionImage }}</p>
+                                    @if ($currentSectionImage !== '' || $currentSectionVideo['url'] !== '')
+                                        <div class="grid w-full min-w-0 gap-4 text-center">
+                                            @if ($currentSectionVideo['url'] !== '')
+                                                <div class="grid gap-2">
+                                                    <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+                                                        <video
+                                                            src="{{ $currentSectionVideo['url'] }}"
+                                                            controls
+                                                            muted
+                                                            playsinline
+                                                            preload="metadata"
+                                                            class="h-40 w-full object-cover"
+                                                        ></video>
+                                                    </div>
+                                                    <p class="break-all text-xs leading-5 text-slate-500">Current video: {{ $currentSectionVideo['url'] }}</p>
+                                                </div>
+                                            @endif
+
+                                            @if ($currentSectionImage !== '')
+                                                <div class="grid gap-2">
+                                                    <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+                                                        <img src="{{ $currentSectionImage }}" alt="{{ $field['title'] }}" class="h-40 w-full object-cover">
+                                                    </div>
+                                                    <p class="break-all text-xs leading-5 text-slate-500">
+                                                        {{ $currentSectionVideo['url'] !== '' ? 'Fallback image:' : 'Current:' }} {{ $currentSectionImage }}
+                                                    </p>
+                                                </div>
+                                            @endif
                                         </div>
                                     @else
                                         <p class="max-w-xs break-words text-center text-sm leading-6 text-slate-500">
-                                            No image uploaded yet. The homepage will use its built-in fallback until one is added here.
+                                            No media uploaded yet. The homepage will use its built-in fallback until an image or, for Our Services, a video is added here.
                                         </p>
                                     @endif
                                 </div>

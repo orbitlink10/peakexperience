@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact.submit');
+Route::get('/pages/{page}', [HomeController::class, 'page'])->name('pages.show');
 Route::get('/services/{service}', [HomeController::class, 'service'])->name('services.show');
 Route::get('/homepage-assets/{path}', [HomeController::class, 'asset'])
     ->where('path', '.*')
@@ -31,6 +32,12 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::post('/gallery/delete', [AdminAuthController::class, 'deleteGalleryImages'])->name('gallery.delete');
         Route::get('/homepage', [AdminAuthController::class, 'showHomepage'])->name('homepage');
         Route::post('/homepage', [AdminAuthController::class, 'updateHomepage'])->name('homepage.update');
+        Route::get('/pages/create', [AdminAuthController::class, 'createPage'])->name('pages.create');
+        Route::post('/pages', [AdminAuthController::class, 'storePage'])->name('pages.store');
+        Route::get('/pages/{pageId}/edit', [AdminAuthController::class, 'editPage'])->name('pages.edit');
+        Route::put('/pages/{pageId}', [AdminAuthController::class, 'updatePage'])->name('pages.update');
+        Route::delete('/pages/{pageId}', [AdminAuthController::class, 'deletePage'])->name('pages.delete');
+        Route::post('/pages/bulk-delete', [AdminAuthController::class, 'bulkDeletePages'])->name('pages.bulk-delete');
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
     });
 });

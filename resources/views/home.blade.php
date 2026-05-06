@@ -63,6 +63,7 @@
     if ($serviceShowcaseImage === '') {
         $serviceShowcaseImage = $resolvedImages[0] ?? $showcaseImages[2];
     }
+    $serviceShowcaseVideo = \App\Support\HomepageContent::videoSource((string) data_get($sectionImages, 'services.video_path', ''));
     $ambientImage = \App\Support\HomepageContent::assetUrl((string) data_get($sectionImages, 'proof.path', ''));
     if ($ambientImage === '') {
         $ambientImage = $resolvedImages[2] ?? $showcaseImages[2];
@@ -224,7 +225,13 @@
             <section class="section section-services" id="services">
                 <div class="wrap service-showcase reveal reveal-delay-1">
                     <figure class="service-showcase-media">
-                        <img src="{{ $serviceShowcaseImage }}" alt="Peak Experience team planning event services">
+                        @if ($serviceShowcaseVideo['type'] === 'file')
+                            <video class="service-showcase-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+                                <source src="{{ $serviceShowcaseVideo['url'] }}">
+                            </video>
+                        @else
+                            <img src="{{ $serviceShowcaseImage }}" alt="Peak Experience team planning event services">
+                        @endif
                     </figure>
 
                     <div class="service-showcase-copy">

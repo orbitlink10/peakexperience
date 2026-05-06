@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ContactInquiryMail;
 use App\Support\HomepageContent;
+use App\Support\PageContent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -45,6 +46,19 @@ class HomeController extends Controller
         return view('service', [
             'logo' => $content['logo'],
             'service' => $serviceItem,
+        ] + $this->contactData());
+    }
+
+    public function page(string $page): View
+    {
+        $content = HomepageContent::load();
+        $pageItem = PageContent::findBySlug($page);
+
+        abort_unless(is_array($pageItem), 404);
+
+        return view('page', [
+            'logo' => $content['logo'],
+            'page' => $pageItem,
         ] + $this->contactData());
     }
 
