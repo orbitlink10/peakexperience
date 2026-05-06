@@ -224,27 +224,6 @@
 
             <section class="section section-services" id="services">
                 <div class="wrap service-showcase reveal reveal-delay-1">
-                    <figure class="service-showcase-media">
-                        @if ($serviceShowcaseVideo['type'] === 'file')
-                            <video class="service-showcase-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-                                <source src="{{ $serviceShowcaseVideo['url'] }}">
-                            </video>
-                        @elseif (in_array($serviceShowcaseVideo['type'], ['youtube', 'vimeo'], true))
-                            <div class="service-showcase-video-frame" aria-hidden="true">
-                                <iframe
-                                    class="service-showcase-video-embed"
-                                    src="{{ $serviceShowcaseVideo['url'] }}"
-                                    title=""
-                                    tabindex="-1"
-                                    allow="autoplay; encrypted-media; picture-in-picture"
-                                    referrerpolicy="strict-origin-when-cross-origin"
-                                ></iframe>
-                            </div>
-                        @else
-                            <img src="{{ $serviceShowcaseImage }}" alt="Peak Experience team planning event services">
-                        @endif
-                    </figure>
-
                     <div class="service-showcase-copy">
                         <div>
                             <span class="section-prefix">Tools to craft any experience</span>
@@ -254,6 +233,29 @@
                         <p>We deliver seamless event production, staging, media systems, and exhibition support through one coordinated team. From the first planning session to live show-day execution, every service is shaped to keep your event polished, engaging, and technically steady.</p>
                         <a class="button button-primary service-showcase-button" href="#services-detail">Explore Services</a>
                     </div>
+
+                    <figure class="service-showcase-media">
+                        @if ($serviceShowcaseVideo['type'] === 'file')
+                            <video class="service-showcase-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+                                <source src="{{ $serviceShowcaseVideo['url'] }}">
+                            </video>
+                        @elseif (in_array($serviceShowcaseVideo['type'], ['youtube', 'vimeo'], true))
+                            <div class="service-showcase-video-frame" aria-hidden="true">
+                                <div class="service-showcase-video-cover">
+                                    <iframe
+                                        class="service-showcase-video-embed"
+                                        src="{{ $serviceShowcaseVideo['url'] }}"
+                                        title=""
+                                        tabindex="-1"
+                                        allow="autoplay; encrypted-media; picture-in-picture"
+                                        referrerpolicy="strict-origin-when-cross-origin"
+                                    ></iframe>
+                                </div>
+                            </div>
+                        @else
+                            <img src="{{ $serviceShowcaseImage }}" alt="Peak Experience team planning event services">
+                        @endif
+                    </figure>
                 </div>
 
                 <div class="wrap service-stack service-stack--detail" id="services-detail">
