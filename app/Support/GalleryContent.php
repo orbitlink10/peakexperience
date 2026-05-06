@@ -65,7 +65,7 @@ class GalleryContent
             ],
             [
                 'title' => 'TowerXchange Stage Installation',
-                'image' => 'https://images.unsplash.com/photo-1540317580384-e5d43867caa6?auto=format&fit=crop&w=1400&q=80',
+                'image' => 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=1400&q=80',
             ],
             [
                 'title' => 'ITW Africa Stage Installation',
