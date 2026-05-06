@@ -273,20 +273,17 @@
             </section>
 
             <section class="section section-proof" id="proof">
-                <div class="wrap proof-showcase reveal reveal-delay-2">
-                    <figure class="proof-showcase-media">
-                        <img src="{{ $ambientImage }}" alt="Peak Experience event production showcase">
-                    </figure>
+                <div class="wrap">
+                    <article class="proof-stage reveal reveal-delay-2">
+                        <img class="proof-stage-media" src="{{ $ambientImage }}" alt="Peak Experience event production showcase">
 
-                    <div class="proof-showcase-copy">
-                        <div>
-                            <span class="section-prefix">Creative event management</span>
+                        <div class="proof-stage-copy">
+                            <span class="proof-stage-kicker">Innovative. Impactful. Seamless.</span>
                             <h2>Our Work</h2>
+                            <p>Explore the conferences, launches, exhibitions, executive forums, and hybrid productions Peak Experience has shaped across Kenya. Every brief is translated into an environment that feels polished, immersive, and tightly executed from the first guest arrival to the final cue.</p>
+                            <a class="button proof-stage-button" href="#process">Discover More</a>
                         </div>
-
-                        <p>Our work spans conferences, launches, exhibitions, executive gatherings, and hybrid experiences, all delivered with the same balance of creativity, technical control, and production calm. We turn ambitious ideas into polished event environments that feel seamless from the first guest arrival to the final cue.</p>
-                        <a class="button button-primary proof-button" href="#process">Discover Our Work</a>
-                    </div>
+                    </article>
                 </div>
             </section>
 

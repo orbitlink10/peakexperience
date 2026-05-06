@@ -107,7 +107,7 @@ class AdminAuthController extends Controller
     {
         $galleryItems = GalleryContent::load();
 
-        return view('admin.dashboard', $this->sharedData($request, 'Gallery') + [
+        return view('admin.dashboard', $this->sharedData($request, 'gallery') + [
             'galleryItems' => $galleryItems,
         ]);
     }
@@ -168,7 +168,7 @@ class AdminAuthController extends Controller
     {
         $content = HomepageContent::load();
 
-        return view('admin.homepage', $this->sharedData($request, 'Homepage') + [
+        return view('admin.homepage', $this->sharedData($request, 'homepage') + [
             'logo' => $content['logo'],
             'sectionImages' => $content['section_images'],
             'heroVideo' => $content['hero_video'],
@@ -193,7 +193,7 @@ class AdminAuthController extends Controller
 
         $page = $sections[$section];
 
-        return view('admin.placeholder', $this->sharedData($request, $page['label']) + [
+        return view('admin.placeholder', $this->sharedData($request, $section) + [
             'pageHeading' => $page['heading'],
             'pageDescription' => $page['description'],
         ]);
@@ -323,7 +323,7 @@ class AdminAuthController extends Controller
     /**
      * @return array{
      *   publicNav: array<int, array{label:string,href:string}>,
-     *   sidebarItems: array<int, array{label:string,href:string,active:bool}>,
+     *   sidebarItems: array<int, array<string, mixed>>,
      *   adminName: string,
      *   today: string
      * }
@@ -342,21 +342,43 @@ class AdminAuthController extends Controller
         ];
 
         $menu = [
-            ['label' => 'Overview', 'href' => route('admin.section', ['section' => 'overview'])],
-            ['label' => 'Services', 'href' => route('admin.section', ['section' => 'services'])],
-            ['label' => 'Team', 'href' => route('admin.section', ['section' => 'team'])],
-            ['label' => 'Gallery', 'href' => route('admin.gallery')],
-            ['label' => 'Sliders', 'href' => route('admin.section', ['section' => 'sliders'])],
-            ['label' => 'Clients', 'href' => route('admin.section', ['section' => 'clients'])],
-            ['label' => 'Invoices', 'href' => route('admin.section', ['section' => 'invoices'])],
-            ['label' => 'Videos', 'href' => route('admin.section', ['section' => 'videos'])],
-            ['label' => 'Pages', 'href' => route('admin.section', ['section' => 'pages'])],
-            ['label' => 'Homepage', 'href' => route('admin.homepage')],
-            ['label' => 'Contact Page', 'href' => route('admin.section', ['section' => 'contact-page'])],
+            ['key' => 'overview', 'label' => 'Overview', 'href' => route('admin.section', ['section' => 'overview'])],
+            ['key' => 'services', 'label' => 'Services', 'href' => route('admin.section', ['section' => 'services'])],
+            ['key' => 'team', 'label' => 'Team', 'href' => route('admin.section', ['section' => 'team'])],
+            ['key' => 'gallery', 'label' => 'Gallery', 'href' => route('admin.gallery')],
+            ['key' => 'sliders', 'label' => 'Sliders', 'href' => route('admin.section', ['section' => 'sliders'])],
+            ['key' => 'clients', 'label' => 'Clients', 'href' => route('admin.section', ['section' => 'clients'])],
+            ['key' => 'invoices', 'label' => 'Invoices', 'href' => route('admin.section', ['section' => 'invoices'])],
+            ['key' => 'videos', 'label' => 'Videos', 'href' => route('admin.section', ['section' => 'videos'])],
+            [
+                'key' => 'pages',
+                'label' => 'Pages',
+                'href' => route('admin.section', ['section' => 'pages']),
+                'children' => [
+                    ['key' => 'homepage', 'label' => 'Homepage', 'href' => route('admin.homepage')],
+                    ['key' => 'contact-page', 'label' => 'Contact Page', 'href' => route('admin.section', ['section' => 'contact-page'])],
+                ],
+            ],
         ];
 
         $sidebarItems = array_map(
-            fn (array $item): array => $item + ['active' => $item['label'] === $activeSidebar],
+            function (array $item) use ($activeSidebar): array {
+                $children = array_map(
+                    fn (array $child): array => array_merge($child, ['active' => $child['key'] === $activeSidebar]),
+                    $item['children'] ?? []
+                );
+
+                $childIsActive = array_reduce(
+                    $children,
+                    fn (bool $active, array $child): bool => $active || $child['active'],
+                    false
+                );
+
+                return array_merge($item, [
+                    'active' => $item['key'] === $activeSidebar || $childIsActive,
+                    'children' => $children,
+                ]);
+            },
             $menu
         );
 

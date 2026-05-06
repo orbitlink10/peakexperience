@@ -28,4 +28,25 @@ class AdminSidebarTest extends TestCase
                 ->assertSee($heading);
         }
     }
+
+    public function test_pages_group_stays_active_for_homepage_editor(): void
+    {
+        $response = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->get(route('admin.homepage'));
+
+        $response->assertOk();
+
+        $content = $response->getContent();
+
+        $this->assertIsString($content);
+        $this->assertMatchesRegularExpression(
+            '/href="' . preg_quote(route('admin.section', ['section' => 'pages']), '/') . '"[^>]*bg-white\/10 text-white[^>]*>\s*Pages\s*<\/a>/s',
+            $content
+        );
+        $this->assertMatchesRegularExpression(
+            '/href="' . preg_quote(route('admin.homepage'), '/') . '"[^>]*bg-white\/10 text-white[^>]*aria-current="page"[^>]*>\s*Homepage\s*<\/a>/s',
+            $content
+        );
+    }
 }

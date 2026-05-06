@@ -42,14 +42,37 @@
                                     $linkClasses = $item['active']
                                         ? 'bg-white/10 text-white'
                                         : 'text-slate-300 hover:bg-white/5 hover:text-white';
+                                    $childLinkBaseClasses = 'block rounded-lg px-4 py-2.5 text-sm font-medium transition';
                                 @endphp
                                 <li>
                                     <a
                                         href="{{ $item['href'] }}"
                                         class="block rounded-xl px-4 py-3 text-sm font-medium transition {{ $linkClasses }}"
+                                        @if ($item['active'] && empty($item['children'])) aria-current="page" @endif
                                     >
                                         {{ $item['label'] }}
                                     </a>
+
+                                    @if (! empty($item['children']))
+                                        <ul class="mt-1 space-y-1 pl-3">
+                                            @foreach ($item['children'] as $child)
+                                                @php
+                                                    $childLinkClasses = $child['active']
+                                                        ? 'bg-white/10 text-white'
+                                                        : 'text-slate-400 hover:bg-white/5 hover:text-white';
+                                                @endphp
+                                                <li>
+                                                    <a
+                                                        href="{{ $child['href'] }}"
+                                                        class="{{ $childLinkBaseClasses }} {{ $childLinkClasses }}"
+                                                        @if ($child['active']) aria-current="page" @endif
+                                                    >
+                                                        {{ $child['label'] }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
                                 </li>
                             @endforeach
                         </ul>
