@@ -11,7 +11,7 @@
     <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(245,158,11,0.12),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(59,130,246,0.08),_transparent_22%)]">
         <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
             <div class="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-                <a href="{{ route('admin.gallery') }}" class="flex min-w-0 items-center gap-3">
+                <a href="{{ route('home') }}" class="flex min-w-0 items-center gap-3" aria-label="Go to Peak Experience homepage">
                     <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-950 text-sm font-black tracking-[0.24em] text-white">PE</span>
                     <span class="min-w-0">
                         <span class="block truncate text-base font-semibold text-slate-950 sm:text-lg">Peak Experience</span>

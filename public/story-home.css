@@ -1141,16 +1141,19 @@ section[id] {
 }
 
 .service-showcase {
-    grid-template-columns: minmax(280px, 0.76fr) minmax(0, 1.24fr);
+    grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
+    gap: clamp(1.2rem, 3vw, 2.4rem);
     align-items: center;
 }
 
 .service-showcase-media {
-    min-height: clamp(24rem, 48vw, 49rem);
-    aspect-ratio: 4 / 3;
+    width: min(100%, 42rem);
+    min-height: clamp(20rem, 34vw, 32rem);
+    aspect-ratio: 5 / 4;
     border-radius: clamp(1.8rem, 2.6vw, 2.8rem);
     container-type: size;
     isolation: isolate;
+    justify-self: end;
 }
 
 .service-showcase-video,
