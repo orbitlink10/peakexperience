@@ -218,11 +218,6 @@
                     <span class="hero__preheading">{{ strtoupper($page['type']) }}</span>
                     <h1 class="hero__title theme-title">{{ $page['title'] }}</h1>
                     <hr class="hero__hr">
-                    @if ($page['meta_description'] !== '')
-                        <div class="hero__copy u-no-margin-content">
-                            <p>{{ $page['meta_description'] }}</p>
-                        </div>
-                    @endif
                 </div>
             </div>
 
@@ -238,9 +233,6 @@
                     </div>
 
                     <div class="block-copy">
-                        @if ($page['meta_description'] !== '')
-                            <p class="block-head__subtitle">{{ $page['meta_description'] }}</p>
-                        @endif
                         <div class="block-head__body u-no-margin-content">
                             {!! $page['description'] !!}
                         </div>

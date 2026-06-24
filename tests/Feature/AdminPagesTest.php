@@ -180,6 +180,8 @@ class AdminPagesTest extends TestCase
         $response->assertSee('class="block-heading"', false);
         $response->assertSee('class="block-copy"', false);
         $response->assertSee('class="gmasonry__wrap"', false);
+        $response->assertDontSee('<p class="block-head__subtitle">Starlink Nairobi description</p>', false);
+        $response->assertDontSee('<p>Starlink Nairobi description</p>', false);
         $response->assertSee('Rendered page content', false);
     }
 
