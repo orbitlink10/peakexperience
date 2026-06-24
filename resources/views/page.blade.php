@@ -38,17 +38,17 @@
         @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
         @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
         html{scroll-behavior:smooth}
-        body.story-page{margin:0;background:#fff;color:#333;font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-size:18px;line-height:26px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+        body.story-page{--page-image-gutter:clamp(18px,2.1vw,38px);margin:0;background:#fff;color:#333;font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-size:18px;line-height:26px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
         .story-page *{box-sizing:border-box}
         .story-page main img,.story-page .se-footer-brand img,.story-page .se-footer-group img{display:block;max-width:100%;height:auto}
         .block{position:relative}.block--dark{background:#7a7e81;color:#eee}.block--light{background:#fff;color:#333}.block--colored{background:#10808f;color:#fff}
-        .hero{position:relative;overflow:hidden;min-height:100vh;font-size:27px;line-height:27px;font-weight:300;text-wrap:balance}
+        .hero{position:relative;overflow:hidden;width:calc(100% - (var(--page-image-gutter) * 2));min-height:calc(100vh - 132px);margin:0 auto;border-radius:16px;font-size:27px;line-height:27px;font-weight:300;text-wrap:balance}
         .hero__bg,.bg{position:absolute;top:0;left:0;width:100%;height:100%}
         .bg--embed{overflow:hidden}.u-bg-cover{background-size:cover;background-position:center 40%;background-repeat:no-repeat}
         .hero__bg img,.u-bg-cover img{width:100%;height:100%;object-fit:cover;margin:0;filter:saturate(.95) contrast(1.02)}
         .bg--opacity{background:#000}
         .block__padding{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:90px 24px}
-        .block__hero-height{min-height:100vh}.u-flex-column-middle{display:flex;flex-direction:column;align-items:center;justify-content:center}
+        .block__hero-height{min-height:inherit}.u-flex-column-middle{display:flex;flex-direction:column;align-items:center;justify-content:center}
         .hero__body{width:100%;max-width:520px;margin:0 auto 30px;text-align:center;opacity:1}
         .hero__preheading{display:block;margin:0 auto 18px;text-transform:uppercase;font-size:14px;line-height:18px;font-weight:500;letter-spacing:.08em;color:#fff}
         .theme-se .theme-title,.story-page .theme-title{font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-weight:400;text-transform:uppercase}
@@ -75,7 +75,7 @@
         .btn::after{content:"\2192";font-size:24px;line-height:1}
         .btn:hover,.se-btn:hover{background:#333;color:#fff}
         .b-intro__buttons{margin-top:34px;text-align:left}.b-gallery-masonry{padding:0;background:#fff}
-        .b-gallery-masonry .block__padding{max-width:none;padding:0 24px 96px}
+        .b-gallery-masonry .block__padding{max-width:none;padding:0 var(--page-image-gutter) 96px}
         .gmasonry__wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;margin:0 auto;padding:0}
         .gmasonry__item{position:relative;overflow:hidden;min-height:clamp(260px,23vw,430px);border-radius:9px;background:#ddd}
         .gmasonry__item img{width:100%;height:100%;object-fit:cover;margin:0}
@@ -108,7 +108,7 @@
         .story-page .whatsapp-widget-icon{display:block;width:35px;height:35px;max-width:35px;max-height:35px;flex:0 0 35px}
         @media(max-width:899px){.b-intro .block-head{grid-template-columns:1fr;gap:30px}.b-intro .block__padding{padding-top:76px;padding-bottom:36px}.gmasonry__wrap{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media(max-width:799px){.hero__body .hero__title{font-size:53px;line-height:50px}.hero__copy{font-size:24px;line-height:28px}.se-footer-columns{grid-template-columns:1fr}.body--section{width:100%;margin-bottom:34px}.block-head__title{font-size:38px;line-height:42px}}
-        @media(max-width:599px){body.story-page{font-size:16px;line-height:24px}.hero__body .hero__title{font-size:40px;line-height:36px}.hero__copy{font-size:21px;line-height:25px}.block__padding{padding:70px 18px}.b-intro .block-head__subtitle{font-size:23px;line-height:28px}.b-intro .block-head__body{font-size:17px;line-height:27px}.gmasonry__wrap{grid-template-columns:1fr}.b-gallery-masonry .block__padding{padding:0 14px 70px}.gmasonry__item{min-height:230px}}
+        @media(max-width:599px){body.story-page{--page-image-gutter:14px;font-size:16px;line-height:24px}.hero{min-height:72vh;border-radius:12px}.hero__body .hero__title{font-size:40px;line-height:36px}.hero__copy{font-size:21px;line-height:25px}.block__padding{padding:70px 18px}.b-intro .block-head__subtitle{font-size:23px;line-height:28px}.b-intro .block-head__body{font-size:17px;line-height:27px}.gmasonry__wrap{grid-template-columns:1fr}.b-gallery-masonry .block__padding{padding:0 var(--page-image-gutter) 70px}.gmasonry__item{min-height:230px}}
     </style>
 </head>
 <body id="top" class="story-page theme-se">
