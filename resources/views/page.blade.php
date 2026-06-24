@@ -40,7 +40,7 @@
         html{scroll-behavior:smooth}
         body.story-page{margin:0;background:#fff;color:#333;font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-size:18px;line-height:26px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
         .story-page *{box-sizing:border-box}
-        .story-page img{display:block;max-width:100%;height:auto}
+        .story-page main img,.story-page .se-footer-brand img,.story-page .se-footer-group img{display:block;max-width:100%;height:auto}
         .block{position:relative}.block--dark{background:#7a7e81;color:#eee}.block--light{background:#fff;color:#333}.block--colored{background:#10808f;color:#fff}
         .hero{position:relative;overflow:hidden;min-height:100vh;font-size:27px;line-height:27px;font-weight:300;text-wrap:balance}
         .hero__bg,.bg{position:absolute;top:0;left:0;width:100%;height:100%}
