@@ -1,11 +1,4 @@
 @php
-    $fallbackImages = [
-        'staging' => 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1400&q=80',
-        'event-production' => 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=1400&q=80',
-        'media-solutions' => 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&w=1400&q=80',
-        'exhibition-solutions' => 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80',
-    ];
-
     $contactEmail = trim((string) ($contactEmail ?? ''));
     $hasContactEmail = filled($contactEmail);
     $contactPhones = is_array($contactPhones ?? null) ? $contactPhones : [];
@@ -20,23 +13,38 @@
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
     $hasLogo = filled($logoUrl);
-    $serviceSlug = \Illuminate\Support\Str::slug((string) ($service['title'] ?? ''));
-    $serviceImage = ! empty($service['image'])
-        ? \App\Support\HomepageContent::assetUrl((string) $service['image'])
-        : ($fallbackImages[$serviceSlug] ?? reset($fallbackImages));
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $service['title'] }} | Peak Experience</title>
-    <meta name="description" content="{{ $service['text'] }}">
+    <title>Our Work | Peak Experience</title>
+    <meta name="description" content="Explore Peak Experience case studies across conferences, exhibitions, brand experiences, and live event production in Kenya.">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('story-home.css') }}">
+    <style>
+        .work-page-main{background:#f7f3ec}
+        .work-page-hero{padding:clamp(70px,8vw,120px) 0 48px}
+        .work-page-kicker{display:block;margin-bottom:16px;color:#0f766e;font-size:14px;font-weight:800;letter-spacing:.22em;text-transform:uppercase}
+        .work-page-hero h1{max-width:860px;margin:0;color:#202633;font-size:clamp(54px,8vw,118px);line-height:.92;letter-spacing:0;text-transform:uppercase}
+        .work-page-hero p{max-width:720px;margin:28px 0 0;color:#667085;font-size:clamp(20px,2vw,30px);line-height:1.35}
+        .work-list-section{padding:0 0 clamp(72px,8vw,120px)}
+        .work-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+        .work-card{overflow:hidden;border-radius:8px;background:#fff;color:#202633;text-decoration:none;box-shadow:0 18px 45px rgba(32,38,51,.08)}
+        .work-card-media{aspect-ratio:4/3;background:#d9d9d9}
+        .work-card-media img{width:100%;height:100%;object-fit:cover}
+        .work-card-placeholder{display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:#8b929c;font-size:13px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+        .work-card-body{padding:24px}
+        .work-card-body h2{margin:0;color:#202633;font-size:clamp(23px,2vw,32px);line-height:1.05}
+        .work-card-body p{margin:14px 0 0;color:#667085;font-size:17px;line-height:1.55}
+        .work-empty{border:1px solid rgba(32,38,51,.12);border-radius:8px;background:#fff;padding:48px;color:#667085;font-size:20px}
+        @media(max-width:980px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:640px){.work-grid{grid-template-columns:1fr}.work-page-hero{padding-top:48px}.work-card-body{padding:20px}}
+    </style>
 </head>
 <body id="top">
     <div class="page-shell">
@@ -69,10 +77,10 @@
                                 </ul>
                             @endif
                         </li>
-                        <li><a href="{{ route('home') }}#services">Our Services</a></li>
                         <li><a href="{{ route('our-work') }}">Our Work</a></li>
+                        <li><a href="{{ route('home') }}#services">Our Services</a></li>
                         <li><a href="{{ route('home') }}#process">Our Stories</a></li>
-                        <li><a href="{{ route('home') }}#contact">Contact Us</a></li>
+                        <li><a href="{{ route('home') }}#intro">About Us</a></li>
                     </ul>
                 </nav>
 
@@ -103,92 +111,54 @@
                                     </ul>
                                 @endif
                             </li>
-                            <li><a href="{{ route('home') }}#services">Our Services</a></li>
                             <li><a href="{{ route('our-work') }}">Our Work</a></li>
+                            <li><a href="{{ route('home') }}#services">Our Services</a></li>
                             <li><a href="{{ route('home') }}#process">Our Stories</a></li>
+                            <li><a href="{{ route('home') }}#intro">About Us</a></li>
                             <li><a href="{{ route('home') }}#contact">Contact Us</a></li>
                         </ul>
                     </nav>
-
-                    <div class="nav-meta">
-                        @if ($hasContactEmail)
-                            <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
-                        @endif
-                        @foreach ($contactPhones as $phone)
-                            <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
-                        @endforeach
-                    </div>
                 </div>
             </div>
         </header>
 
-        <main>
-            <section class="section service-article-hero">
-                <div class="wrap service-article-shell reveal">
-                    <div class="service-article-copy">
-                        <a class="back-link" href="{{ route('home') }}#services-detail">Back to Services</a>
-                        <span class="section-prefix">{{ $service['article']['eyebrow'] }}</span>
-                        <h1>{{ $service['title'] }}</h1>
-                        <p class="service-article-headline">{{ $service['article']['headline'] }}</p>
-                        <p class="service-article-summary">{{ $service['text'] }}</p>
-
-                        <div class="service-article-actions">
-                            @if ($hasContactEmail)
-                                <a class="button button-primary" href="mailto:{{ $contactEmail }}">Email Us</a>
-                            @endif
-                            @if (! empty($contactPhones))
-                                <a class="button button-secondary" href="tel:{{ $contactPhones[0]['dial'] }}">Call Us</a>
-                            @endif
-                            @if ($hasWhatsapp)
-                                <a class="button button-whatsapp" href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer">WhatsApp Us</a>
-                            @endif
-                        </div>
-                    </div>
-
-                    <figure class="service-article-media">
-                        <img src="{{ $serviceImage }}" alt="{{ $service['title'] }}">
-                    </figure>
+        <main class="work-page-main">
+            <section class="work-page-hero">
+                <div class="wrap">
+                    <span class="work-page-kicker">Peak Experience Case Studies</span>
+                    <h1>Our Work</h1>
+                    <p>Explore the live moments Peak Experience has shaped for conferences, exhibitions, brand experiences, and corporate events across Kenya.</p>
                 </div>
             </section>
 
-            <section class="section service-article-content">
-                <div class="wrap service-article-grid reveal reveal-delay-1">
-                    <article class="article-body">
-                        <p class="article-intro">{{ $service['article']['intro'] }}</p>
-
-                        @foreach ($service['article']['sections'] as $section)
-                            <section class="article-section">
-                                <h2>{{ $section['title'] }}</h2>
-                                <p>{{ $section['text'] }}</p>
-                            </section>
-                        @endforeach
-                    </article>
-
-                    <aside class="article-sidebar">
-                        <div class="article-sidebar-block">
-                            <h2>What This Includes</h2>
-
-                            <ul class="article-highlight-list">
-                                @foreach ($service['article']['highlights'] as $highlight)
-                                    <li>{{ $highlight }}</li>
-                                @endforeach
-                            </ul>
+            <section class="work-list-section">
+                <div class="wrap">
+                    @if (count($caseStudies) > 0)
+                        <div class="work-grid">
+                            @foreach ($caseStudies as $caseStudy)
+                                @php
+                                    $imageUrl = \App\Support\HomepageContent::assetUrl((string) ($caseStudy['image'] ?? ''));
+                                @endphp
+                                <article class="work-card">
+                                    <div class="work-card-media">
+                                        @if ($imageUrl !== '')
+                                            <img src="{{ $imageUrl }}" alt="{{ $caseStudy['image_alt'] !== '' ? $caseStudy['image_alt'] : $caseStudy['title'] }}">
+                                        @else
+                                            <div class="work-card-placeholder">Case Study</div>
+                                        @endif
+                                    </div>
+                                    <div class="work-card-body">
+                                        <h2>{{ $caseStudy['title'] }}</h2>
+                                        @if ($caseStudy['description'] !== '')
+                                            <p>{{ \Illuminate\Support\Str::limit(strip_tags($caseStudy['description']), 150) }}</p>
+                                        @endif
+                                    </div>
+                                </article>
+                            @endforeach
                         </div>
-
-                        <div class="article-sidebar-block article-contact-block">
-                            <h2>Talk To Peak Experience</h2>
-                            <p>Share the venue, audience size, and event date and we will map the right production path.</p>
-
-                            <div class="article-contact-list">
-                                @if ($hasContactEmail)
-                                    <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
-                                @endif
-                                @foreach ($contactPhones as $phone)
-                                    <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
-                                @endforeach
-                            </div>
-                        </div>
-                    </aside>
+                    @else
+                        <div class="work-empty">Case studies will be published here once they are added in the dashboard.</div>
+                    @endif
                 </div>
             </section>
         </main>
@@ -203,9 +173,9 @@
                     </div>
 
                     <nav class="footer-links" aria-label="Footer navigation">
-                        <a href="{{ route('home') }}">Home</a>
+                        <a href="{{ route('home') }}#intro">About</a>
                         <a href="{{ route('home') }}#services">Services</a>
-                        <a href="{{ route('home') }}#process">Process</a>
+                        <a href="{{ route('our-work') }}">Our Work</a>
                         <a href="{{ route('home') }}#contact">Contact Us</a>
                     </nav>
 
@@ -223,7 +193,6 @@
                             <a href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer">WhatsApp</a>
                         @endif
                         <a href="#top">Back To Top</a>
-                        <span>Live event delivery across Kenya</span>
                     </div>
                 </div>
             </div>

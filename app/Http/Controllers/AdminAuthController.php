@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\CaseStudyContent;
 use App\Support\GalleryContent;
 use App\Support\HomepageContent;
 use App\Support\PageContent;
@@ -30,11 +31,6 @@ class AdminAuthController extends Controller
                 'label' => 'Services',
                 'heading' => 'Services',
                 'description' => 'Use this section for service management once those editing tools are added to the admin panel.',
-            ],
-            'case-study' => [
-                'label' => 'Case Study',
-                'heading' => 'Case Study',
-                'description' => 'Use this section for case studies once those editing tools are added to the admin panel.',
             ],
             'team' => [
                 'label' => 'Team',
@@ -210,6 +206,113 @@ class AdminAuthController extends Controller
         ]);
     }
 
+    public function caseStudies(Request $request): View
+    {
+        return view('admin.case-studies.index', $this->sharedData($request, 'case-study') + [
+            'caseStudies' => CaseStudyContent::load(),
+        ]);
+    }
+
+    public function createCaseStudy(Request $request): View
+    {
+        return view('admin.case-studies.form', $this->sharedData($request, 'case-study') + [
+            'caseStudy' => CaseStudyContent::defaults(),
+            'formMode' => 'create',
+        ]);
+    }
+
+    public function storeCaseStudy(Request $request): RedirectResponse
+    {
+        $caseStudies = CaseStudyContent::load();
+        $payload = $this->validatedCaseStudyPayload($request);
+        $imagePath = $this->storeCaseStudyImage($request, '');
+        $timestamp = now()->toIso8601String();
+
+        $caseStudies[] = [
+            'id' => (string) Str::uuid(),
+            'slug' => $this->uniqueContentSlug($payload['title'], $caseStudies, 'case-study'),
+            'title' => $payload['title'],
+            'image' => $imagePath,
+            'image_alt' => $payload['image_alt'],
+            'status' => $payload['status'],
+            'order' => $payload['order'],
+            'description' => $payload['description'],
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
+        ];
+
+        CaseStudyContent::save($caseStudies);
+
+        return redirect()->route('admin.case-studies.index')->with('status', 'Case study created successfully.');
+    }
+
+    public function editCaseStudy(Request $request, string $caseStudyId): View
+    {
+        $caseStudy = CaseStudyContent::findById($caseStudyId);
+        abort_unless(is_array($caseStudy), 404);
+
+        return view('admin.case-studies.form', $this->sharedData($request, 'case-study') + [
+            'caseStudy' => $caseStudy,
+            'formMode' => 'edit',
+        ]);
+    }
+
+    public function updateCaseStudy(Request $request, string $caseStudyId): RedirectResponse
+    {
+        $caseStudies = CaseStudyContent::load();
+        $caseStudy = null;
+
+        foreach ($caseStudies as $index => $item) {
+            if ($item['id'] === $caseStudyId) {
+                $caseStudy = $item;
+                break;
+            }
+        }
+
+        abort_unless(is_array($caseStudy), 404);
+
+        $payload = $this->validatedCaseStudyPayload($request);
+        $imagePath = $this->storeCaseStudyImage($request, (string) ($caseStudy['image'] ?? ''));
+        $caseStudies[$index] = [
+            'id' => $caseStudy['id'],
+            'slug' => $this->uniqueContentSlug($payload['title'], $caseStudies, 'case-study', $caseStudy['id']),
+            'title' => $payload['title'],
+            'image' => $imagePath,
+            'image_alt' => $payload['image_alt'],
+            'status' => $payload['status'],
+            'order' => $payload['order'],
+            'description' => $payload['description'],
+            'created_at' => (string) ($caseStudy['created_at'] ?? now()->toIso8601String()),
+            'updated_at' => now()->toIso8601String(),
+        ];
+
+        CaseStudyContent::save($caseStudies);
+
+        return redirect()->route('admin.case-studies.index')->with('status', 'Case study updated successfully.');
+    }
+
+    public function deleteCaseStudy(Request $request, string $caseStudyId): RedirectResponse
+    {
+        $caseStudies = [];
+        $deleted = false;
+
+        foreach (CaseStudyContent::load() as $caseStudy) {
+            if ($caseStudy['id'] === $caseStudyId) {
+                $this->deletePublicAsset(HomepageContent::storedPath((string) ($caseStudy['image'] ?? '')));
+                $deleted = true;
+                continue;
+            }
+
+            $caseStudies[] = $caseStudy;
+        }
+
+        abort_unless($deleted, 404);
+
+        CaseStudyContent::save($caseStudies);
+
+        return redirect()->route('admin.case-studies.index')->with('status', 'Case study deleted successfully.');
+    }
+
     public function storePage(Request $request): RedirectResponse
     {
         $pages = PageContent::load();
@@ -347,6 +450,10 @@ class AdminAuthController extends Controller
     {
         if ($section === 'pages') {
             return $this->pages($request);
+        }
+
+        if ($section === 'case-study') {
+            return $this->caseStudies($request);
         }
 
         $sections = $this->placeholderSections();
@@ -575,6 +682,37 @@ class AdminAuthController extends Controller
         ];
     }
 
+    /**
+     * @return array{
+     *   title:string,
+     *   image_alt:string,
+     *   status:string,
+     *   order:int,
+     *   description:string
+     * }
+     */
+    private function validatedCaseStudyPayload(Request $request): array
+    {
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:180'],
+            'image_path' => ['nullable', 'string', 'max:255'],
+            'image_file' => ['nullable', 'image', 'max:5120'],
+            'image_remove' => ['nullable', 'boolean'],
+            'image_alt' => ['nullable', 'string', 'max:180'],
+            'status' => ['required', Rule::in(['Active', 'Draft'])],
+            'order' => ['nullable', 'integer', 'min:0', 'max:9999'],
+            'description' => ['nullable', 'string'],
+        ]);
+
+        return [
+            'title' => trim((string) $validated['title']),
+            'image_alt' => trim((string) ($validated['image_alt'] ?? '')),
+            'status' => trim((string) $validated['status']),
+            'order' => (int) ($validated['order'] ?? 0),
+            'description' => trim((string) ($validated['description'] ?? '')),
+        ];
+    }
+
     private function storePageImage(Request $request, string $existingPath): string
     {
         $imagePath = trim((string) $request->input('image_path', $existingPath));
@@ -587,6 +725,23 @@ class AdminAuthController extends Controller
         if ($request->hasFile('image_file')) {
             $this->deletePublicAsset(HomepageContent::storedPath($imagePath));
             $imagePath = $request->file('image_file')->store('homepage/pages', 'public');
+        }
+
+        return $imagePath;
+    }
+
+    private function storeCaseStudyImage(Request $request, string $existingPath): string
+    {
+        $imagePath = trim((string) $request->input('image_path', $existingPath));
+
+        if ($request->boolean('image_remove')) {
+            $this->deletePublicAsset(HomepageContent::storedPath($imagePath));
+            $imagePath = '';
+        }
+
+        if ($request->hasFile('image_file')) {
+            $this->deletePublicAsset(HomepageContent::storedPath($imagePath));
+            $imagePath = $request->file('image_file')->store('homepage/case-studies', 'public');
         }
 
         return $imagePath;
@@ -646,17 +801,25 @@ class AdminAuthController extends Controller
      */
     private function uniquePageSlug(string $title, array $pages, ?string $ignoreId = null): string
     {
+        return $this->uniqueContentSlug($title, $pages, 'page', $ignoreId);
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $items
+     */
+    private function uniqueContentSlug(string $title, array $items, string $fallback, ?string $ignoreId = null): string
+    {
         $base = Str::slug($title);
         if ($base === '') {
-            $base = 'page';
+            $base = $fallback;
         }
 
         $slug = $base;
         $suffix = 2;
 
-        while (collect($pages)->contains(function (array $page) use ($slug, $ignoreId): bool {
-            return (string) ($page['slug'] ?? '') === $slug
-                && (string) ($page['id'] ?? '') !== (string) $ignoreId;
+        while (collect($items)->contains(function (array $item) use ($slug, $ignoreId): bool {
+            return (string) ($item['slug'] ?? '') === $slug
+                && (string) ($item['id'] ?? '') !== (string) $ignoreId;
         })) {
             $slug = $base . '-' . $suffix;
             $suffix++;
@@ -689,7 +852,7 @@ class AdminAuthController extends Controller
         $menu = [
             ['key' => 'overview', 'label' => 'Overview', 'href' => route('admin.section', ['section' => 'overview'])],
             ['key' => 'services', 'label' => 'Services', 'href' => route('admin.section', ['section' => 'services'])],
-            ['key' => 'case-study', 'label' => 'Case Study', 'href' => route('admin.section', ['section' => 'case-study'])],
+            ['key' => 'case-study', 'label' => 'Case Study', 'href' => route('admin.case-studies.index')],
             ['key' => 'team', 'label' => 'Team', 'href' => route('admin.section', ['section' => 'team'])],
             ['key' => 'gallery', 'label' => 'Gallery', 'href' => route('admin.gallery')],
             ['key' => 'sliders', 'label' => 'Sliders', 'href' => route('admin.section', ['section' => 'sliders'])],

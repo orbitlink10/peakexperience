@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/our-work', [HomeController::class, 'ourWork'])->name('our-work');
 Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact.submit');
 Route::get('/services/{service}', [HomeController::class, 'service'])->name('services.show');
 Route::get('/homepage-assets/{path}', [HomeController::class, 'asset'])
@@ -31,6 +32,12 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::post('/gallery/delete', [AdminAuthController::class, 'deleteGalleryImages'])->name('gallery.delete');
         Route::get('/homepage', [AdminAuthController::class, 'showHomepage'])->name('homepage');
         Route::post('/homepage', [AdminAuthController::class, 'updateHomepage'])->name('homepage.update');
+        Route::get('/case-studies', [AdminAuthController::class, 'caseStudies'])->name('case-studies.index');
+        Route::get('/case-studies/create', [AdminAuthController::class, 'createCaseStudy'])->name('case-studies.create');
+        Route::post('/case-studies', [AdminAuthController::class, 'storeCaseStudy'])->name('case-studies.store');
+        Route::get('/case-studies/{caseStudyId}/edit', [AdminAuthController::class, 'editCaseStudy'])->name('case-studies.edit');
+        Route::put('/case-studies/{caseStudyId}', [AdminAuthController::class, 'updateCaseStudy'])->name('case-studies.update');
+        Route::delete('/case-studies/{caseStudyId}', [AdminAuthController::class, 'deleteCaseStudy'])->name('case-studies.delete');
         Route::get('/pages/create', [AdminAuthController::class, 'createPage'])->name('pages.create');
         Route::post('/pages', [AdminAuthController::class, 'storePage'])->name('pages.store');
         Route::get('/pages/{pageId}/edit', [AdminAuthController::class, 'editPage'])->name('pages.edit');

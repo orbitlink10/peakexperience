@@ -120,7 +120,7 @@
                                 </ul>
                             @endif
                         </li>
-                        <li><a href="#proof">Our Work</a></li>
+                        <li><a href="{{ route('our-work') }}">Our Work</a></li>
                         <li><a href="#services">Our Services</a></li>
                         <li><a href="#process">Our Stories</a></li>
                         <li><a href="#intro">About Us</a></li>
@@ -154,7 +154,7 @@
                                     </ul>
                                 @endif
                             </li>
-                            <li><a href="#proof">Our Work</a></li>
+                            <li><a href="{{ route('our-work') }}">Our Work</a></li>
                             <li><a href="#services">Our Services</a></li>
                             <li><a href="#process">Our Stories</a></li>
                             <li><a href="#intro">About Us</a></li>
@@ -243,7 +243,7 @@
 
                         <p>Peak Experience combines creative direction, staging, media systems, and venue execution so audiences experience one coherent story instead of a room full of disconnected details. From venue planning and show flow to media support and live delivery, every layer is built to feel polished, calm, and intentional from the first arrival to the final cue.</p>
 
-                        <a class="button button-primary intro-button" href="#proof">Discover Our Work</a>
+                        <a class="button button-primary intro-button" href="{{ route('our-work') }}">Discover Our Work</a>
                     </div>
                 </div>
             </section>
@@ -327,7 +327,7 @@
                             <span class="proof-stage-kicker">Innovative. Impactful. Seamless.</span>
                             <h2>Our Work</h2>
                             <p>Explore the conferences, launches, exhibitions, executive forums, and hybrid productions Peak Experience has shaped across Kenya. Every brief is translated into an environment that feels polished, immersive, and tightly executed from the first guest arrival to the final cue.</p>
-                            <a class="button proof-stage-button" href="#process">Discover More</a>
+                            <a class="button proof-stage-button" href="{{ route('our-work') }}">Discover More</a>
                         </div>
                     </article>
                 </div>
@@ -540,7 +540,7 @@
                     <nav class="footer-links" aria-label="Footer navigation">
                         <a href="#intro">About</a>
                         <a href="#services">Services</a>
-                        <a href="#proof">Why Us</a>
+                        <a href="{{ route('our-work') }}">Our Work</a>
                         <a href="#process">Process</a>
                         <a href="#contact">Contact Us</a>
                     </nav>
