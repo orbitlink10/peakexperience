@@ -58,18 +58,26 @@
         .hero__copy p{margin:0}
         .btn-anchor.js-page-down{position:absolute;left:50%;bottom:32px;z-index:3;display:flex;align-items:center;justify-content:center;width:62px;height:62px;margin-left:-31px;border:1px solid currentColor;border-radius:50%;color:#fff;text-decoration:none}
         .btn-anchor.js-page-down span{width:13px;height:13px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translate(-2px,-2px)}
-        .b-intro .block__padding{padding-top:96px;padding-bottom:86px}
+        .b-intro .block__padding{max-width:1320px;padding-top:112px;padding-bottom:48px}
         .block-head{position:relative;width:min(90%,760px);margin:0 auto 45px;text-align:center;text-wrap:balance;opacity:1}
+        .b-intro .block-head{display:grid;grid-template-columns:minmax(260px,.72fr) minmax(0,1fr);gap:clamp(48px,8vw,140px);width:100%;margin:0;align-items:start;text-align:left;text-wrap:normal}
+        .block-head__eyebrow{display:block;margin:0 0 18px;text-transform:uppercase;font-size:13px;line-height:18px;font-weight:500;letter-spacing:.12em;color:#10808f}
         .block-head__title{margin:0 0 22px;color:#333;font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-size:44px;line-height:44px;font-weight:400;text-transform:uppercase}
+        .b-intro .block-head__title{margin:0;color:#5a5557;font-size:clamp(36px,3.4vw,54px);line-height:1.08;font-weight:500;text-transform:none;text-wrap:balance}
         .block-head__subtitle{margin:0 auto 28px;color:#333;font-size:27px;line-height:32px;font-weight:300}
+        .b-intro .block-head__subtitle{margin:0 0 34px;color:#6a6365;font-size:clamp(26px,2.15vw,36px);line-height:1.3;text-wrap:balance}
         .block-head__body{color:#333;font-size:18px;line-height:30px}
+        .b-intro .block-head__body{color:#5f595b;font-size:20px;line-height:32px}
         .block-head__body p{margin:0 0 18px}
-        .btn,.se-btn{display:inline-flex;align-items:center;justify-content:center;min-width:150px;min-height:52px;border:1px solid currentColor;padding:0 24px;color:inherit;background:transparent;text-decoration:none;text-transform:uppercase;font-size:14px;line-height:18px;font-weight:500;letter-spacing:.04em}
+        .block-head__body p:last-child{margin-bottom:0}
+        .block-copy{display:grid;justify-items:start}
+        .btn,.se-btn{display:inline-flex;align-items:center;justify-content:center;gap:18px;min-width:164px;min-height:64px;border:0;border-radius:9px;padding:0 30px;color:#777;background:#f0f1f2;text-decoration:none;text-transform:uppercase;font-size:14px;line-height:18px;font-weight:500;letter-spacing:.04em}
+        .btn::after{content:"\2192";font-size:24px;line-height:1}
         .btn:hover,.se-btn:hover{background:#333;color:#fff}
-        .b-intro__buttons{text-align:center}.b-gallery-masonry{padding:0;background:#fff}
-        .gmasonry__wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;width:min(1440px,calc(100% - 30px));margin:0 auto;padding:0 0 90px}
-        .gmasonry__item{position:relative;overflow:hidden;min-height:300px;background:#ddd}
-        .gmasonry__item:first-child{grid-row:span 2}
+        .b-intro__buttons{margin-top:34px;text-align:left}.b-gallery-masonry{padding:0;background:#fff}
+        .b-gallery-masonry .block__padding{max-width:none;padding:0 24px 96px}
+        .gmasonry__wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;margin:0 auto;padding:0}
+        .gmasonry__item{position:relative;overflow:hidden;min-height:clamp(260px,23vw,430px);border-radius:9px;background:#ddd}
         .gmasonry__item img{width:100%;height:100%;object-fit:cover;margin:0}
         .gmasonry__download{display:none}
         .b-section.block--dark{background:#7a7e81;color:#fff}
@@ -95,8 +103,9 @@
         .se-footer-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px}
         .se-footer-columns div{display:grid;gap:8px}.se-footer-columns h3{margin:0 0 8px;text-transform:uppercase;font-size:18px}.se-footer-columns a{color:#333;text-decoration:none}
         .story-page .whatsapp-widget{right:22px;bottom:22px;z-index:999}
-        @media(max-width:799px){.hero__body .hero__title{font-size:53px;line-height:50px}.hero__copy{font-size:24px;line-height:28px}.gmasonry__wrap,.se-footer-columns{grid-template-columns:1fr}.body--section{width:100%;margin-bottom:34px}.block-head__title{font-size:38px;line-height:38px}}
-        @media(max-width:599px){body.story-page{font-size:16px;line-height:24px}.hero__body .hero__title{font-size:40px;line-height:36px}.hero__copy{font-size:21px;line-height:25px}.block__padding{padding:70px 18px}.block-head__title{font-size:34px;line-height:34px}.block-head__subtitle{font-size:23px;line-height:28px}.gmasonry__item{min-height:230px}}
+        @media(max-width:899px){.b-intro .block-head{grid-template-columns:1fr;gap:30px}.b-intro .block__padding{padding-top:76px;padding-bottom:36px}.gmasonry__wrap{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:799px){.hero__body .hero__title{font-size:53px;line-height:50px}.hero__copy{font-size:24px;line-height:28px}.se-footer-columns{grid-template-columns:1fr}.body--section{width:100%;margin-bottom:34px}.block-head__title{font-size:38px;line-height:42px}}
+        @media(max-width:599px){body.story-page{font-size:16px;line-height:24px}.hero__body .hero__title{font-size:40px;line-height:36px}.hero__copy{font-size:21px;line-height:25px}.block__padding{padding:70px 18px}.b-intro .block-head__subtitle{font-size:23px;line-height:28px}.b-intro .block-head__body{font-size:17px;line-height:27px}.gmasonry__wrap{grid-template-columns:1fr}.b-gallery-masonry .block__padding{padding:0 14px 70px}.gmasonry__item{min-height:230px}}
     </style>
 </head>
 <body id="top" class="story-page theme-se">
@@ -198,19 +207,23 @@
         <section class="b-intro block block--light" id="content">
             <div class="block__padding">
                 <div class="block-head u-max-width-med">
-                    <div>
+                    <div class="block-heading">
+                        <span class="block-head__eyebrow">{{ $page['type'] }}</span>
                         <h2 class="block-head__title">{{ $page['heading_two'] }}</h2>
                     </div>
-                    @if ($page['meta_description'] !== '')
-                        <p class="block-head__subtitle">{{ $page['meta_description'] }}</p>
-                    @endif
-                    <div class="block-head__body u-no-margin-content">
-                        {!! $page['description'] !!}
-                    </div>
-                </div>
 
-                <div class="block-cta u-text-center b-intro__buttons">
-                    <a class="btn btn-centred" href="{{ route('home') }}#contact">Enquire Now</a>
+                    <div class="block-copy">
+                        @if ($page['meta_description'] !== '')
+                            <p class="block-head__subtitle">{{ $page['meta_description'] }}</p>
+                        @endif
+                        <div class="block-head__body u-no-margin-content">
+                            {!! $page['description'] !!}
+                        </div>
+
+                        <div class="block-cta u-text-center b-intro__buttons">
+                            <a class="btn btn-centred" href="{{ route('home') }}#contact">Enquire Now</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

@@ -146,7 +146,7 @@ class AdminPagesTest extends TestCase
                     'meta_title' => 'Starlink Nairobi Meta',
                     'meta_description' => 'Starlink Nairobi description',
                     'title' => 'Starlink Nairobi',
-                    'image' => '',
+                    'image' => 'https://example.com/page-image.jpg',
                     'image_alt' => 'Starlink Nairobi',
                     'heading_two' => 'Stay connected in Nairobi',
                     'type' => 'Post',
@@ -162,6 +162,9 @@ class AdminPagesTest extends TestCase
         $response->assertOk();
         $response->assertSee('Starlink Nairobi');
         $response->assertSee('Stay connected in Nairobi');
+        $response->assertSee('class="block-heading"', false);
+        $response->assertSee('class="block-copy"', false);
+        $response->assertSee('class="gmasonry__wrap"', false);
         $response->assertSee('Rendered page content', false);
     }
 }
