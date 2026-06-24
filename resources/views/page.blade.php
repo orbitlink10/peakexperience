@@ -31,6 +31,7 @@
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('story-home.css') }}">
     <style>
         @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Light.woff2") format("woff2");font-weight:300;font-style:normal;font-display:swap}
@@ -40,15 +41,6 @@
         body.story-page{margin:0;background:#fff;color:#333;font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-size:18px;line-height:26px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
         .story-page *{box-sizing:border-box}
         .story-page img{display:block;max-width:100%;height:auto}
-        .se-header{position:fixed;top:15px;left:15px;right:15px;z-index:998;display:flex;align-items:center;justify-content:space-between;min-height:84px;padding:0 22px;color:#fff}
-        .se-header:before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.18);backdrop-filter:blur(2px);z-index:-1}
-        .se-logo{display:block;width:130px;height:58px;color:#fff;text-decoration:none;text-transform:uppercase;font-weight:500;letter-spacing:.08em}
-        .se-logo img{width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1)}
-        .se-logo span{display:flex;align-items:center;height:100%}
-        .se-nav ul{display:flex;align-items:center;justify-content:center;gap:34px;margin:0;padding:0;list-style:none}
-        .se-nav a,.se-enquire-button{color:#fff;text-decoration:none;text-transform:uppercase;font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-size:14px;line-height:18px;font-weight:500;letter-spacing:.04em}
-        .se-enquire-button{display:inline-flex;align-items:center;justify-content:center;min-width:104px;min-height:44px;border:1px solid rgba(255,255,255,.8);padding:0 18px}
-        .se-enquire-button:hover{background:#fff;color:#333}
         .block{position:relative}.block--dark{background:#7a7e81;color:#eee}.block--light{background:#fff;color:#333}.block--colored{background:#10808f;color:#fff}
         .hero{position:relative;overflow:hidden;min-height:100vh;font-size:27px;line-height:27px;font-weight:300;text-wrap:balance}
         .hero__bg,.bg{position:absolute;top:0;left:0;width:100%;height:100%}
@@ -103,31 +95,76 @@
         .se-footer-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px}
         .se-footer-columns div{display:grid;gap:8px}.se-footer-columns h3{margin:0 0 8px;text-transform:uppercase;font-size:18px}.se-footer-columns a{color:#333;text-decoration:none}
         .story-page .whatsapp-widget{right:22px;bottom:22px;z-index:999}
-        @media(max-width:799px){.se-header{top:0;left:0;right:0;min-height:72px}.se-nav{display:none}.se-logo{width:108px;height:48px}.hero__body .hero__title{font-size:53px;line-height:50px}.hero__copy{font-size:24px;line-height:28px}.gmasonry__wrap,.se-footer-columns{grid-template-columns:1fr}.body--section{width:100%;margin-bottom:34px}.block-head__title{font-size:38px;line-height:38px}}
+        @media(max-width:799px){.hero__body .hero__title{font-size:53px;line-height:50px}.hero__copy{font-size:24px;line-height:28px}.gmasonry__wrap,.se-footer-columns{grid-template-columns:1fr}.body--section{width:100%;margin-bottom:34px}.block-head__title{font-size:38px;line-height:38px}}
         @media(max-width:599px){body.story-page{font-size:16px;line-height:24px}.hero__body .hero__title{font-size:40px;line-height:36px}.hero__copy{font-size:21px;line-height:25px}.block__padding{padding:70px 18px}.block-head__title{font-size:34px;line-height:34px}.block-head__subtitle{font-size:23px;line-height:28px}.gmasonry__item{min-height:230px}}
     </style>
 </head>
 <body id="top" class="story-page theme-se">
-    <header class="se-header">
-        <a class="se-logo" href="{{ route('home') }}" aria-label="Peak Experience home">
-            @if ($hasLogo)
-                <img src="{{ $logoUrl }}" alt="Peak Experience logo">
-            @else
-                <span>Peak</span>
-            @endif
-        </a>
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="wrap header-row">
+                <a class="brand" href="{{ route('home') }}" aria-label="Peak Experience home">
+                    @if ($hasLogo)
+                        <img class="brand-logo" src="{{ $logoUrl }}" alt="Peak Experience">
+                    @else
+                        <span class="brand-copy">
+                            <strong>Peak Experience</strong>
+                            <span class="brand-dots" aria-hidden="true">
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                            </span>
+                        </span>
+                    @endif
+                </a>
 
-        <nav class="se-nav" aria-label="Primary navigation">
-            <ul>
-                <li><a href="{{ route('home') }}#services">What We Do</a></li>
-                <li><a href="{{ route('home') }}#proof">Our Work</a></li>
-                <li><a href="{{ route('home') }}#intro">About Us</a></li>
-                <li><a href="{{ route('home') }}#contact">Contact</a></li>
-            </ul>
-        </nav>
+                <nav class="site-nav" aria-label="Primary">
+                    <ul>
+                        <li><a class="nav-link--caret" href="{{ route('home') }}#services">What We Do</a></li>
+                        <li><a href="{{ route('home') }}#proof">Our Work</a></li>
+                        <li><a href="{{ route('home') }}#services">Our Services</a></li>
+                        <li><a href="{{ route('home') }}#process">Our Stories</a></li>
+                        <li><a class="nav-link--caret" href="{{ route('home') }}#intro">About Us</a></li>
+                    </ul>
+                </nav>
 
-        <a class="se-enquire-button" href="{{ route('home') }}#contact">Enquire</a>
-    </header>
+                <div class="header-utility">
+                    <a class="button button-nav-cta" href="{{ route('home') }}#contact">Contact Us</a>
+                </div>
+
+                <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>
+                    <span class="nav-toggle-box" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+            </div>
+
+            <div class="wrap">
+                <div class="nav-panel" id="mobile-nav" data-nav-panel>
+                    <nav aria-label="Mobile">
+                        <ul>
+                            <li><a href="{{ route('home') }}#services">What We Do</a></li>
+                            <li><a href="{{ route('home') }}#proof">Our Work</a></li>
+                            <li><a href="{{ route('home') }}#services">Our Services</a></li>
+                            <li><a href="{{ route('home') }}#process">Our Stories</a></li>
+                            <li><a href="{{ route('home') }}#intro">About Us</a></li>
+                            <li><a href="{{ route('home') }}#contact">Contact Us</a></li>
+                        </ul>
+                    </nav>
+
+                    <div class="nav-meta">
+                        @if ($hasContactEmail)
+                            <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
+                        @endif
+                        @foreach ($contactPhones as $phone)
+                            <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </header>
 
     <main id="main">
         <section class="hero block block--dark block--has-bg">
@@ -303,5 +340,8 @@
             </a>
         </div>
     @endif
+    </div>
+
+    <script src="{{ asset('story-home.js') }}" defer></script>
 </body>
 </html>
