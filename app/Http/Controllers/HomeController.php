@@ -25,6 +25,7 @@ class HomeController extends Controller
             'heroVideo' => $content['hero_video'],
             'whatWeDo' => HomepageContent::services($content['what_we_do']),
             'ourProcess' => $content['our_process'],
+            'navPages' => PageContent::load(),
         ] + $this->contactData($content));
     }
 
@@ -46,6 +47,7 @@ class HomeController extends Controller
         return view('service', [
             'logo' => $content['logo'],
             'service' => $serviceItem,
+            'navPages' => PageContent::load(),
         ] + $this->contactData($content));
     }
 
@@ -60,6 +62,7 @@ class HomeController extends Controller
             'logo' => $content['logo'],
             'sectionImages' => $content['section_images'],
             'page' => $pageItem,
+            'navPages' => PageContent::load(),
         ] + $this->contactData($content));
     }
 

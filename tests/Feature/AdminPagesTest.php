@@ -167,4 +167,64 @@ class AdminPagesTest extends TestCase
         $response->assertSee('class="gmasonry__wrap"', false);
         $response->assertSee('Rendered page content', false);
     }
+
+    public function test_public_navigation_lists_saved_pages_under_what_we_do(): void
+    {
+        HomepageSetting::query()->create([
+            'key' => 'pages',
+            'value' => [
+                [
+                    'id' => 'page-1',
+                    'slug' => 'brand-experiences',
+                    'meta_title' => 'Brand Experiences',
+                    'meta_description' => 'Brand experience page',
+                    'title' => 'Brand Experiences',
+                    'image' => '',
+                    'image_alt' => 'Brand Experiences',
+                    'heading_two' => 'Brand Experiences',
+                    'type' => 'Page',
+                    'description' => '<p>Brand experience content</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+                [
+                    'id' => 'page-2',
+                    'slug' => 'exhibitions',
+                    'meta_title' => 'Exhibitions',
+                    'meta_description' => 'Exhibitions page',
+                    'title' => 'Exhibitions',
+                    'image' => '',
+                    'image_alt' => 'Exhibitions',
+                    'heading_two' => 'Exhibitions',
+                    'type' => 'Page',
+                    'description' => '<p>Exhibition content</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+                [
+                    'id' => 'page-3',
+                    'slug' => 'conferences',
+                    'meta_title' => 'Conferences',
+                    'meta_description' => 'Conferences page',
+                    'title' => 'Conferences',
+                    'image' => '',
+                    'image_alt' => 'Conferences',
+                    'heading_two' => 'Conferences',
+                    'type' => 'Page',
+                    'description' => '<p>Conference content</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+            ],
+        ]);
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertSee('class="nav-dropdown"', false);
+        $response->assertSee('Brand Experiences');
+        $response->assertSee('Exhibitions');
+        $response->assertSee('Conferences');
+        $response->assertSee(route('pages.show', ['page' => 'exhibitions']), false);
+    }
 }

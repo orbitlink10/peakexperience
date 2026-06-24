@@ -12,6 +12,10 @@
     $socialLinks = is_array($socialLinks ?? null) ? $socialLinks : [];
     $whatsappUrl = trim((string) ($whatsappUrl ?? ''));
     $hasWhatsapp = filled($whatsappUrl);
+    $navPages = array_values(array_filter(
+        is_array($navPages ?? null) ? $navPages : [],
+        fn ($item) => is_array($item) && filled($item['title'] ?? '') && filled($item['slug'] ?? '')
+    ));
     $logoUrl = \App\Support\HomepageContent::assetUrl(
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
@@ -55,6 +59,16 @@
 
                 <nav class="site-nav" aria-label="Primary">
                     <ul>
+                        <li class="nav-item--dropdown">
+                            <a class="nav-link--caret" href="{{ route('home') }}#services">What We Do</a>
+                            @if (count($navPages) > 0)
+                                <ul class="nav-dropdown" aria-label="What We Do pages">
+                                    @foreach ($navPages as $navPage)
+                                        <li><a href="{{ route('pages.show', ['page' => $navPage['slug']]) }}">{{ $navPage['title'] }}</a></li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </li>
                         <li><a href="{{ route('home') }}#services">Our Services</a></li>
                         <li><a href="{{ route('home') }}#proof">Our Work</a></li>
                         <li><a href="{{ route('home') }}#process">Our Stories</a></li>
@@ -79,6 +93,16 @@
                 <div class="nav-panel" id="mobile-nav" data-nav-panel>
                     <nav aria-label="Mobile">
                         <ul>
+                            <li>
+                                <a href="{{ route('home') }}#services">What We Do</a>
+                                @if (count($navPages) > 0)
+                                    <ul class="nav-mobile-children" aria-label="What We Do pages">
+                                        @foreach ($navPages as $navPage)
+                                            <li><a href="{{ route('pages.show', ['page' => $navPage['slug']]) }}">{{ $navPage['title'] }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </li>
                             <li><a href="{{ route('home') }}#services">Our Services</a></li>
                             <li><a href="{{ route('home') }}#proof">Our Work</a></li>
                             <li><a href="{{ route('home') }}#process">Our Stories</a></li>
