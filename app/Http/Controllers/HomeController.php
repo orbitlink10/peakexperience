@@ -58,6 +58,7 @@ class HomeController extends Controller
 
         return view('page', [
             'logo' => $content['logo'],
+            'sectionImages' => $content['section_images'],
             'page' => $pageItem,
         ] + $this->contactData($content));
     }

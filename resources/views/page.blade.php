@@ -10,6 +10,14 @@
     );
     $hasLogo = filled($logoUrl);
     $pageImage = \App\Support\HomepageContent::assetUrl((string) ($page['image'] ?? ''));
+    $fallbackHero = \App\Support\HomepageContent::assetUrl((string) data_get($sectionImages ?? [], 'hero.path', ''));
+    $fallbackIntro = \App\Support\HomepageContent::assetUrl((string) data_get($sectionImages ?? [], 'intro.path', ''));
+    $fallbackProof = \App\Support\HomepageContent::assetUrl((string) data_get($sectionImages ?? [], 'proof.path', ''));
+    $heroImage = $pageImage !== '' ? $pageImage : ($fallbackHero !== '' ? $fallbackHero : $fallbackIntro);
+    $galleryImages = array_values(array_filter([$pageImage, $fallbackHero, $fallbackIntro, $fallbackProof]));
+    if ($heroImage !== '' && count($galleryImages) < 5) {
+        $galleryImages = array_pad($galleryImages, 5, $heroImage);
+    }
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -23,119 +31,156 @@
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('story-home.css') }}">
 </head>
-<body id="top">
-    <div class="page-shell">
-        <header class="site-header">
-            <div class="wrap header-row">
-                <a class="brand" href="{{ route('home') }}" aria-label="Peak Experience home">
-                    @if ($hasLogo)
-                        <img class="brand-logo" src="{{ $logoUrl }}" alt="Peak Experience logo">
-                    @else
-                        <span class="brand-copy">
-                            <strong>Peak Experience</strong>
-                            <span class="brand-dots" aria-hidden="true">
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                            </span>
-                        </span>
-                    @endif
-                </a>
+<body id="top" class="story-page">
+    <header class="se-header">
+        <a class="se-logo" href="{{ route('home') }}" aria-label="Peak Experience home">
+            @if ($hasLogo)
+                <img src="{{ $logoUrl }}" alt="Peak Experience logo">
+            @else
+                <span>Peak</span>
+            @endif
+        </a>
 
-                <nav class="site-nav" aria-label="Primary">
-                    <ul>
-                        <li><a href="{{ route('home') }}#services">Our Services</a></li>
-                        <li><a href="{{ route('home') }}#proof">Our Work</a></li>
-                        <li><a href="{{ route('home') }}#process">Our Stories</a></li>
-                        <li><a href="{{ route('home') }}#contact">Contact Us</a></li>
-                    </ul>
+        <nav class="se-nav" aria-label="Primary navigation">
+            <ul>
+                <li><a href="{{ route('home') }}#services">What We Do</a></li>
+                <li><a href="{{ route('home') }}#proof">Our Work</a></li>
+                <li><a href="{{ route('home') }}#intro">About Us</a></li>
+                <li><a href="{{ route('home') }}#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <a class="se-enquire-button" href="{{ route('home') }}#contact">Enquire</a>
+    </header>
+
+    <main id="main">
+        <section class="se-hero block block--dark block--has-bg">
+            @if ($heroImage !== '')
+                <img class="se-hero__bg" src="{{ $heroImage }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
+            @endif
+            <div class="se-hero__shade"></div>
+            <div class="se-hero__content">
+                <p class="se-breadcrumb"><a href="{{ route('home') }}">Home</a> / <span>{{ $page['type'] }}</span></p>
+                <h1 class="theme-title">{{ $page['title'] }}</h1>
+                @if ($page['meta_description'] !== '')
+                    <p>{{ $page['meta_description'] }}</p>
+                @endif
+            </div>
+            <a class="se-scroll" href="#content" aria-label="Scroll to page content"><span></span></a>
+        </section>
+
+        <section class="se-intro block block--light" id="content">
+            <div class="se-block-padding">
+                <div class="se-content-narrow">
+                    <h2>{{ $page['heading_two'] }}</h2>
+                    <div class="se-rich-text">
+                        {!! $page['description'] !!}
+                    </div>
+                    <a class="se-btn se-btn-centred" href="{{ route('home') }}#contact">Enquire Now</a>
+                </div>
+            </div>
+        </section>
+
+        @if (count($galleryImages) > 0)
+            <section class="se-gallery block">
+                <div class="se-gallery-grid">
+                    @foreach ($galleryImages as $index => $image)
+                        <figure class="se-gallery-item se-gallery-item--{{ $index + 1 }}">
+                            <img src="{{ $image }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
+                        </figure>
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
+        <section class="se-related block block--dark">
+            <div class="se-block-padding">
+                <div class="se-section-head">
+                    <h2>More From Peak Experience</h2>
+                    <p>Creative event production shaped around venue, audience, timing, and the story your brand needs to tell.</p>
+                </div>
+
+                <div class="se-card-row">
+                    <article class="se-story-card">
+                        <span>01</span>
+                        <h3>Planning</h3>
+                        <p>We turn event requirements into a clear production plan with the right technical, creative, and operational details.</p>
+                    </article>
+                    <article class="se-story-card">
+                        <span>02</span>
+                        <h3>Production</h3>
+                        <p>Lighting, audio, staging, media, and build elements are coordinated into one polished live experience.</p>
+                    </article>
+                    <article class="se-story-card">
+                        <span>03</span>
+                        <h3>Delivery</h3>
+                        <p>Our team manages show-day execution so every guest touchpoint feels composed, responsive, and memorable.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="se-footer-brand block block--colored">
+        <div class="se-block-padding">
+            <div class="se-footer-inner">
+                <div class="se-footer-logo">
+                    @if ($hasLogo)
+                        <img src="{{ $logoUrl }}" alt="Peak Experience logo">
+                    @else
+                        <strong>Peak Experience</strong>
+                    @endif
+                </div>
+
+                <nav class="se-footer-social" aria-label="Social links">
+                    @foreach ($socialLinks as $socialLink)
+                        <a href="{{ $socialLink['url'] }}" target="_blank" rel="noreferrer">{{ $socialLink['label'] }}</a>
+                    @endforeach
+                    @if ($hasWhatsapp)
+                        <a href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer">WhatsApp</a>
+                    @endif
                 </nav>
 
-                <div class="header-utility">
-                    <a class="button button-nav-cta" href="{{ route('home') }}#contact">Contact Us</a>
+                <div class="se-footer-contact">
+                    @if ($hasContactEmail)
+                        <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
+                    @endif
+                    @foreach ($contactPhones as $phone)
+                        <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
+                    @endforeach
                 </div>
             </div>
-        </header>
+        </div>
+    </footer>
 
-        <main>
-            <section class="section">
-                <div class="wrap service-article-shell">
-                    <div class="service-article-copy">
-                        <a class="back-link" href="{{ route('home') }}">Back Home</a>
-                        <span class="section-prefix">{{ $page['type'] }}</span>
-                        <h1>{{ $page['title'] }}</h1>
-                        <p>{{ $page['meta_description'] }}</p>
-                    </div>
-
-                    @if ($pageImage !== '')
-                        <figure class="service-article-media">
-                            <img src="{{ $pageImage }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
-                        </figure>
+    <footer class="se-footer-group block block--light">
+        <div class="se-block-padding">
+            <div class="se-footer-columns">
+                <div>
+                    <h3>What We Do</h3>
+                    <a href="{{ route('home') }}#services">Event Production</a>
+                    <a href="{{ route('home') }}#services">Audio Systems</a>
+                    <a href="{{ route('home') }}#services">Media</a>
+                </div>
+                <div>
+                    <h3>Company</h3>
+                    <a href="{{ route('home') }}#intro">About Us</a>
+                    <a href="{{ route('home') }}#proof">Our Work</a>
+                    <a href="{{ route('home') }}#contact">Contact</a>
+                </div>
+                <div>
+                    <h3>Enquiries</h3>
+                    <a href="{{ route('home') }}#contact">Start a Brief</a>
+                    @if ($hasContactEmail)
+                        <a href="mailto:{{ $contactEmail }}">Email Us</a>
                     @endif
                 </div>
-            </section>
-
-            <section class="section">
-                <div class="wrap section-layout">
-                    <div class="section-rail">
-                        <strong>{{ strtoupper(substr($page['type'], 0, 1)) }}</strong>
-                        <span>{{ $page['type'] }}</span>
-                    </div>
-
-                    <div class="page-content-shell">
-                        <div class="section-copy process-copy">
-                            <div>
-                                <span class="section-prefix">Published content</span>
-                                <h2>{{ $page['heading_two'] }}</h2>
-                            </div>
-                        </div>
-
-                        <div class="page-content-body">
-                            {!! $page['description'] !!}
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="footer">
-            <div class="wrap">
-                <div class="footer-panel">
-                    <div class="footer-copy">
-                        <span class="footer-kicker">Peak Experience</span>
-                        <strong>Creative production for live experiences that need polish.</strong>
-                        <p>Event staging, media systems, exhibition builds, and disciplined show-day delivery for brands and organisers across Kenya.</p>
-                    </div>
-
-                    <nav class="footer-links" aria-label="Footer navigation">
-                        <a href="{{ route('home') }}#intro">About</a>
-                        <a href="{{ route('home') }}#services">Services</a>
-                        <a href="{{ route('home') }}#proof">Our Work</a>
-                        <a href="{{ route('home') }}#process">Process</a>
-                        <a href="{{ route('home') }}#contact">Contact Us</a>
-                    </nav>
-
-                    <div class="footer-links">
-                        @if ($hasContactEmail)
-                            <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
-                        @endif
-                        @foreach ($contactPhones as $phone)
-                            <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
-                        @endforeach
-                        @foreach ($socialLinks as $socialLink)
-                            <a href="{{ $socialLink['url'] }}" target="_blank" rel="noreferrer">{{ $socialLink['label'] }}</a>
-                        @endforeach
-                        @if ($hasWhatsapp)
-                            <a href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer">WhatsApp</a>
-                        @endif
-                    </div>
-                </div>
             </div>
-        </footer>
-    </div>
+        </div>
+    </footer>
 
     @if ($hasWhatsapp)
         <div class="whatsapp-widget" aria-label="WhatsApp chat widget">
