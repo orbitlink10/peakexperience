@@ -31,6 +31,11 @@ class AdminAuthController extends Controller
                 'heading' => 'Services',
                 'description' => 'Use this section for service management once those editing tools are added to the admin panel.',
             ],
+            'case-study' => [
+                'label' => 'Case Study',
+                'heading' => 'Case Study',
+                'description' => 'Use this section for case studies once those editing tools are added to the admin panel.',
+            ],
             'team' => [
                 'label' => 'Team',
                 'heading' => 'Team',
@@ -684,6 +689,7 @@ class AdminAuthController extends Controller
         $menu = [
             ['key' => 'overview', 'label' => 'Overview', 'href' => route('admin.section', ['section' => 'overview'])],
             ['key' => 'services', 'label' => 'Services', 'href' => route('admin.section', ['section' => 'services'])],
+            ['key' => 'case-study', 'label' => 'Case Study', 'href' => route('admin.section', ['section' => 'case-study'])],
             ['key' => 'team', 'label' => 'Team', 'href' => route('admin.section', ['section' => 'team'])],
             ['key' => 'gallery', 'label' => 'Gallery', 'href' => route('admin.gallery')],
             ['key' => 'sliders', 'label' => 'Sliders', 'href' => route('admin.section', ['section' => 'sliders'])],

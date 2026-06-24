@@ -30,6 +30,7 @@
                                     $itemIcon = match ($item['key']) {
                                         'overview' => 'fa-tachometer-alt',
                                         'services' => 'fa-tools',
+                                        'case-study' => 'fa-briefcase',
                                         'team' => 'fa-users',
                                         'gallery' => 'fa-photo-video',
                                         'sliders' => 'fa-images',
