@@ -179,7 +179,7 @@
                             placeholder="+2547XXXXXXXX"
                             class="admin-input"
                         >
-                        <p class="admin-help">Example: <code>+254712345678</code> or <code>254712345678</code>.</p>
+                        <p class="admin-help">Example: <code>+254712345678</code> or <code>254712345678</code>. If left empty, the main contact phone is used.</p>
                     </div>
                 </div>
             </section>

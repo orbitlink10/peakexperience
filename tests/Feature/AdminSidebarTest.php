@@ -41,11 +41,11 @@ class AdminSidebarTest extends TestCase
 
         $this->assertIsString($content);
         $this->assertMatchesRegularExpression(
-            '/href="' . preg_quote(route('admin.section', ['section' => 'pages']), '/') . '"[^>]*bg-white\/10 text-white[^>]*>\s*Pages\s*<\/a>/s',
+            '/href="' . preg_quote(route('admin.section', ['section' => 'pages']), '/') . '"[^>]*nav-link active[^>]*>.*?<p>Pages<\/p>/s',
             $content
         );
         $this->assertMatchesRegularExpression(
-            '/href="' . preg_quote(route('admin.homepage'), '/') . '"[^>]*bg-white\/10 text-white[^>]*aria-current="page"[^>]*>\s*Homepage\s*<\/a>/s',
+            '/href="' . preg_quote(route('admin.homepage'), '/') . '"[^>]*nav-link nav-child active[^>]*aria-current="page"[^>]*>.*?<p>Homepage<\/p>/s',
             $content
         );
     }

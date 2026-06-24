@@ -149,14 +149,18 @@ class HomeController extends Controller
     private function contactData(?array $content = null): array
     {
         $content ??= HomepageContent::load();
-        $whatsappPhone = trim((string) data_get($content, 'contact.whatsapp_phone', '+254119857961'));
+        $contactPhones = [
+            ['display' => '+254 119857961', 'dial' => '+254119857961'],
+            ['display' => '+254 792243400', 'dial' => '+254792243400'],
+        ];
+        $whatsappPhone = trim((string) data_get($content, 'contact.whatsapp_phone', ''));
+        if ($whatsappPhone === '') {
+            $whatsappPhone = (string) data_get($contactPhones, '0.dial', '+254119857961');
+        }
 
         return [
             'contactEmail' => 'info@peakexperience.co.ke',
-            'contactPhones' => [
-                ['display' => '+254 119857961', 'dial' => '+254119857961'],
-                ['display' => '+254 792243400', 'dial' => '+254792243400'],
-            ],
+            'contactPhones' => $contactPhones,
             'socialLinks' => [
                 ['label' => 'TikTok', 'url' => 'https://www.tiktok.com/@peak_audio_systems'],
                 ['label' => 'Instagram', 'url' => 'https://www.instagram.com/peak_audio_systems/'],

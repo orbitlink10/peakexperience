@@ -5,103 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Admin | Peak Experience')</title>
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
 </head>
-<body class="min-h-screen bg-slate-100 text-slate-900 antialiased">
-    <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(245,158,11,0.12),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(59,130,246,0.08),_transparent_22%)]">
-        <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
-            <div class="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-                <a href="{{ route('home') }}" class="flex min-w-0 items-center gap-3" aria-label="Go to Peak Experience homepage">
-                    <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-950 text-sm font-black tracking-[0.24em] text-white">PE</span>
-                    <span class="min-w-0">
-                        <span class="block truncate text-base font-semibold text-slate-950 sm:text-lg">Peak Experience</span>
-                        <span class="block truncate text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">Admin Workspace</span>
-                    </span>
-                </a>
-
-                <div class="flex items-center gap-3">
-                    <a href="{{ url('/') }}" class="admin-btn-secondary hidden sm:inline-flex">Open Site</a>
-                    <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">
-                        @yield('badge', 'Dashboard')
-                    </span>
-                </div>
-            </div>
-        </header>
-
-        <main class="mx-auto grid max-w-[1600px] gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-8">
-            <aside class="lg:sticky lg:top-24 lg:self-start">
-                <div class="overflow-hidden rounded-2xl bg-slate-950 text-slate-100 shadow-xl shadow-slate-950/10 ring-1 ring-white/10">
-                    <div class="border-b border-white/10 px-5 py-5">
-                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Control Center</p>
-                        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-white">Admin</h2>
+<body class="admin-skin min-h-screen text-slate-900 antialiased">
+    <div class="admin-layout">
+        <aside class="main-sidebar">
+            <div class="sticky-sidebar">
+                <div class="sidebar">
+                    <div class="user-panel sticky-panel">
+                        <a href="{{ route('home') }}" class="text-decoration-none">
+                            <h3>Peak Experience</h3>
+                        </a>
                     </div>
 
-                    <nav class="px-3 py-3">
-                        <ul class="space-y-1">
+                    <nav class="admin-nav" aria-label="Admin navigation">
+                        <ul class="nav-sidebar">
                             @foreach ($sidebarItems as $item)
                                 @php
-                                    $linkClasses = $item['active']
-                                        ? 'bg-white/10 text-white'
-                                        : 'text-slate-300 hover:bg-white/5 hover:text-white';
-                                    $childLinkBaseClasses = 'block rounded-lg px-4 py-2.5 text-sm font-medium transition';
+                                    $itemIcon = match ($item['key']) {
+                                        'overview' => 'fa-tachometer-alt',
+                                        'services' => 'fa-tools',
+                                        'team' => 'fa-users',
+                                        'gallery' => 'fa-photo-video',
+                                        'sliders' => 'fa-images',
+                                        'clients' => 'fa-user-friends',
+                                        'invoices' => 'fa-file-invoice',
+                                        'videos' => 'fa-video',
+                                        'pages' => 'fa-edit',
+                                        default => 'fa-circle',
+                                    };
                                 @endphp
-                                <li>
-                                    <a
-                                        href="{{ $item['href'] }}"
-                                        class="block rounded-xl px-4 py-3 text-sm font-medium transition {{ $linkClasses }}"
-                                        @if ($item['active'] && empty($item['children'])) aria-current="page" @endif
-                                    >
-                                        {{ $item['label'] }}
-                                    </a>
 
-                                    @if (! empty($item['children']))
-                                        <ul class="mt-1 space-y-1 pl-3">
-                                            @foreach ($item['children'] as $child)
-                                                @php
-                                                    $childLinkClasses = $child['active']
-                                                        ? 'bg-white/10 text-white'
-                                                        : 'text-slate-400 hover:bg-white/5 hover:text-white';
-                                                @endphp
-                                                <li>
-                                                    <a
-                                                        href="{{ $child['href'] }}"
-                                                        class="{{ $childLinkBaseClasses }} {{ $childLinkClasses }}"
-                                                        @if ($child['active']) aria-current="page" @endif
-                                                    >
-                                                        {{ $child['label'] }}
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @endif
-                                </li>
+                                @if ($loop->first)
+                                    <li class="nav-item">
+                                        <a href="{{ $item['href'] }}" class="nav-link {{ $item['active'] ? 'active' : '' }}" @if ($item['active'] && empty($item['children'])) aria-current="page" @endif>
+                                            <i class="nav-icon fas {{ $itemIcon }}"></i>
+                                            <p>{{ $item['label'] }}</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-header">Content Management</li>
+                                @else
+                                    <li class="nav-item">
+                                        <a href="{{ $item['href'] }}" class="nav-link {{ $item['active'] ? 'active' : '' }}" @if ($item['active'] && empty($item['children'])) aria-current="page" @endif>
+                                            <i class="nav-icon fas {{ $itemIcon }}"></i>
+                                            <p>{{ $item['label'] }}</p>
+                                        </a>
+
+                                        @if (! empty($item['children']))
+                                            <ul class="nav-treeview">
+                                                @foreach ($item['children'] as $child)
+                                                    @php
+                                                        $childIcon = $child['key'] === 'homepage' ? 'fa-file-alt' : 'fa-envelope';
+                                                    @endphp
+                                                    <li class="nav-item">
+                                                        <a href="{{ $child['href'] }}" class="nav-link nav-child {{ $child['active'] ? 'active' : '' }}" @if ($child['active']) aria-current="page" @endif>
+                                                            <i class="nav-icon fas {{ $childIcon }}"></i>
+                                                            <p>{{ $child['label'] }}</p>
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </li>
+                                @endif
                             @endforeach
                         </ul>
                     </nav>
 
-                    <div class="border-t border-white/10 px-5 py-4">
-                        <p class="text-sm leading-6 text-slate-300">
-                            Logged in as <span class="font-semibold text-white">{{ $adminName }}</span><br>
-                            <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">{{ $today }}</span>
-                        </p>
-
-                        <form method="POST" action="{{ route('admin.logout') }}" class="mt-4">
-                            @csrf
-                            <button
-                                type="submit"
-                                class="inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/15"
-                            >
-                                Logout
-                            </button>
-                        </form>
-                    </div>
+                    <form method="POST" action="{{ route('admin.logout') }}" class="sidebar-logout">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </form>
                 </div>
-            </aside>
+            </div>
+        </aside>
 
-            <section class="min-w-0">
-                @yield('content')
-            </section>
+        <main class="content-wrapper">
+            @yield('content')
         </main>
     </div>
 
