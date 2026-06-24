@@ -248,43 +248,6 @@
             </section>
         @endif
 
-        <section class="b-section block block--dark block--fg-colored block--has-bg layout-default">
-            <div class="block__padding u-text-center theme-font-render">
-                <div class="b-section__content">
-                    <div class="block-head u-max-width-med">
-                        <div>
-                            <div class="block-head__prefix">Peak Experience</div>
-                            <h2 class="block-head__title">Our Work</h2>
-                        </div>
-                        <p class="block-head__subtitle">Explore how our event team turns conferences, exhibitions, and brand experiences into polished live moments.</p>
-                    </div>
-
-                    <div class="row u-max-width-wide block-vertical-subsection">
-                        <div class="col col-sm-6 col-md-4 body body--section">
-                            <div>
-                                <div class="body__media"><strong>01</strong></div>
-                                <div class="body__copy"><p>We shape the brief, audience journey, and production requirements into a clear event plan.</p></div>
-                                <a class="btn btn--xs btn--margin-sm" href="{{ route('home') }}#contact">Plan</a>
-                            </div>
-                        </div>
-                        <div class="col col-sm-6 col-md-4 body body--section">
-                            <div>
-                                <div class="body__media"><strong>02</strong></div>
-                                <div class="body__copy"><p>Technical, creative, staging, media, lighting, and audio elements are coordinated into one experience.</p></div>
-                                <a class="btn btn--xs btn--margin-sm" href="{{ route('home') }}#services">Produce</a>
-                            </div>
-                        </div>
-                        <div class="col col-sm-6 col-md-4 body body--section">
-                            <div>
-                                <div class="body__media"><strong>03</strong></div>
-                                <div class="body__copy"><p>Show-day delivery is managed with the calm structure needed for guests, speakers, and organisers.</p></div>
-                                <a class="btn btn--xs btn--margin-sm" href="{{ route('home') }}#proof">Deliver</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer class="se-footer-brand block block--colored">
