@@ -149,7 +149,7 @@
                         <li><a href="{{ route('home') }}#proof">Our Work</a></li>
                         <li><a href="{{ route('home') }}#services">Our Services</a></li>
                         <li><a href="{{ route('home') }}#process">Our Stories</a></li>
-                        <li><a class="nav-link--caret" href="{{ route('home') }}#intro">About Us</a></li>
+                        <li><a href="{{ route('home') }}#intro">About Us</a></li>
                     </ul>
                 </nav>
 

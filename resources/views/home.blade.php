@@ -123,7 +123,7 @@
                         <li><a href="#proof">Our Work</a></li>
                         <li><a href="#services">Our Services</a></li>
                         <li><a href="#process">Our Stories</a></li>
-                        <li><a class="nav-link--caret" href="#intro">About Us</a></li>
+                        <li><a href="#intro">About Us</a></li>
                     </ul>
                 </nav>
 
