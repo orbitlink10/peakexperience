@@ -8,6 +8,7 @@
         $isEditing = $formMode === 'edit';
         $imagePath = old('image_path', (string) ($pageData['image'] ?? ''));
         $imageUrl = \App\Support\HomepageContent::assetUrl($imagePath);
+        $galleryImages = old('gallery_existing', is_array($pageData['gallery_images'] ?? null) ? $pageData['gallery_images'] : []);
         $descriptionValue = old('description', (string) ($pageData['description'] ?? ''));
     @endphp
 
@@ -190,6 +191,33 @@
                                                 <span>Remove current image</span>
                                             </label>
                                         @endif
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Page Gallery Images</label>
+                                        <p class="admin-help">Upload up to six images for this specific page. These are the images shown in the published page grid.</p>
+                                        <div class="pages-gallery-upload-grid">
+                                            @for ($galleryIndex = 0; $galleryIndex < 6; $galleryIndex++)
+                                                @php
+                                                    $galleryPath = (string) ($galleryImages[$galleryIndex] ?? '');
+                                                    $galleryUrl = \App\Support\HomepageContent::assetUrl($galleryPath);
+                                                @endphp
+                                                <div class="pages-gallery-upload">
+                                                    <input type="hidden" name="gallery_existing[{{ $galleryIndex }}]" value="{{ $galleryPath }}">
+                                                    <label for="gallery_image_{{ $galleryIndex }}">Image {{ $galleryIndex + 1 }}</label>
+                                                    @if ($galleryUrl !== '')
+                                                        <img src="{{ $galleryUrl }}" alt="Page gallery image {{ $galleryIndex + 1 }}">
+                                                        <label class="pages-form-checkbox">
+                                                            <input type="checkbox" name="gallery_remove[{{ $galleryIndex }}]" value="1" @checked((bool) old("gallery_remove.$galleryIndex"))>
+                                                            <span>Remove this image</span>
+                                                        </label>
+                                                    @else
+                                                        <div class="pages-gallery-placeholder">No image</div>
+                                                    @endif
+                                                    <input id="gallery_image_{{ $galleryIndex }}" type="file" name="gallery_images[{{ $galleryIndex }}]" accept="image/*" class="pages-form-file-input">
+                                                </div>
+                                            @endfor
+                                        </div>
                                     </div>
 
                                     <div class="form-group text-right">

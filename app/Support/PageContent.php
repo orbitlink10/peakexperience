@@ -16,6 +16,7 @@ class PageContent
      *     title:string,
      *     image:string,
      *     image_alt:string,
+     *     gallery_images:array<int, string>,
      *     heading_two:string,
      *     type:string,
      *     description:string,
@@ -77,6 +78,7 @@ class PageContent
             'title' => '',
             'image' => '',
             'image_alt' => '',
+            'gallery_images' => [],
             'heading_two' => '',
             'type' => 'Post',
             'description' => '',
@@ -151,6 +153,13 @@ class PageContent
             'title' => trim((string) ($page['title'] ?? $defaults['title'])),
             'image' => trim((string) ($page['image'] ?? $defaults['image'])),
             'image_alt' => trim((string) ($page['image_alt'] ?? $defaults['image_alt'])),
+            'gallery_images' => array_values(array_slice(array_filter(
+                array_map(
+                    fn ($image): string => trim((string) $image),
+                    is_array($page['gallery_images'] ?? null) ? $page['gallery_images'] : []
+                ),
+                fn (string $image): bool => $image !== ''
+            ), 0, 6)),
             'heading_two' => trim((string) ($page['heading_two'] ?? $defaults['heading_two'])),
             'type' => trim((string) ($page['type'] ?? $defaults['type'])) ?: 'Post',
             'description' => trim((string) ($page['description'] ?? $defaults['description'])),

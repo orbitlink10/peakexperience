@@ -76,6 +76,10 @@ class AdminPagesTest extends TestCase
                 'heading_two' => 'Starlink Nairobi Heading',
                 'type' => 'Post',
                 'description' => '<p>Detailed page description.</p>',
+                'gallery_images' => [
+                    0 => UploadedFile::fake()->createWithContent('gallery-one.png', base64_decode(self::TINY_PNG)),
+                    1 => UploadedFile::fake()->createWithContent('gallery-two.png', base64_decode(self::TINY_PNG)),
+                ],
             ]);
 
         $response->assertRedirect(route('admin.section', ['section' => 'pages']));
@@ -88,7 +92,10 @@ class AdminPagesTest extends TestCase
         $this->assertCount(1, $pages->value);
         $this->assertSame('starlink-nairobi', $pages->value[0]['slug']);
         $this->assertStringStartsWith('homepage/pages/', $pages->value[0]['image']);
+        $this->assertCount(2, $pages->value[0]['gallery_images']);
+        $this->assertStringStartsWith('homepage/pages/gallery/', $pages->value[0]['gallery_images'][0]);
         Storage::disk('public')->assertExists($pages->value[0]['image']);
+        Storage::disk('public')->assertExists($pages->value[0]['gallery_images'][0]);
     }
 
     public function test_admin_can_update_and_delete_pages(): void
@@ -98,6 +105,10 @@ class AdminPagesTest extends TestCase
         $imagePath = UploadedFile::fake()
             ->createWithContent('existing.png', base64_decode(self::TINY_PNG))
             ->store('homepage/pages', 'public');
+
+        $galleryPath = UploadedFile::fake()
+            ->createWithContent('gallery.png', base64_decode(self::TINY_PNG))
+            ->store('homepage/pages/gallery', 'public');
 
         HomepageSetting::query()->create([
             'key' => 'pages',
@@ -152,6 +163,8 @@ class AdminPagesTest extends TestCase
 
     public function test_public_page_preview_renders_saved_content(): void
     {
+        $galleryPath = 'https://example.com/page-gallery.jpg';
+
         HomepageSetting::query()->create([
             'key' => 'pages',
             'value' => [
@@ -163,6 +176,7 @@ class AdminPagesTest extends TestCase
                     'title' => 'Starlink Nairobi',
                     'image' => 'https://example.com/page-image.jpg',
                     'image_alt' => 'Starlink Nairobi',
+                    'gallery_images' => [$galleryPath],
                     'heading_two' => 'Stay connected in Nairobi',
                     'type' => 'Post',
                     'description' => '<p>Rendered page content</p>',
@@ -180,6 +194,7 @@ class AdminPagesTest extends TestCase
         $response->assertSee('class="block-heading"', false);
         $response->assertSee('class="block-copy"', false);
         $response->assertSee('class="gmasonry__wrap"', false);
+        $response->assertSee($galleryPath, false);
         $response->assertDontSee('<p class="block-head__subtitle">Starlink Nairobi description</p>', false);
         $response->assertDontSee('<p>Starlink Nairobi description</p>', false);
         $response->assertSee('Rendered page content', false);

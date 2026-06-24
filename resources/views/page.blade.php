@@ -18,10 +18,10 @@
     $fallbackIntro = \App\Support\HomepageContent::assetUrl((string) data_get($sectionImages ?? [], 'intro.path', ''));
     $fallbackProof = \App\Support\HomepageContent::assetUrl((string) data_get($sectionImages ?? [], 'proof.path', ''));
     $heroImage = $pageImage !== '' ? $pageImage : ($fallbackHero !== '' ? $fallbackHero : $fallbackIntro);
-    $galleryImages = array_values(array_filter([$pageImage, $fallbackHero, $fallbackIntro, $fallbackProof]));
-    if ($heroImage !== '' && count($galleryImages) < 5) {
-        $galleryImages = array_pad($galleryImages, 5, $heroImage);
-    }
+    $galleryImages = array_values(array_filter(array_map(
+        fn ($image) => \App\Support\HomepageContent::assetUrl((string) $image),
+        is_array($page['gallery_images'] ?? null) ? $page['gallery_images'] : []
+    )));
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">

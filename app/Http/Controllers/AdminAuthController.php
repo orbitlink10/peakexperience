@@ -210,6 +210,7 @@ class AdminAuthController extends Controller
         $pages = PageContent::load();
         $payload = $this->validatedPagePayload($request);
         $imagePath = $this->storePageImage($request, '');
+        $galleryImages = $this->storePageGalleryImages($request, []);
         $timestamp = now()->toIso8601String();
 
         array_unshift($pages, [
@@ -220,6 +221,7 @@ class AdminAuthController extends Controller
             'title' => $payload['title'],
             'image' => $imagePath,
             'image_alt' => $payload['image_alt'],
+            'gallery_images' => $galleryImages,
             'heading_two' => $payload['heading_two'],
             'type' => $payload['type'],
             'description' => $payload['description'],
@@ -260,6 +262,7 @@ class AdminAuthController extends Controller
 
         $payload = $this->validatedPagePayload($request);
         $imagePath = $this->storePageImage($request, (string) ($page['image'] ?? ''));
+        $galleryImages = $this->storePageGalleryImages($request, is_array($page['gallery_images'] ?? null) ? $page['gallery_images'] : []);
         $updatedPage = [
             'id' => $page['id'],
             'slug' => $this->uniquePageSlug($payload['title'], $pages, $page['id']),
@@ -268,6 +271,7 @@ class AdminAuthController extends Controller
             'title' => $payload['title'],
             'image' => $imagePath,
             'image_alt' => $payload['image_alt'],
+            'gallery_images' => $galleryImages,
             'heading_two' => $payload['heading_two'],
             'type' => $payload['type'],
             'description' => $payload['description'],
@@ -290,6 +294,7 @@ class AdminAuthController extends Controller
         foreach (PageContent::load() as $page) {
             if ($page['id'] === $pageId) {
                 $this->deletePublicAsset(HomepageContent::storedPath((string) ($page['image'] ?? '')));
+                $this->deletePageGalleryImages(is_array($page['gallery_images'] ?? null) ? $page['gallery_images'] : []);
                 $deleted = true;
                 continue;
             }
@@ -321,6 +326,7 @@ class AdminAuthController extends Controller
         foreach (PageContent::load() as $page) {
             if (array_key_exists((string) $page['id'], $selected)) {
                 $this->deletePublicAsset(HomepageContent::storedPath((string) ($page['image'] ?? '')));
+                $this->deletePageGalleryImages(is_array($page['gallery_images'] ?? null) ? $page['gallery_images'] : []);
                 continue;
             }
 
@@ -541,6 +547,12 @@ class AdminAuthController extends Controller
             'image_path' => ['nullable', 'string', 'max:255'],
             'image_file' => ['nullable', 'image', 'max:5120'],
             'image_remove' => ['nullable', 'boolean'],
+            'gallery_existing' => ['nullable', 'array', 'max:6'],
+            'gallery_existing.*' => ['nullable', 'string', 'max:255'],
+            'gallery_images' => ['nullable', 'array', 'max:6'],
+            'gallery_images.*' => ['nullable', 'image', 'max:5120'],
+            'gallery_remove' => ['nullable', 'array', 'max:6'],
+            'gallery_remove.*' => ['nullable', 'boolean'],
             'image_alt' => ['nullable', 'string', 'max:180'],
             'heading_two' => ['required', 'string', 'max:220'],
             'type' => ['required', Rule::in($this->pageTypes())],
@@ -573,6 +585,47 @@ class AdminAuthController extends Controller
         }
 
         return $imagePath;
+    }
+
+    /**
+     * @param  array<int, string>  $existingImages
+     * @return array<int, string>
+     */
+    private function storePageGalleryImages(Request $request, array $existingImages): array
+    {
+        $submittedImages = $request->input('gallery_existing', []);
+        $submittedImages = is_array($submittedImages) ? $submittedImages : [];
+        $galleryImages = [];
+
+        for ($index = 0; $index < 6; $index++) {
+            $imagePath = trim((string) ($submittedImages[$index] ?? ($existingImages[$index] ?? '')));
+
+            if ($request->boolean("gallery_remove.$index")) {
+                $this->deletePublicAsset(HomepageContent::storedPath($imagePath));
+                $imagePath = '';
+            }
+
+            if ($request->hasFile("gallery_images.$index")) {
+                $this->deletePublicAsset(HomepageContent::storedPath($imagePath));
+                $imagePath = $request->file("gallery_images.$index")->store('homepage/pages/gallery', 'public');
+            }
+
+            if ($imagePath !== '') {
+                $galleryImages[] = $imagePath;
+            }
+        }
+
+        return $galleryImages;
+    }
+
+    /**
+     * @param  array<int, string>  $images
+     */
+    private function deletePageGalleryImages(array $images): void
+    {
+        foreach ($images as $image) {
+            $this->deletePublicAsset(HomepageContent::storedPath((string) $image));
+        }
     }
 
     /**

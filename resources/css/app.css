@@ -531,6 +531,27 @@
         @apply text-sm font-semibold text-slate-500;
     }
 
+    .pages-gallery-upload-grid {
+        @apply mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3;
+    }
+
+    .pages-gallery-upload {
+        @apply rounded-2xl border border-slate-200 bg-slate-50 p-4;
+    }
+
+    .pages-gallery-upload > label:first-of-type {
+        @apply mb-3 block text-sm font-bold text-slate-800;
+    }
+
+    .pages-gallery-upload img,
+    .pages-gallery-placeholder {
+        @apply mb-3 h-36 w-full rounded-xl object-cover;
+    }
+
+    .pages-gallery-placeholder {
+        @apply flex items-center justify-center bg-white text-xs font-bold uppercase tracking-[0.16em] text-slate-400;
+    }
+
     .pages-form-checkbox {
         @apply mt-3 inline-flex items-center gap-2 text-sm font-medium text-slate-700;
     }
