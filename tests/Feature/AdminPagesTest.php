@@ -46,6 +46,21 @@ class AdminPagesTest extends TestCase
         $response->assertSee('Starlink in Kenya');
     }
 
+    public function test_page_form_renders_active_editor_controls(): void
+    {
+        $response = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->get(route('admin.pages.create'));
+
+        $response->assertOk();
+        $response->assertSee('contenteditable="true"', false);
+        $response->assertSee('data-editor-menu-toggle', false);
+        $response->assertSee('data-editor-link', false);
+        $response->assertSee('data-editor-image', false);
+        $response->assertSee('data-editor-video', false);
+        $response->assertSee('data-editor-fullscreen', false);
+    }
+
     public function test_admin_can_create_page_from_pages_template(): void
     {
         Storage::fake('public');

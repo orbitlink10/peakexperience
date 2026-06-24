@@ -544,7 +544,31 @@
     }
 
     .pages-editor-menubar {
-        @apply flex flex-wrap gap-5 border-b border-slate-200 bg-white px-3 py-2 text-[13px] text-slate-700;
+        @apply flex flex-wrap gap-1 border-b border-slate-200 bg-white px-3 py-2 text-[13px] text-slate-700;
+    }
+
+    .pages-editor-menu {
+        @apply relative;
+    }
+
+    .pages-editor-menu > button {
+        @apply inline-flex min-h-8 items-center justify-center rounded px-3 text-[13px] font-medium text-slate-700 transition hover:bg-slate-100 focus:bg-blue-100 focus:outline-none;
+    }
+
+    .pages-editor-menu.is-open > button {
+        @apply bg-blue-100 text-slate-950;
+    }
+
+    .pages-editor-menu-panel {
+        @apply invisible absolute left-0 top-full z-50 mt-1 hidden min-w-52 rounded-lg border border-slate-200 bg-white p-1.5 opacity-0 shadow-xl shadow-slate-950/10;
+    }
+
+    .pages-editor-menu.is-open .pages-editor-menu-panel {
+        @apply visible grid opacity-100;
+    }
+
+    .pages-editor-menu-panel button {
+        @apply flex w-full items-center rounded-md px-3 py-2 text-left text-[13px] font-medium text-slate-700 transition hover:bg-slate-100 focus:bg-slate-100 focus:outline-none;
     }
 
     .pages-editor-toolbar {
@@ -555,14 +579,43 @@
         @apply inline-flex min-h-8 min-w-8 items-center justify-center rounded px-2 text-[13px] font-medium text-slate-700 transition hover:bg-slate-200;
     }
 
+    .pages-editor-toolbar button:focus {
+        @apply bg-blue-100 outline-none;
+    }
+
     .pages-editor-surface {
         @apply min-h-[400px] px-3 py-2.5 text-sm text-slate-900 outline-none;
         line-height: 1.6;
     }
 
+    .pages-editor-surface:focus {
+        @apply ring-4 ring-blue-100;
+    }
+
     .pages-editor-surface:empty::before {
         content: "Start writing page content...";
         color: rgb(148 163 184);
+    }
+
+    .pages-editor-surface img {
+        @apply my-4 max-w-full rounded-lg;
+    }
+
+    .pages-editor-surface table {
+        @apply my-4 w-full border-collapse;
+    }
+
+    .pages-editor-surface td,
+    .pages-editor-surface th {
+        @apply border border-slate-300 px-3 py-2;
+    }
+
+    .pages-editor.is-fullscreen {
+        @apply fixed inset-4 z-[100] flex flex-col rounded-xl;
+    }
+
+    .pages-editor.is-fullscreen .pages-editor-surface {
+        @apply flex-1 overflow-auto;
     }
 
     .pages-editor-textarea {

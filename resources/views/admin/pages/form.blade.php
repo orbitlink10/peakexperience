@@ -89,15 +89,61 @@
                                     <div class="form-group">
                                         <label>Page Description:</label>
                                         <div class="pages-editor" data-editor-root>
-                                            <div class="pages-editor-menubar" aria-hidden="true">
-                                                <span>File</span>
-                                                <span>Edit</span>
-                                                <span>View</span>
-                                                <span>Insert</span>
-                                                <span>Format</span>
-                                                <span>Tools</span>
-                                                <span>Table</span>
-                                                <span>Help</span>
+                                            <div class="pages-editor-menubar" aria-label="Editor menu">
+                                                <div class="pages-editor-menu" data-editor-menu>
+                                                    <button type="button" data-editor-menu-toggle>File</button>
+                                                    <div class="pages-editor-menu-panel">
+                                                        <button type="button" data-editor-submit>Save page</button>
+                                                    </div>
+                                                </div>
+                                                <div class="pages-editor-menu" data-editor-menu>
+                                                    <button type="button" data-editor-menu-toggle>Edit</button>
+                                                    <div class="pages-editor-menu-panel">
+                                                        <button type="button" data-command="undo">Undo</button>
+                                                        <button type="button" data-command="redo">Redo</button>
+                                                        <button type="button" data-command="selectAll">Select all</button>
+                                                    </div>
+                                                </div>
+                                                <div class="pages-editor-menu" data-editor-menu>
+                                                    <button type="button" data-editor-menu-toggle>View</button>
+                                                    <div class="pages-editor-menu-panel">
+                                                        <button type="button" data-editor-view-source>HTML source</button>
+                                                        <button type="button" data-editor-fullscreen>Fullscreen editor</button>
+                                                    </div>
+                                                </div>
+                                                <div class="pages-editor-menu" data-editor-menu>
+                                                    <button type="button" data-editor-menu-toggle>Insert</button>
+                                                    <div class="pages-editor-menu-panel">
+                                                        <button type="button" data-editor-link>Link</button>
+                                                        <button type="button" data-editor-image>Image URL</button>
+                                                        <button type="button" data-editor-video>Video embed URL</button>
+                                                        <button type="button" data-editor-insert-table>Table</button>
+                                                    </div>
+                                                </div>
+                                                <div class="pages-editor-menu" data-editor-menu>
+                                                    <button type="button" data-editor-menu-toggle>Format</button>
+                                                    <div class="pages-editor-menu-panel">
+                                                        <button type="button" data-command="formatBlock" data-command-value="p">Paragraph</button>
+                                                        <button type="button" data-command="formatBlock" data-command-value="h2">Heading 2</button>
+                                                        <button type="button" data-command="formatBlock" data-command-value="h3">Heading 3</button>
+                                                        <button type="button" data-command="bold">Bold</button>
+                                                        <button type="button" data-command="italic">Italic</button>
+                                                        <button type="button" data-command="underline">Underline</button>
+                                                        <button type="button" data-command="strikeThrough">Strikethrough</button>
+                                                    </div>
+                                                </div>
+                                                <div class="pages-editor-menu" data-editor-menu>
+                                                    <button type="button" data-editor-menu-toggle>Tools</button>
+                                                    <div class="pages-editor-menu-panel">
+                                                        <button type="button" data-command="removeFormat">Clear formatting</button>
+                                                    </div>
+                                                </div>
+                                                <div class="pages-editor-menu" data-editor-menu>
+                                                    <button type="button" data-editor-menu-toggle>Table</button>
+                                                    <div class="pages-editor-menu-panel">
+                                                        <button type="button" data-editor-insert-table>Insert 3 x 3 table</button>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="pages-editor-toolbar">
@@ -105,17 +151,23 @@
                                                 <button type="button" data-command="redo" aria-label="Redo"><i class="fas fa-redo"></i></button>
                                                 <button type="button" data-command="bold" aria-label="Bold"><strong>B</strong></button>
                                                 <button type="button" data-command="italic" aria-label="Italic"><em>I</em></button>
+                                                <button type="button" data-command="underline" aria-label="Underline"><u>U</u></button>
+                                                <button type="button" data-command="strikeThrough" aria-label="Strikethrough"><s>S</s></button>
                                                 <button type="button" data-command="justifyLeft" aria-label="Align left"><i class="fas fa-align-left"></i></button>
                                                 <button type="button" data-command="justifyCenter" aria-label="Align center"><i class="fas fa-align-center"></i></button>
                                                 <button type="button" data-command="justifyRight" aria-label="Align right"><i class="fas fa-align-right"></i></button>
+                                                <button type="button" data-command="justifyFull" aria-label="Justify"><i class="fas fa-align-justify"></i></button>
                                                 <button type="button" data-command="insertUnorderedList" aria-label="Bullet list"><i class="fas fa-list-ul"></i></button>
                                                 <button type="button" data-command="insertOrderedList" aria-label="Numbered list"><i class="fas fa-list-ol"></i></button>
                                                 <button type="button" data-editor-link aria-label="Insert link"><i class="fas fa-link"></i></button>
                                                 <button type="button" data-editor-image aria-label="Insert image"><i class="fas fa-image"></i></button>
+                                                <button type="button" data-editor-video aria-label="Insert video"><i class="fas fa-square-caret-right"></i></button>
+                                                <button type="button" data-editor-view-source aria-label="Edit HTML source"><i class="fas fa-code"></i></button>
+                                                <button type="button" data-editor-fullscreen aria-label="Fullscreen editor"><i class="fas fa-expand"></i></button>
                                                 <button type="button" data-command="removeFormat" aria-label="Clear formatting"><i class="fas fa-eraser"></i></button>
                                             </div>
 
-                                            <div class="pages-editor-surface" contenteditable="true" data-editor-surface>{!! $descriptionValue !!}</div>
+                                            <div class="pages-editor-surface" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="true" tabindex="0" data-editor-surface>{!! $descriptionValue !!}</div>
                                         </div>
 
                                         <textarea id="textarea" name="description" class="pages-editor-textarea" data-editor-textarea>{{ $descriptionValue }}</textarea>
@@ -163,14 +215,98 @@
             const form = document.querySelector('[data-page-form]');
             const fileInput = document.querySelector('[data-file-input]');
             const fileLabel = document.querySelector('[data-file-label]');
+            let savedRange = null;
 
             if (!root || !surface || !textarea || !form) {
                 return;
             }
 
+            const editorContainsSelection = () => {
+                const selection = window.getSelection();
+
+                return Boolean(selection && selection.rangeCount > 0 && surface.contains(selection.anchorNode));
+            };
+
+            const saveSelection = () => {
+                const selection = window.getSelection();
+
+                if (!selection || selection.rangeCount === 0 || !surface.contains(selection.anchorNode)) {
+                    return;
+                }
+
+                savedRange = selection.getRangeAt(0).cloneRange();
+            };
+
+            const restoreSelection = () => {
+                surface.focus();
+
+                if (!savedRange) {
+                    return;
+                }
+
+                const selection = window.getSelection();
+                if (!selection) {
+                    return;
+                }
+
+                selection.removeAllRanges();
+                selection.addRange(savedRange);
+            };
+
             const syncEditor = () => {
                 textarea.value = surface.innerHTML.trim();
             };
+
+            const runCommand = (command, value = null) => {
+                restoreSelection();
+                document.execCommand(command, false, value);
+                saveSelection();
+                syncEditor();
+            };
+
+            const insertHtml = (html) => {
+                runCommand('insertHTML', html);
+            };
+
+            const escapeHtml = (value) => value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+
+            const normalizeUrl = (value) => {
+                const url = value.trim();
+                if (url === '') {
+                    return '';
+                }
+
+                if (/^(https?:|mailto:|tel:|\/|#)/i.test(url)) {
+                    return url;
+                }
+
+                return `https://${url}`;
+            };
+
+            const closeMenus = (except = null) => {
+                root.querySelectorAll('[data-editor-menu]').forEach((menu) => {
+                    if (menu !== except) {
+                        menu.classList.remove('is-open');
+                    }
+                });
+            };
+
+            root.querySelectorAll('[data-editor-menu-toggle]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const menu = button.closest('[data-editor-menu]');
+                    if (!menu) {
+                        return;
+                    }
+
+                    const isOpen = menu.classList.contains('is-open');
+                    closeMenus(menu);
+                    menu.classList.toggle('is-open', !isOpen);
+                });
+            });
 
             root.querySelectorAll('[data-command]').forEach((button) => {
                 button.addEventListener('click', () => {
@@ -179,41 +315,103 @@
                         return;
                     }
 
-                    surface.focus();
-                    document.execCommand(command, false);
-                    syncEditor();
+                    runCommand(command, button.getAttribute('data-command-value'));
+                    closeMenus();
                 });
             });
 
-            const linkButton = root.querySelector('[data-editor-link]');
-            if (linkButton) {
+            root.querySelectorAll('[data-editor-link]').forEach((linkButton) => {
                 linkButton.addEventListener('click', () => {
                     const url = window.prompt('Enter the link URL');
-                    if (!url) {
+                    const normalizedUrl = normalizeUrl(url || '');
+                    if (!normalizedUrl) {
                         return;
                     }
 
-                    surface.focus();
-                    document.execCommand('createLink', false, url);
-                    syncEditor();
+                    runCommand('createLink', normalizedUrl);
+                    closeMenus();
                 });
-            }
+            });
 
-            const imageButton = root.querySelector('[data-editor-image]');
-            if (imageButton) {
+            root.querySelectorAll('[data-editor-image]').forEach((imageButton) => {
                 imageButton.addEventListener('click', () => {
                     const url = window.prompt('Enter the image URL');
-                    if (!url) {
+                    const normalizedUrl = normalizeUrl(url || '');
+                    if (!normalizedUrl) {
                         return;
                     }
 
-                    surface.focus();
-                    document.execCommand('insertImage', false, url);
-                    syncEditor();
+                    const alt = window.prompt('Enter image alt text') || '';
+                    insertHtml(`<img src="${escapeHtml(normalizedUrl)}" alt="${escapeHtml(alt)}">`);
+                    closeMenus();
                 });
-            }
+            });
 
+            root.querySelectorAll('[data-editor-video]').forEach((videoButton) => {
+                videoButton.addEventListener('click', () => {
+                    const url = window.prompt('Enter YouTube, Vimeo, or video URL');
+                    const normalizedUrl = normalizeUrl(url || '');
+                    if (!normalizedUrl) {
+                        return;
+                    }
+
+                    insertHtml(`<p><a href="${escapeHtml(normalizedUrl)}">${escapeHtml(normalizedUrl)}</a></p>`);
+                    closeMenus();
+                });
+            });
+
+            root.querySelectorAll('[data-editor-insert-table]').forEach((tableButton) => {
+                tableButton.addEventListener('click', () => {
+                    insertHtml('<table><tbody><tr><td>Cell</td><td>Cell</td><td>Cell</td></tr><tr><td>Cell</td><td>Cell</td><td>Cell</td></tr><tr><td>Cell</td><td>Cell</td><td>Cell</td></tr></tbody></table>');
+                    closeMenus();
+                });
+            });
+
+            root.querySelectorAll('[data-editor-view-source]').forEach((sourceButton) => {
+                sourceButton.addEventListener('click', () => {
+                    const html = window.prompt('Edit HTML source', surface.innerHTML.trim());
+                    if (html === null) {
+                        return;
+                    }
+
+                    surface.innerHTML = html;
+                    syncEditor();
+                    closeMenus();
+                });
+            });
+
+            root.querySelectorAll('[data-editor-fullscreen]').forEach((fullscreenButton) => {
+                fullscreenButton.addEventListener('click', () => {
+                    root.classList.toggle('is-fullscreen');
+                    surface.focus();
+                    closeMenus();
+                });
+            });
+
+            root.querySelectorAll('[data-editor-submit]').forEach((saveButton) => {
+                saveButton.addEventListener('click', () => {
+                    syncEditor();
+                    form.requestSubmit();
+                });
+            });
+
+            surface.addEventListener('keyup', saveSelection);
+            surface.addEventListener('mouseup', saveSelection);
+            surface.addEventListener('focus', saveSelection);
             surface.addEventListener('input', syncEditor);
+            surface.addEventListener('paste', () => {
+                window.setTimeout(syncEditor, 0);
+            });
+            document.addEventListener('selectionchange', () => {
+                if (editorContainsSelection()) {
+                    saveSelection();
+                }
+            });
+            document.addEventListener('click', (event) => {
+                if (!root.contains(event.target)) {
+                    closeMenus();
+                }
+            });
             form.addEventListener('submit', syncEditor);
 
             if (fileInput && fileLabel) {
