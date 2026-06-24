@@ -31,10 +31,83 @@
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('story-home.css') }}">
+    <style>
+        @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Light.woff2") format("woff2");font-weight:300;font-style:normal;font-display:swap}
+        @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+        html{scroll-behavior:smooth}
+        body.story-page{margin:0;background:#fff;color:#333;font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-size:18px;line-height:26px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+        .story-page *{box-sizing:border-box}
+        .story-page img{display:block;max-width:100%;height:auto}
+        .se-header{position:fixed;top:15px;left:15px;right:15px;z-index:998;display:flex;align-items:center;justify-content:space-between;min-height:84px;padding:0 22px;color:#fff}
+        .se-header:before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.18);backdrop-filter:blur(2px);z-index:-1}
+        .se-logo{display:block;width:130px;height:58px;color:#fff;text-decoration:none;text-transform:uppercase;font-weight:500;letter-spacing:.08em}
+        .se-logo img{width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1)}
+        .se-logo span{display:flex;align-items:center;height:100%}
+        .se-nav ul{display:flex;align-items:center;justify-content:center;gap:34px;margin:0;padding:0;list-style:none}
+        .se-nav a,.se-enquire-button{color:#fff;text-decoration:none;text-transform:uppercase;font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-size:14px;line-height:18px;font-weight:500;letter-spacing:.04em}
+        .se-enquire-button{display:inline-flex;align-items:center;justify-content:center;min-width:104px;min-height:44px;border:1px solid rgba(255,255,255,.8);padding:0 18px}
+        .se-enquire-button:hover{background:#fff;color:#333}
+        .block{position:relative}.block--dark{background:#7a7e81;color:#eee}.block--light{background:#fff;color:#333}.block--colored{background:#10808f;color:#fff}
+        .hero{position:relative;overflow:hidden;min-height:100vh;font-size:27px;line-height:27px;font-weight:300;text-wrap:balance}
+        .hero__bg,.bg{position:absolute;top:0;left:0;width:100%;height:100%}
+        .bg--embed{overflow:hidden}.u-bg-cover{background-size:cover;background-position:center 40%;background-repeat:no-repeat}
+        .hero__bg img,.u-bg-cover img{width:100%;height:100%;object-fit:cover;margin:0;filter:saturate(.95) contrast(1.02)}
+        .bg--opacity{background:#000}
+        .block__padding{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:90px 24px}
+        .block__hero-height{min-height:100vh}.u-flex-column-middle{display:flex;flex-direction:column;align-items:center;justify-content:center}
+        .hero__body{width:100%;max-width:520px;margin:0 auto 30px;text-align:center;opacity:1}
+        .hero__preheading{display:block;margin:0 auto 18px;text-transform:uppercase;font-size:14px;line-height:18px;font-weight:500;letter-spacing:.08em;color:#fff}
+        .theme-se .theme-title,.story-page .theme-title{font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-weight:400;text-transform:uppercase}
+        .hero__body .hero__title{margin:0;color:#fff;font-size:60px;line-height:56px;letter-spacing:0;opacity:1!important}
+        .hero__hr{display:block;width:72px;height:1px;border:0;margin:24px auto;background:#fff;color:#fff}
+        .hero__copy{max-width:460px;margin:0 auto;color:#fff;font-size:27px;line-height:27px;font-weight:300}
+        .hero__copy p{margin:0}
+        .btn-anchor.js-page-down{position:absolute;left:50%;bottom:32px;z-index:3;display:flex;align-items:center;justify-content:center;width:62px;height:62px;margin-left:-31px;border:1px solid currentColor;border-radius:50%;color:#fff;text-decoration:none}
+        .btn-anchor.js-page-down span{width:13px;height:13px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translate(-2px,-2px)}
+        .b-intro .block__padding{padding-top:96px;padding-bottom:86px}
+        .block-head{position:relative;width:min(90%,760px);margin:0 auto 45px;text-align:center;text-wrap:balance;opacity:1}
+        .block-head__title{margin:0 0 22px;color:#333;font-family:"GT Walsheim",Helvetica,Arial,sans-serif;font-size:44px;line-height:44px;font-weight:400;text-transform:uppercase}
+        .block-head__subtitle{margin:0 auto 28px;color:#333;font-size:27px;line-height:32px;font-weight:300}
+        .block-head__body{color:#333;font-size:18px;line-height:30px}
+        .block-head__body p{margin:0 0 18px}
+        .btn,.se-btn{display:inline-flex;align-items:center;justify-content:center;min-width:150px;min-height:52px;border:1px solid currentColor;padding:0 24px;color:inherit;background:transparent;text-decoration:none;text-transform:uppercase;font-size:14px;line-height:18px;font-weight:500;letter-spacing:.04em}
+        .btn:hover,.se-btn:hover{background:#333;color:#fff}
+        .b-intro__buttons{text-align:center}.b-gallery-masonry{padding:0;background:#fff}
+        .gmasonry__wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;width:min(1440px,calc(100% - 30px));margin:0 auto;padding:0 0 90px}
+        .gmasonry__item{position:relative;overflow:hidden;min-height:300px;background:#ddd}
+        .gmasonry__item:first-child{grid-row:span 2}
+        .gmasonry__item img{width:100%;height:100%;object-fit:cover;margin:0}
+        .gmasonry__download{display:none}
+        .b-section.block--dark{background:#7a7e81;color:#fff}
+        .b-section .block__padding{padding-top:96px;padding-bottom:96px;text-align:center}
+        .block-head__prefix{margin:0 0 12px;text-transform:uppercase;font-size:14px;line-height:18px;font-weight:500;letter-spacing:.08em;color:#10808f}
+        .block--dark .block-head__prefix{color:#fff}
+        .block--dark .block-head__title,.block--dark .block-head__subtitle{color:#fff}
+        .row{display:flex;flex-wrap:wrap;justify-content:center;width:100%;max-width:1200px;margin:0 auto}
+        .body--section{width:33.333%;padding:0 18px;text-align:center}
+        .body__media{height:86px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center}
+        .body__media img{width:auto;max-width:190px;max-height:86px;margin:0 auto;object-fit:contain}
+        .body__copy{color:#fff;font-size:16px;line-height:24px}
+        .btn--xs{min-width:0;min-height:42px;margin-top:20px;font-size:12px}
+        .se-footer-brand{background:#10808f;color:#fff;text-align:center}
+        .se-footer-brand .block__padding,.se-footer-brand .se-block-padding{padding:76px 24px}
+        .se-footer-inner{display:grid;justify-items:center;gap:24px}
+        .se-footer-logo img{max-width:420px;max-height:110px;filter:brightness(0) invert(1);margin:0 auto}
+        .se-footer-logo strong{font-size:54px;line-height:54px;font-weight:400;text-transform:uppercase}
+        .se-footer-social,.se-footer-contact{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 24px}
+        .se-footer-social a,.se-footer-contact a{color:#fff;text-decoration:none;text-transform:uppercase;font-size:14px;line-height:18px}
+        .se-footer-group{background:#f4f4f4;color:#333}
+        .se-footer-group .se-block-padding{width:min(1200px,calc(100% - 48px));margin:0 auto;padding:54px 0}
+        .se-footer-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px}
+        .se-footer-columns div{display:grid;gap:8px}.se-footer-columns h3{margin:0 0 8px;text-transform:uppercase;font-size:18px}.se-footer-columns a{color:#333;text-decoration:none}
+        .story-page .whatsapp-widget{right:22px;bottom:22px;z-index:999}
+        @media(max-width:799px){.se-header{top:0;left:0;right:0;min-height:72px}.se-nav{display:none}.se-logo{width:108px;height:48px}.hero__body .hero__title{font-size:53px;line-height:50px}.hero__copy{font-size:24px;line-height:28px}.gmasonry__wrap,.se-footer-columns{grid-template-columns:1fr}.body--section{width:100%;margin-bottom:34px}.block-head__title{font-size:38px;line-height:38px}}
+        @media(max-width:599px){body.story-page{font-size:16px;line-height:24px}.hero__body .hero__title{font-size:40px;line-height:36px}.hero__copy{font-size:21px;line-height:25px}.block__padding{padding:70px 18px}.block-head__title{font-size:34px;line-height:34px}.block-head__subtitle{font-size:23px;line-height:28px}.gmasonry__item{min-height:230px}}
+    </style>
 </head>
-<body id="top" class="story-page">
+<body id="top" class="story-page theme-se">
     <header class="se-header">
         <a class="se-logo" href="{{ route('home') }}" aria-label="Peak Experience home">
             @if ($hasLogo)
@@ -57,68 +130,105 @@
     </header>
 
     <main id="main">
-        <section class="se-hero block block--dark block--has-bg">
-            @if ($heroImage !== '')
-                <img class="se-hero__bg" src="{{ $heroImage }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
-            @endif
-            <div class="se-hero__shade"></div>
-            <div class="se-hero__content">
-                <p class="se-breadcrumb"><a href="{{ route('home') }}">Home</a> / <span>{{ $page['type'] }}</span></p>
-                <h1 class="theme-title">{{ $page['title'] }}</h1>
-                @if ($page['meta_description'] !== '')
-                    <p>{{ $page['meta_description'] }}</p>
-                @endif
+        <section class="hero block block--dark block--has-bg">
+            <div class="hero__bg">
+                <div class="bg bg--embed">
+                    @if ($heroImage !== '')
+                        <div class="bg u-bg-cover">
+                            <img src="{{ $heroImage }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
+                        </div>
+                    @endif
+                    <div class="bg bg--opacity" style="opacity:0.25"></div>
+                </div>
             </div>
-            <a class="se-scroll" href="#content" aria-label="Scroll to page content"><span></span></a>
+
+            <div class="block__padding block__hero-height u-flex-column-middle">
+                <div class="hero__body">
+                    <span class="hero__preheading">{{ strtoupper($page['type']) }}</span>
+                    <h1 class="hero__title theme-title">{{ $page['title'] }}</h1>
+                    <hr class="hero__hr">
+                    @if ($page['meta_description'] !== '')
+                        <div class="hero__copy u-no-margin-content">
+                            <p>{{ $page['meta_description'] }}</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <a class="btn-anchor js-page-down" href="#content" aria-label="Scroll to page content"><span></span></a>
         </section>
 
-        <section class="se-intro block block--light" id="content">
-            <div class="se-block-padding">
-                <div class="se-content-narrow">
-                    <h2>{{ $page['heading_two'] }}</h2>
-                    <div class="se-rich-text">
+        <section class="b-intro block block--light" id="content">
+            <div class="block__padding">
+                <div class="block-head u-max-width-med">
+                    <div>
+                        <h2 class="block-head__title">{{ $page['heading_two'] }}</h2>
+                    </div>
+                    @if ($page['meta_description'] !== '')
+                        <p class="block-head__subtitle">{{ $page['meta_description'] }}</p>
+                    @endif
+                    <div class="block-head__body u-no-margin-content">
                         {!! $page['description'] !!}
                     </div>
-                    <a class="se-btn se-btn-centred" href="{{ route('home') }}#contact">Enquire Now</a>
+                </div>
+
+                <div class="block-cta u-text-center b-intro__buttons">
+                    <a class="btn btn-centred" href="{{ route('home') }}#contact">Enquire Now</a>
                 </div>
             </div>
         </section>
 
         @if (count($galleryImages) > 0)
-            <section class="se-gallery block">
-                <div class="se-gallery-grid">
+            <section class="b-gallery-masonry block block--light">
+                <div class="block__padding js-gmasonry">
+                    <div class="gmasonry__wrap">
                     @foreach ($galleryImages as $index => $image)
-                        <figure class="se-gallery-item se-gallery-item--{{ $index + 1 }}">
-                            <img src="{{ $image }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
-                        </figure>
+                        <div class="gmasonry__item col col-sm-6 col-lg-4 col--gmasonry">
+                            <div data-gmasonry-slide="{{ $index }}" data-gmasonry-filters="false">
+                                <img src="{{ $image }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
+                            </div>
+                            <a class="gmasonry__download" href="{{ $image }}" download>Download</a>
+                        </div>
                     @endforeach
+                    </div>
                 </div>
             </section>
         @endif
 
-        <section class="se-related block block--dark">
-            <div class="se-block-padding">
-                <div class="se-section-head">
-                    <h2>More From Peak Experience</h2>
-                    <p>Creative event production shaped around venue, audience, timing, and the story your brand needs to tell.</p>
-                </div>
+        <section class="b-section block block--dark block--fg-colored block--has-bg layout-default">
+            <div class="block__padding u-text-center theme-font-render">
+                <div class="b-section__content">
+                    <div class="block-head u-max-width-med">
+                        <div>
+                            <div class="block-head__prefix">Peak Experience</div>
+                            <h2 class="block-head__title">Our Work</h2>
+                        </div>
+                        <p class="block-head__subtitle">Explore how our event team turns conferences, exhibitions, and brand experiences into polished live moments.</p>
+                    </div>
 
-                <div class="se-card-row">
-                    <article class="se-story-card">
-                        <span>01</span>
-                        <h3>Planning</h3>
-                        <p>We turn event requirements into a clear production plan with the right technical, creative, and operational details.</p>
-                    </article>
-                    <article class="se-story-card">
-                        <span>02</span>
-                        <h3>Production</h3>
-                        <p>Lighting, audio, staging, media, and build elements are coordinated into one polished live experience.</p>
-                    </article>
-                    <article class="se-story-card">
-                        <span>03</span>
-                        <h3>Delivery</h3>
-                        <p>Our team manages show-day execution so every guest touchpoint feels composed, responsive, and memorable.</p>
-                    </article>
+                    <div class="row u-max-width-wide block-vertical-subsection">
+                        <div class="col col-sm-6 col-md-4 body body--section">
+                            <div>
+                                <div class="body__media"><strong>01</strong></div>
+                                <div class="body__copy"><p>We shape the brief, audience journey, and production requirements into a clear event plan.</p></div>
+                                <a class="btn btn--xs btn--margin-sm" href="{{ route('home') }}#contact">Plan</a>
+                            </div>
+                        </div>
+                        <div class="col col-sm-6 col-md-4 body body--section">
+                            <div>
+                                <div class="body__media"><strong>02</strong></div>
+                                <div class="body__copy"><p>Technical, creative, staging, media, lighting, and audio elements are coordinated into one experience.</p></div>
+                                <a class="btn btn--xs btn--margin-sm" href="{{ route('home') }}#services">Produce</a>
+                            </div>
+                        </div>
+                        <div class="col col-sm-6 col-md-4 body body--section">
+                            <div>
+                                <div class="body__media"><strong>03</strong></div>
+                                <div class="body__copy"><p>Show-day delivery is managed with the calm structure needed for guests, speakers, and organisers.</p></div>
+                                <a class="btn btn--xs btn--margin-sm" href="{{ route('home') }}#proof">Deliver</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
