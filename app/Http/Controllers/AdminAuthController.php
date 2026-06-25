@@ -62,6 +62,11 @@ class AdminAuthController extends Controller
                 'heading' => 'Pages',
                 'description' => 'Use this area for standalone page management when those editors are added.',
             ],
+            'posts' => [
+                'label' => 'Posts',
+                'heading' => 'Posts',
+                'description' => 'Use this area for blog post management when those editors are added.',
+            ],
             'contact-page' => [
                 'label' => 'Contact Page',
                 'heading' => 'Contact Page',
@@ -192,16 +197,32 @@ class AdminAuthController extends Controller
 
     public function pages(Request $request): View
     {
-        return view('admin.pages.index', $this->sharedData($request, 'pages') + [
+        return view('admin.pages.index', $this->sharedData($request, 'pages') + $this->pageAdminContext('pages') + [
             'pages' => PageContent::load(),
+        ]);
+    }
+
+    public function posts(Request $request): View
+    {
+        return view('admin.pages.index', $this->sharedData($request, 'posts') + $this->pageAdminContext('posts') + [
+            'pages' => $this->postsOnly(PageContent::load()),
         ]);
     }
 
     public function createPage(Request $request): View
     {
-        return view('admin.pages.form', $this->sharedData($request, 'pages') + [
+        return view('admin.pages.form', $this->sharedData($request, 'pages') + $this->pageAdminContext('pages') + [
             'pageData' => PageContent::defaults(),
             'pageTypes' => $this->pageTypes(),
+            'formMode' => 'create',
+        ]);
+    }
+
+    public function createPost(Request $request): View
+    {
+        return view('admin.pages.form', $this->sharedData($request, 'posts') + $this->pageAdminContext('posts') + [
+            'pageData' => array_merge(PageContent::defaults(), ['type' => 'Post']),
+            'pageTypes' => ['Post'],
             'formMode' => 'create',
         ]);
     }
@@ -315,31 +336,12 @@ class AdminAuthController extends Controller
 
     public function storePage(Request $request): RedirectResponse
     {
-        $pages = PageContent::load();
-        $payload = $this->validatedPagePayload($request);
-        $imagePath = $this->storePageImage($request, '');
-        $galleryImages = $this->storePageGalleryImages($request, []);
-        $timestamp = now()->toIso8601String();
+        return $this->storePageLikeContent($request, 'pages');
+    }
 
-        array_unshift($pages, [
-            'id' => (string) Str::uuid(),
-            'slug' => $this->uniquePageSlug($payload['title'], $pages),
-            'meta_title' => $payload['meta_title'],
-            'meta_description' => $payload['meta_description'],
-            'title' => $payload['title'],
-            'image' => $imagePath,
-            'image_alt' => $payload['image_alt'],
-            'gallery_images' => $galleryImages,
-            'heading_two' => $payload['heading_two'],
-            'type' => $payload['type'],
-            'description' => $payload['description'],
-            'created_at' => $timestamp,
-            'updated_at' => $timestamp,
-        ]);
-
-        PageContent::save($pages);
-
-        return redirect()->route('admin.section', ['section' => 'pages'])->with('status', 'Page created successfully.');
+    public function storePost(Request $request): RedirectResponse
+    {
+        return $this->storePageLikeContent($request, 'posts');
     }
 
     public function editPage(Request $request, string $pageId): View
@@ -347,14 +349,36 @@ class AdminAuthController extends Controller
         $page = PageContent::findById($pageId);
         abort_unless(is_array($page), 404);
 
-        return view('admin.pages.form', $this->sharedData($request, 'pages') + [
+        return view('admin.pages.form', $this->sharedData($request, 'pages') + $this->pageAdminContext('pages') + [
             'pageData' => $page,
             'pageTypes' => $this->pageTypes(),
             'formMode' => 'edit',
         ]);
     }
 
+    public function editPost(Request $request, string $postId): View
+    {
+        $post = PageContent::findById($postId);
+        abort_unless(is_array($post) && $post['type'] === 'Post', 404);
+
+        return view('admin.pages.form', $this->sharedData($request, 'posts') + $this->pageAdminContext('posts') + [
+            'pageData' => $post,
+            'pageTypes' => ['Post'],
+            'formMode' => 'edit',
+        ]);
+    }
+
     public function updatePage(Request $request, string $pageId): RedirectResponse
+    {
+        return $this->updatePageLikeContent($request, $pageId, 'pages');
+    }
+
+    public function updatePost(Request $request, string $postId): RedirectResponse
+    {
+        return $this->updatePageLikeContent($request, $postId, 'posts');
+    }
+
+    private function updatePageLikeContent(Request $request, string $pageId, string $adminContext): RedirectResponse
     {
         $pages = PageContent::load();
         $page = null;
@@ -367,8 +391,13 @@ class AdminAuthController extends Controller
         }
 
         abort_unless(is_array($page), 404);
+        abort_unless($adminContext !== 'posts' || $page['type'] === 'Post', 404);
 
         $payload = $this->validatedPagePayload($request);
+        if ($adminContext === 'posts') {
+            $payload['type'] = 'Post';
+        }
+
         $imagePath = $this->storePageImage($request, (string) ($page['image'] ?? ''));
         $galleryImages = $this->storePageGalleryImages($request, is_array($page['gallery_images'] ?? null) ? $page['gallery_images'] : []);
         $updatedPage = [
@@ -391,16 +420,27 @@ class AdminAuthController extends Controller
 
         PageContent::save($pages);
 
-        return redirect()->route('admin.section', ['section' => 'pages'])->with('status', 'Page updated successfully.');
+        return redirect($this->pageAdminRedirectUrl($adminContext))->with('status', $this->pageAdminLabel($adminContext) . ' updated successfully.');
     }
 
     public function deletePage(Request $request, string $pageId): RedirectResponse
+    {
+        return $this->deletePageLikeContent($pageId, 'pages');
+    }
+
+    public function deletePost(Request $request, string $postId): RedirectResponse
+    {
+        return $this->deletePageLikeContent($postId, 'posts');
+    }
+
+    private function deletePageLikeContent(string $pageId, string $adminContext): RedirectResponse
     {
         $pages = [];
         $deleted = false;
 
         foreach (PageContent::load() as $page) {
             if ($page['id'] === $pageId) {
+                abort_if($adminContext === 'posts' && $page['type'] !== 'Post', 404);
                 $this->deletePublicAsset(HomepageContent::storedPath((string) ($page['image'] ?? '')));
                 $this->deletePageGalleryImages(is_array($page['gallery_images'] ?? null) ? $page['gallery_images'] : []);
                 $deleted = true;
@@ -414,10 +454,20 @@ class AdminAuthController extends Controller
 
         PageContent::save($pages);
 
-        return redirect()->route('admin.section', ['section' => 'pages'])->with('status', 'Page deleted successfully.');
+        return redirect($this->pageAdminRedirectUrl($adminContext))->with('status', $this->pageAdminLabel($adminContext) . ' deleted successfully.');
     }
 
     public function bulkDeletePages(Request $request): RedirectResponse
+    {
+        return $this->bulkDeletePageLikeContent($request, 'pages');
+    }
+
+    public function bulkDeletePosts(Request $request): RedirectResponse
+    {
+        return $this->bulkDeletePageLikeContent($request, 'posts');
+    }
+
+    private function bulkDeletePageLikeContent(Request $request, string $adminContext): RedirectResponse
     {
         $validated = $request->validate([
             'bulk_action' => ['required', Rule::in(['delete'])],
@@ -433,6 +483,11 @@ class AdminAuthController extends Controller
 
         foreach (PageContent::load() as $page) {
             if (array_key_exists((string) $page['id'], $selected)) {
+                if ($adminContext === 'posts' && $page['type'] !== 'Post') {
+                    $remainingPages[] = $page;
+                    continue;
+                }
+
                 $this->deletePublicAsset(HomepageContent::storedPath((string) ($page['image'] ?? '')));
                 $this->deletePageGalleryImages(is_array($page['gallery_images'] ?? null) ? $page['gallery_images'] : []);
                 continue;
@@ -443,7 +498,7 @@ class AdminAuthController extends Controller
 
         PageContent::save($remainingPages);
 
-        return redirect()->route('admin.section', ['section' => 'pages'])->with('status', 'Selected pages deleted.');
+        return redirect($this->pageAdminRedirectUrl($adminContext))->with('status', 'Selected ' . strtolower($this->pageAdminPluralLabel($adminContext)) . ' deleted.');
     }
 
     public function section(Request $request, string $section): View
@@ -454,6 +509,10 @@ class AdminAuthController extends Controller
 
         if ($section === 'case-study') {
             return $this->caseStudies($request);
+        }
+
+        if ($section === 'posts') {
+            return $this->posts($request);
         }
 
         $sections = $this->placeholderSections();
@@ -650,6 +709,95 @@ class AdminAuthController extends Controller
      *   description:string
      * }
      */
+    private function storePageLikeContent(Request $request, string $adminContext): RedirectResponse
+    {
+        $pages = PageContent::load();
+        $payload = $this->validatedPagePayload($request);
+        if ($adminContext === 'posts') {
+            $payload['type'] = 'Post';
+        }
+
+        $imagePath = $this->storePageImage($request, '');
+        $galleryImages = $this->storePageGalleryImages($request, []);
+        $timestamp = now()->toIso8601String();
+
+        array_unshift($pages, [
+            'id' => (string) Str::uuid(),
+            'slug' => $this->uniquePageSlug($payload['title'], $pages),
+            'meta_title' => $payload['meta_title'],
+            'meta_description' => $payload['meta_description'],
+            'title' => $payload['title'],
+            'image' => $imagePath,
+            'image_alt' => $payload['image_alt'],
+            'gallery_images' => $galleryImages,
+            'heading_two' => $payload['heading_two'],
+            'type' => $payload['type'],
+            'description' => $payload['description'],
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
+        ]);
+
+        PageContent::save($pages);
+
+        return redirect($this->pageAdminRedirectUrl($adminContext))->with('status', $this->pageAdminLabel($adminContext) . ' created successfully.');
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $pages
+     * @return array<int, array<string, mixed>>
+     */
+    private function postsOnly(array $pages): array
+    {
+        return array_values(array_filter(
+            $pages,
+            fn (array $page): bool => (string) ($page['type'] ?? '') === 'Post'
+        ));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function pageAdminContext(string $adminContext): array
+    {
+        $isPosts = $adminContext === 'posts';
+
+        return [
+            'adminContext' => $adminContext,
+            'pageHeading' => $isPosts ? 'Posts' : 'Pages',
+            'pageDescription' => $isPosts ? 'Manage site posts and published content.' : 'Manage site pages and published content.',
+            'createRouteName' => $isPosts ? 'admin.posts.create' : 'admin.pages.create',
+            'storeRouteName' => $isPosts ? 'admin.posts.store' : 'admin.pages.store',
+            'editRouteName' => $isPosts ? 'admin.posts.edit' : 'admin.pages.edit',
+            'updateRouteName' => $isPosts ? 'admin.posts.update' : 'admin.pages.update',
+            'deleteRouteName' => $isPosts ? 'admin.posts.delete' : 'admin.pages.delete',
+            'bulkDeleteRouteName' => $isPosts ? 'admin.posts.bulk-delete' : 'admin.pages.bulk-delete',
+            'routeIdName' => $isPosts ? 'postId' : 'pageId',
+            'contentLabel' => $isPosts ? 'Post' : 'Page',
+            'createButtonLabel' => $isPosts ? 'Add Post' : 'Add Page',
+            'emptyMessage' => $isPosts
+                ? 'No posts created yet. Use Add Post to create the first one with the new template.'
+                : 'No pages created yet. Use Add Page to create the first one with the new template.',
+            'cancelUrl' => $this->pageAdminRedirectUrl($adminContext),
+        ];
+    }
+
+    private function pageAdminRedirectUrl(string $adminContext): string
+    {
+        return $adminContext === 'posts'
+            ? route('admin.posts.index')
+            : route('admin.section', ['section' => 'pages']);
+    }
+
+    private function pageAdminLabel(string $adminContext): string
+    {
+        return $adminContext === 'posts' ? 'Post' : 'Page';
+    }
+
+    private function pageAdminPluralLabel(string $adminContext): string
+    {
+        return $adminContext === 'posts' ? 'Posts' : 'Pages';
+    }
+
     private function validatedPagePayload(Request $request): array
     {
         $validated = $request->validate([
@@ -853,6 +1001,7 @@ class AdminAuthController extends Controller
             ['key' => 'overview', 'label' => 'Overview', 'href' => route('admin.section', ['section' => 'overview'])],
             ['key' => 'services', 'label' => 'Services', 'href' => route('admin.section', ['section' => 'services'])],
             ['key' => 'case-study', 'label' => 'Case Study', 'href' => route('admin.case-studies.index')],
+            ['key' => 'posts', 'label' => 'Posts', 'href' => route('admin.posts.index')],
             ['key' => 'team', 'label' => 'Team', 'href' => route('admin.section', ['section' => 'team'])],
             ['key' => 'gallery', 'label' => 'Gallery', 'href' => route('admin.gallery')],
             ['key' => 'sliders', 'label' => 'Sliders', 'href' => route('admin.section', ['section' => 'sliders'])],

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Pages | Peak Experience')
-@section('badge', 'Pages')
+@section('title', $pageHeading . ' | Peak Experience')
+@section('badge', $pageHeading)
 
 @section('content')
     <div class="pages-admin-shell">
@@ -21,8 +21,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h1 class="page-title">Pages</h1>
-                        <p class="text-muted">Manage site pages and published content.</p>
+                        <h1 class="page-title">{{ $pageHeading }}</h1>
+                        <p class="text-muted">{{ $pageDescription }}</p>
                     </div>
                 </div>
             </div>
@@ -33,14 +33,14 @@
                 <div class="card shadow-lg rounded-lg border-0">
                     <div class="card-header">
                         <h3 class="card-title">Post List</h3>
-                        <a href="{{ route('admin.pages.create') }}" class="btn btn-light btn-sm text-primary font-weight-bold">
+                        <a href="{{ route($createRouteName) }}" class="btn btn-light btn-sm text-primary font-weight-bold">
                             <i class="fas fa-plus"></i>
-                            Add Page
+                            {{ $createButtonLabel }}
                         </a>
                     </div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('admin.pages.bulk-delete') }}" id="bulk-action-form">
+                        <form method="POST" action="{{ route($bulkDeleteRouteName) }}" id="bulk-action-form">
                             @csrf
 
                             <div class="bulk-action-row">
@@ -92,11 +92,11 @@
                                                             <i class="fas fa-eye"></i>
                                                             Preview
                                                         </a>
-                                                        <a href="{{ route('admin.pages.edit', ['pageId' => $page['id']]) }}" class="btn btn-outline-warning btn-sm">
+                                                        <a href="{{ route($editRouteName, [$routeIdName => $page['id']]) }}" class="btn btn-outline-warning btn-sm">
                                                             <i class="fas fa-edit"></i>
                                                             Update
                                                         </a>
-                                                        <form method="POST" action="{{ route('admin.pages.delete', ['pageId' => $page['id']]) }}">
+                                                        <form method="POST" action="{{ route($deleteRouteName, [$routeIdName => $page['id']]) }}">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-outline-danger btn-sm">
@@ -110,7 +110,7 @@
                                         @empty
                                             <tr>
                                                 <td colspan="7" class="pages-empty-state">
-                                                    No pages created yet. Use <strong>Add Page</strong> to create the first one with the new template.
+                                                    {{ $emptyMessage }}
                                                 </td>
                                             </tr>
                                         @endforelse

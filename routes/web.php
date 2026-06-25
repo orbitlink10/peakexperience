@@ -38,6 +38,13 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/case-studies/{caseStudyId}/edit', [AdminAuthController::class, 'editCaseStudy'])->name('case-studies.edit');
         Route::put('/case-studies/{caseStudyId}', [AdminAuthController::class, 'updateCaseStudy'])->name('case-studies.update');
         Route::delete('/case-studies/{caseStudyId}', [AdminAuthController::class, 'deleteCaseStudy'])->name('case-studies.delete');
+        Route::get('/posts', [AdminAuthController::class, 'posts'])->name('posts.index');
+        Route::get('/posts/create', [AdminAuthController::class, 'createPost'])->name('posts.create');
+        Route::post('/posts', [AdminAuthController::class, 'storePost'])->name('posts.store');
+        Route::get('/posts/{postId}/edit', [AdminAuthController::class, 'editPost'])->name('posts.edit');
+        Route::put('/posts/{postId}', [AdminAuthController::class, 'updatePost'])->name('posts.update');
+        Route::delete('/posts/{postId}', [AdminAuthController::class, 'deletePost'])->name('posts.delete');
+        Route::post('/posts/bulk-delete', [AdminAuthController::class, 'bulkDeletePosts'])->name('posts.bulk-delete');
         Route::get('/pages/create', [AdminAuthController::class, 'createPage'])->name('pages.create');
         Route::post('/pages', [AdminAuthController::class, 'storePage'])->name('pages.store');
         Route::get('/pages/{pageId}/edit', [AdminAuthController::class, 'editPage'])->name('pages.edit');

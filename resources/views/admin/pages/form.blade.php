@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', ($formMode === 'edit' ? 'Update Page' : 'Add New Page') . ' | Peak Experience')
-@section('badge', 'Pages')
+@section('title', ($formMode === 'edit' ? 'Update ' . $contentLabel : $createButtonLabel) . ' | Peak Experience')
+@section('badge', $pageHeading)
 
 @section('content')
     @php
@@ -44,7 +44,7 @@
                             <div class="card-body">
                                 <form
                                     method="POST"
-                                    action="{{ $isEditing ? route('admin.pages.update', ['pageId' => $pageData['id']]) : route('admin.pages.store') }}"
+                                    action="{{ $isEditing ? route($updateRouteName, [$routeIdName => $pageData['id']]) : route($storeRouteName) }}"
                                     enctype="multipart/form-data"
                                     data-page-form
                                 >
@@ -221,7 +221,7 @@
                                     </div>
 
                                     <div class="form-group text-right">
-                                        <a href="{{ route('admin.section', ['section' => 'pages']) }}" class="btn btn-danger">Cancel</a>
+                                        <a href="{{ $cancelUrl }}" class="btn btn-danger">Cancel</a>
                                         <button type="submit" class="btn btn-primary">{{ $isEditing ? 'Update' : 'Submit' }}</button>
                                     </div>
                                 </form>

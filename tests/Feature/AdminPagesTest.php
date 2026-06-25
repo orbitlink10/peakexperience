@@ -61,6 +61,56 @@ class AdminPagesTest extends TestCase
         $response->assertSee('data-editor-fullscreen', false);
     }
 
+    public function test_posts_section_lists_only_posts_and_uses_post_routes(): void
+    {
+        HomepageSetting::query()->create([
+            'key' => 'pages',
+            'value' => [
+                [
+                    'id' => 'post-1',
+                    'slug' => 'starlink-in-kenya',
+                    'meta_title' => 'Starlink in Kenya',
+                    'meta_description' => 'Manage Starlink post',
+                    'title' => 'Starlink in Kenya',
+                    'image' => '',
+                    'image_alt' => 'Starlink Dish',
+                    'heading_two' => 'Why Starlink matters',
+                    'type' => 'Post',
+                    'description' => '<p>Body copy</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+                [
+                    'id' => 'page-1',
+                    'slug' => 'brand-experiences',
+                    'meta_title' => 'Brand Experiences',
+                    'meta_description' => 'Manage Brand Experiences page',
+                    'title' => 'Brand Experiences',
+                    'image' => '',
+                    'image_alt' => 'Brand Experiences',
+                    'heading_two' => 'Brand Experiences',
+                    'type' => 'Page',
+                    'description' => '<p>Page copy</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+            ],
+        ]);
+
+        $response = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->get(route('admin.posts.index'));
+
+        $response->assertOk();
+        $response->assertSee('Posts');
+        $response->assertSee('Post List');
+        $response->assertSee('Add Post');
+        $response->assertSee(route('admin.posts.create'), false);
+        $response->assertSee(route('admin.posts.edit', ['postId' => 'post-1']), false);
+        $response->assertSee('Starlink in Kenya');
+        $response->assertDontSee('Brand Experiences');
+    }
+
     public function test_admin_can_create_page_from_pages_template(): void
     {
         Storage::fake('public');
@@ -96,6 +146,35 @@ class AdminPagesTest extends TestCase
         $this->assertStringStartsWith('homepage/pages/gallery/', $pages->value[0]['gallery_images'][0]);
         Storage::disk('public')->assertExists($pages->value[0]['image']);
         Storage::disk('public')->assertExists($pages->value[0]['gallery_images'][0]);
+    }
+
+    public function test_admin_can_create_post_from_posts_template(): void
+    {
+        Storage::fake('public');
+
+        $response = $this
+            ->withSession(['admin_authenticated' => true, 'admin_username' => 'admin'])
+            ->post(route('admin.posts.store'), [
+                'meta_title' => 'Starlink Nairobi Meta',
+                'meta_description' => 'Starlink Nairobi meta description',
+                'title' => 'Starlink Nairobi',
+                'image_file' => UploadedFile::fake()->createWithContent('starlink.png', base64_decode(self::TINY_PNG)),
+                'image_alt' => 'Starlink Nairobi',
+                'heading_two' => 'Starlink Nairobi Heading',
+                'type' => 'Post',
+                'description' => '<p>Detailed post description.</p>',
+            ]);
+
+        $response->assertRedirect(route('admin.posts.index'));
+        $response->assertSessionHas('status', 'Post created successfully.');
+
+        $pages = HomepageSetting::query()->where('key', 'pages')->first();
+
+        $this->assertNotNull($pages);
+        $this->assertSame('starlink-nairobi', $pages->value[0]['slug']);
+        $this->assertSame('Post', $pages->value[0]['type']);
+        $this->assertStringStartsWith('homepage/pages/', $pages->value[0]['image']);
+        Storage::disk('public')->assertExists($pages->value[0]['image']);
     }
 
     public function test_admin_can_update_and_delete_pages(): void
