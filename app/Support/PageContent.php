@@ -53,6 +53,17 @@ class PageContent
     }
 
     /**
+     * @return array<int, array<string, mixed>>
+     */
+    public static function posts(): array
+    {
+        return array_values(array_filter(
+            self::load(),
+            fn (array $page): bool => $page['type'] === 'Post'
+        ));
+    }
+
+    /**
      * @return array{
      *     id:string,
      *     slug:string,

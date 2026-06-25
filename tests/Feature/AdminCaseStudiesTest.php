@@ -103,32 +103,41 @@ class AdminCaseStudiesTest extends TestCase
         Storage::disk('public')->assertMissing($imagePath);
     }
 
-    public function test_public_our_work_lists_active_case_studies(): void
+    public function test_public_our_work_lists_saved_posts(): void
     {
         HomepageSetting::query()->create([
-            'key' => 'case_studies',
+            'key' => 'pages',
             'value' => [
                 [
-                    'id' => 'case-1',
+                    'id' => 'post-1',
                     'slug' => 'active-case',
+                    'meta_title' => 'Active Case',
+                    'meta_description' => 'Visible post summary.',
                     'title' => 'Active Case',
                     'image' => 'https://example.com/active.jpg',
-                    'image_alt' => 'Active case image',
-                    'status' => 'Active',
-                    'order' => 2,
-                    'description' => 'Visible case study.',
+                    'image_alt' => 'Active post image',
+                    'gallery_images' => [],
+                    'event_date' => '2026-03-20',
+                    'heading_two' => 'Brief',
+                    'delivery_heading' => 'Delivery',
+                    'delivery_description' => '',
+                    'type' => 'Post',
+                    'description' => '<p>Visible post body.</p>',
                     'created_at' => now()->toIso8601String(),
                     'updated_at' => now()->toIso8601String(),
                 ],
                 [
-                    'id' => 'case-2',
-                    'slug' => 'draft-case',
-                    'title' => 'Draft Case',
+                    'id' => 'page-1',
+                    'slug' => 'normal-page',
+                    'meta_title' => 'Normal Page',
+                    'meta_description' => 'Hidden page summary.',
+                    'title' => 'Normal Page',
                     'image' => '',
                     'image_alt' => '',
-                    'status' => 'Draft',
-                    'order' => 1,
-                    'description' => 'Hidden case study.',
+                    'gallery_images' => [],
+                    'heading_two' => 'Normal Page',
+                    'type' => 'Page',
+                    'description' => '<p>Hidden page body.</p>',
                     'created_at' => now()->toIso8601String(),
                     'updated_at' => now()->toIso8601String(),
                 ],
@@ -140,7 +149,9 @@ class AdminCaseStudiesTest extends TestCase
         $response->assertOk();
         $response->assertSee('Our Work');
         $response->assertSee('Active Case');
+        $response->assertSee('Visible post summary.');
         $response->assertSee('https://example.com/active.jpg', false);
-        $response->assertDontSee('Draft Case');
+        $response->assertSee(route('pages.show', ['page' => 'active-case']), false);
+        $response->assertDontSee('<a class="work-card" href="' . route('pages.show', ['page' => 'normal-page']) . '">', false);
     }
 }

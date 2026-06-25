@@ -20,7 +20,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Our Work | Peak Experience</title>
-    <meta name="description" content="Explore Peak Experience case studies across conferences, exhibitions, brand experiences, and live event production in Kenya.">
+    <meta name="description" content="Explore Peak Experience posts across conferences, exhibitions, brand experiences, and live event production in Kenya.">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -125,7 +125,7 @@
         <main class="work-page-main">
             <section class="work-page-hero">
                 <div class="wrap">
-                    <span class="work-page-kicker">Peak Experience Case Studies</span>
+                    <span class="work-page-kicker">Peak Experience Posts</span>
                     <h1>Our Work</h1>
                     <p>Explore the live moments Peak Experience has shaped for conferences, exhibitions, brand experiences, and corporate events across Kenya.</p>
                 </div>
@@ -133,31 +133,33 @@
 
             <section class="work-list-section">
                 <div class="wrap">
-                    @if (count($caseStudies) > 0)
+                    @if (count($posts) > 0)
                         <div class="work-grid">
-                            @foreach ($caseStudies as $caseStudy)
+                            @foreach ($posts as $post)
                                 @php
-                                    $imageUrl = \App\Support\HomepageContent::assetUrl((string) ($caseStudy['image'] ?? ''));
+                                    $imageUrl = \App\Support\HomepageContent::assetUrl((string) ($post['image'] ?? ''));
                                 @endphp
-                                <article class="work-card">
+                                <a class="work-card" href="{{ route('pages.show', ['page' => $post['slug']]) }}">
                                     <div class="work-card-media">
                                         @if ($imageUrl !== '')
-                                            <img src="{{ $imageUrl }}" alt="{{ $caseStudy['image_alt'] !== '' ? $caseStudy['image_alt'] : $caseStudy['title'] }}">
+                                            <img src="{{ $imageUrl }}" alt="{{ $post['image_alt'] !== '' ? $post['image_alt'] : $post['title'] }}">
                                         @else
-                                            <div class="work-card-placeholder">Case Study</div>
+                                            <div class="work-card-placeholder">Post</div>
                                         @endif
                                     </div>
                                     <div class="work-card-body">
-                                        <h2>{{ $caseStudy['title'] }}</h2>
-                                        @if ($caseStudy['description'] !== '')
-                                            <p>{{ \Illuminate\Support\Str::limit(strip_tags($caseStudy['description']), 150) }}</p>
+                                        <h2>{{ $post['title'] }}</h2>
+                                        @if ($post['meta_description'] !== '')
+                                            <p>{{ \Illuminate\Support\Str::limit($post['meta_description'], 150) }}</p>
+                                        @elseif ($post['description'] !== '')
+                                            <p>{{ \Illuminate\Support\Str::limit(strip_tags($post['description']), 150) }}</p>
                                         @endif
                                     </div>
-                                </article>
+                                </a>
                             @endforeach
                         </div>
                     @else
-                        <div class="work-empty">Case studies will be published here once they are added in the dashboard.</div>
+                        <div class="work-empty">Posts will be published here once they are added in the dashboard.</div>
                     @endif
                 </div>
             </section>

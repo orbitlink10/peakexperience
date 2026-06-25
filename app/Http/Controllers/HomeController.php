@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactInquiryMail;
-use App\Support\CaseStudyContent;
 use App\Support\HomepageContent;
 use App\Support\PageContent;
 use Illuminate\Http\RedirectResponse;
@@ -58,7 +57,7 @@ class HomeController extends Controller
 
         return view('our-work', [
             'logo' => $content['logo'],
-            'caseStudies' => CaseStudyContent::published(),
+            'posts' => PageContent::posts(),
             'navPages' => PageContent::load(),
         ] + $this->contactData($content));
     }
