@@ -22,6 +22,19 @@
         fn ($image) => \App\Support\HomepageContent::assetUrl((string) $image),
         is_array($page['gallery_images'] ?? null) ? $page['gallery_images'] : []
     )));
+    $isPost = (string) ($page['type'] ?? '') === 'Post';
+    $eventDate = trim((string) ($page['event_date'] ?? ''));
+    $eventDateLabel = '';
+    if ($eventDate !== '') {
+        try {
+            $eventDateLabel = \Illuminate\Support\Carbon::parse($eventDate)->format('l d F Y');
+        } catch (\Throwable $exception) {
+            $eventDateLabel = $eventDate;
+        }
+    }
+    $briefHeading = trim((string) ($page['heading_two'] ?? '')) ?: 'Brief';
+    $deliveryHeading = trim((string) ($page['delivery_heading'] ?? '')) ?: 'Delivery';
+    $deliveryDescription = trim((string) ($page['delivery_description'] ?? ''));
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -86,6 +99,24 @@
         .gmasonry__download{display:none}
         .b-section.block--dark{background:#7a7e81;color:#fff}
         .b-section .block__padding{padding-top:96px;padding-bottom:96px;text-align:center}
+        .post-hero-intro{padding:clamp(120px,15vh,190px) 24px 58px;text-align:center;background:#fff}
+        .post-hero-intro__date{display:block;margin:0 0 30px;color:#777;font-size:18px;line-height:22px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+        .post-hero-intro__title{max-width:1240px;margin:0 auto;color:#5d5759;font-size:clamp(54px,7.1vw,122px);line-height:1.03;font-weight:300;text-transform:uppercase;letter-spacing:0}
+        .post-hero-intro__summary{max-width:760px;margin:42px auto 0;color:#6a6365;font-size:clamp(25px,2.1vw,36px);line-height:1.32;font-weight:300}
+        .post-share{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:36px;color:#5f595b;font-size:19px;line-height:24px}
+        .post-share a{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;color:#5f595b;text-decoration:none}
+        .post-hero-image{padding:0 var(--page-image-gutter) 78px;background:#fff}
+        .post-hero-image img{width:100%;max-height:760px;object-fit:cover;border-radius:24px}
+        .post-section{padding:90px clamp(24px,7.5vw,140px);background:#fff}
+        .post-section__inner{display:grid;grid-template-columns:minmax(220px,.68fr) minmax(0,1fr);gap:clamp(42px,10vw,180px);align-items:start}
+        .post-section__heading{margin:0;color:#5d5759;font-size:clamp(38px,3.2vw,56px);line-height:1.08;font-weight:500}
+        .post-section__copy{max-width:820px;color:#6a6365;font-size:clamp(24px,1.85vw,34px);line-height:1.45;font-weight:300}
+        .post-section__copy p{margin:0 0 22px}
+        .post-section__copy p:last-child{margin-bottom:0}
+        .post-gallery{padding:0 var(--page-image-gutter) 86px;background:#fff}
+        .post-gallery__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+        .post-gallery__item{overflow:hidden;min-height:clamp(260px,24vw,430px);border-radius:9px;background:#ddd}
+        .post-gallery__item img{width:100%;height:100%;object-fit:cover}
         .block-head__prefix{margin:0 0 12px;text-transform:uppercase;font-size:14px;line-height:18px;font-weight:500;letter-spacing:.08em;color:#10808f}
         .block--dark .block-head__prefix{color:#fff}
         .block--dark .block-head__title,.block--dark .block-head__subtitle{color:#fff}
@@ -111,8 +142,9 @@
         .story-page .whatsapp-widget-button{display:inline-flex;align-items:center;justify-content:center;width:84px;height:84px;min-width:84px;min-height:84px;border-radius:50%}
         .story-page .whatsapp-widget-icon{display:block;width:35px;height:35px;max-width:35px;max-height:35px;flex:0 0 35px}
         @media(max-width:899px){.b-intro .block-head{grid-template-columns:1fr;gap:30px}.b-intro .block__padding{padding-top:76px;padding-bottom:36px}.gmasonry__wrap{grid-template-columns:repeat(2,minmax(0,1fr))}}
-        @media(max-width:799px){.hero__body .hero__title{font-size:53px;line-height:50px}.hero__copy{font-size:24px;line-height:28px}.se-footer-columns{grid-template-columns:1fr}.body--section{width:100%;margin-bottom:34px}.block-head__title{font-size:38px;line-height:42px}}
-        @media(max-width:599px){body.story-page{--page-image-gutter:14px;font-size:16px;line-height:24px}.hero{min-height:72vh;border-radius:12px}.hero__body .hero__title{font-size:40px;line-height:36px}.hero__copy{font-size:21px;line-height:25px}.block__padding{padding:70px 18px}.b-intro .block-head__subtitle{font-size:23px;line-height:28px}.b-intro .block-head__body{font-size:17px;line-height:27px}.gmasonry__wrap{grid-template-columns:1fr}.b-gallery-masonry .block__padding{padding:0 var(--page-image-gutter) 70px}.gmasonry__item{min-height:230px}}
+        @media(max-width:899px){.post-section__inner{grid-template-columns:1fr;gap:26px}.post-gallery__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:799px){.hero__body .hero__title{font-size:53px;line-height:50px}.hero__copy{font-size:24px;line-height:28px}.se-footer-columns{grid-template-columns:1fr}.body--section{width:100%;margin-bottom:34px}.block-head__title{font-size:38px;line-height:42px}.post-hero-intro{padding-top:86px}.post-hero-image img{border-radius:16px}}
+        @media(max-width:599px){body.story-page{--page-image-gutter:14px;font-size:16px;line-height:24px}.hero{min-height:72vh;border-radius:12px}.hero__body .hero__title{font-size:40px;line-height:36px}.hero__copy{font-size:21px;line-height:25px}.block__padding{padding:70px 18px}.b-intro .block-head__subtitle{font-size:23px;line-height:28px}.b-intro .block-head__body{font-size:17px;line-height:27px}.gmasonry__wrap,.post-gallery__grid{grid-template-columns:1fr}.b-gallery-masonry .block__padding{padding:0 var(--page-image-gutter) 70px}.gmasonry__item,.post-gallery__item{min-height:230px}.post-section{padding:58px 20px}.post-section__copy{font-size:20px;line-height:1.5}}
     </style>
 </head>
 <body id="top" class="story-page theme-se">
@@ -201,65 +233,121 @@
         </header>
 
     <main id="main">
-        <section class="hero block block--dark block--has-bg">
-            <div class="hero__bg">
-                <div class="bg bg--embed">
-                    @if ($heroImage !== '')
-                        <div class="bg u-bg-cover">
-                            <img src="{{ $heroImage }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
-                        </div>
-                    @endif
-                    <div class="bg bg--opacity" style="opacity:0.25"></div>
-                </div>
-            </div>
-
-            <div class="block__padding block__hero-height u-flex-column-middle">
-                <div class="hero__body">
-                    <span class="hero__preheading">{{ strtoupper($page['type']) }}</span>
-                    <h1 class="hero__title theme-title">{{ $page['title'] }}</h1>
-                    <hr class="hero__hr">
-                </div>
-            </div>
-
-            <a class="btn-anchor js-page-down" href="#content" aria-label="Scroll to page content"><span></span></a>
-        </section>
-
-        <section class="b-intro block block--light" id="content">
-            <div class="block__padding">
-                <div class="block-head u-max-width-med">
-                    <div class="block-heading">
-                        <span class="block-head__eyebrow">{{ $page['type'] }}</span>
-                        <h2 class="block-head__title">{{ $page['heading_two'] }}</h2>
-                    </div>
-
-                    <div class="block-copy">
-                        <div class="block-head__body u-no-margin-content">
-                            {!! $page['description'] !!}
-                        </div>
-
-                        <div class="block-cta u-text-center b-intro__buttons">
-                            <a class="btn btn-centred" href="{{ route('home') }}#contact">Enquire Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        @if (count($galleryImages) > 0)
-            <section class="b-gallery-masonry block block--light">
-                <div class="block__padding js-gmasonry">
-                    <div class="gmasonry__wrap">
-                    @foreach ($galleryImages as $index => $image)
-                        <div class="gmasonry__item col col-sm-6 col-lg-4 col--gmasonry">
-                            <div data-gmasonry-slide="{{ $index }}" data-gmasonry-filters="false">
-                                <img src="{{ $image }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
-                            </div>
-                            <a class="gmasonry__download" href="{{ $image }}" download>Download</a>
-                        </div>
+        @if ($isPost)
+            <section class="post-hero-intro" id="content">
+                @if ($eventDateLabel !== '')
+                    <span class="post-hero-intro__date">{{ strtoupper($eventDateLabel) }}</span>
+                @endif
+                <h1 class="post-hero-intro__title">{{ $page['title'] }}</h1>
+                @if ($page['meta_description'] !== '')
+                    <p class="post-hero-intro__summary">{{ $page['meta_description'] }}</p>
+                @endif
+                <div class="post-share" aria-label="Share links">
+                    <span>Share:</span>
+                    @foreach ($socialLinks as $socialLink)
+                        <a href="{{ $socialLink['url'] }}" target="_blank" rel="noreferrer" aria-label="{{ $socialLink['label'] }}">{{ strtoupper(substr($socialLink['label'], 0, 1)) }}</a>
                     @endforeach
+                </div>
+            </section>
+
+            @if ($heroImage !== '')
+                <section class="post-hero-image">
+                    <img src="{{ $heroImage }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
+                </section>
+            @endif
+
+            <section class="post-section">
+                <div class="post-section__inner">
+                    <h2 class="post-section__heading">{{ $briefHeading }}</h2>
+                    <div class="post-section__copy">
+                        {!! $page['description'] !!}
                     </div>
                 </div>
             </section>
+
+            @if (count($galleryImages) > 0)
+                <section class="post-gallery">
+                    <div class="post-gallery__grid">
+                        @foreach ($galleryImages as $image)
+                            <div class="post-gallery__item">
+                                <img src="{{ $image }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
+                            </div>
+                        @endforeach
+                    </div>
+                </section>
+            @endif
+
+            @if ($deliveryDescription !== '')
+                <section class="post-section">
+                    <div class="post-section__inner">
+                        <h2 class="post-section__heading">{{ $deliveryHeading }}</h2>
+                        <div class="post-section__copy">
+                            {!! nl2br(e($deliveryDescription)) !!}
+                        </div>
+                    </div>
+                </section>
+            @endif
+        @else
+            <section class="hero block block--dark block--has-bg">
+                <div class="hero__bg">
+                    <div class="bg bg--embed">
+                        @if ($heroImage !== '')
+                            <div class="bg u-bg-cover">
+                                <img src="{{ $heroImage }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
+                            </div>
+                        @endif
+                        <div class="bg bg--opacity" style="opacity:0.25"></div>
+                    </div>
+                </div>
+
+                <div class="block__padding block__hero-height u-flex-column-middle">
+                    <div class="hero__body">
+                        <span class="hero__preheading">{{ strtoupper($page['type']) }}</span>
+                        <h1 class="hero__title theme-title">{{ $page['title'] }}</h1>
+                        <hr class="hero__hr">
+                    </div>
+                </div>
+
+                <a class="btn-anchor js-page-down" href="#content" aria-label="Scroll to page content"><span></span></a>
+            </section>
+
+            <section class="b-intro block block--light" id="content">
+                <div class="block__padding">
+                    <div class="block-head u-max-width-med">
+                        <div class="block-heading">
+                            <span class="block-head__eyebrow">{{ $page['type'] }}</span>
+                            <h2 class="block-head__title">{{ $page['heading_two'] }}</h2>
+                        </div>
+
+                        <div class="block-copy">
+                            <div class="block-head__body u-no-margin-content">
+                                {!! $page['description'] !!}
+                            </div>
+
+                            <div class="block-cta u-text-center b-intro__buttons">
+                                <a class="btn btn-centred" href="{{ route('home') }}#contact">Enquire Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            @if (count($galleryImages) > 0)
+                <section class="b-gallery-masonry block block--light">
+                    <div class="block__padding js-gmasonry">
+                        <div class="gmasonry__wrap">
+                        @foreach ($galleryImages as $index => $image)
+                            <div class="gmasonry__item col col-sm-6 col-lg-4 col--gmasonry">
+                                <div data-gmasonry-slide="{{ $index }}" data-gmasonry-filters="false">
+                                    <img src="{{ $image }}" alt="{{ $page['image_alt'] !== '' ? $page['image_alt'] : $page['title'] }}">
+                                </div>
+                                <a class="gmasonry__download" href="{{ $image }}" download>Download</a>
+                            </div>
+                        @endforeach
+                        </div>
+                    </div>
+                </section>
+            @endif
         @endif
 
     </main>

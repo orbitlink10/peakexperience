@@ -6,10 +6,12 @@
 @section('content')
     @php
         $isEditing = $formMode === 'edit';
+        $isPostContext = ($adminContext ?? 'pages') === 'posts';
         $imagePath = old('image_path', (string) ($pageData['image'] ?? ''));
         $imageUrl = \App\Support\HomepageContent::assetUrl($imagePath);
         $galleryImages = old('gallery_existing', is_array($pageData['gallery_images'] ?? null) ? $pageData['gallery_images'] : []);
         $descriptionValue = old('description', (string) ($pageData['description'] ?? ''));
+        $deliveryDescriptionValue = old('delivery_description', (string) ($pageData['delivery_description'] ?? ''));
     @endphp
 
     <div class="pages-admin-shell">
@@ -53,19 +55,26 @@
                                         @method('PUT')
                                     @endif
 
-                                    <div class="form-group">
-                                        <label for="meta_title">Meta Title</label>
-                                        <input id="meta_title" type="text" name="meta_title" value="{{ old('meta_title', $pageData['meta_title']) }}" placeholder="Enter Meta Title" class="form-control">
-                                    </div>
+                                    @if ($isPostContext)
+                                        <div class="form-group">
+                                            <label for="event_date">Event Date</label>
+                                            <input id="event_date" type="date" name="event_date" value="{{ old('event_date', $pageData['event_date'] ?? '') }}" class="form-control">
+                                        </div>
+                                    @else
+                                        <div class="form-group">
+                                            <label for="meta_title">Meta Title</label>
+                                            <input id="meta_title" type="text" name="meta_title" value="{{ old('meta_title', $pageData['meta_title']) }}" placeholder="Enter Meta Title" class="form-control">
+                                        </div>
+                                    @endif
 
                                     <div class="form-group">
-                                        <label for="meta_description">Meta Description</label>
+                                        <label for="meta_description">{{ $isPostContext ? 'Summary (Meta Description)' : 'Meta Description' }}</label>
                                         <input id="meta_description" type="text" name="meta_description" value="{{ old('meta_description', $pageData['meta_description']) }}" placeholder="Enter Meta Description" class="form-control">
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="title">Page Title</label>
-                                        <input id="title" type="text" name="title" value="{{ old('title', $pageData['title']) }}" placeholder="Enter Keyword Title" class="form-control">
+                                        <label for="title">{{ $isPostContext ? 'Conference / Event Title' : 'Page Title' }}</label>
+                                        <input id="title" type="text" name="title" value="{{ old('title', $pageData['title']) }}" placeholder="{{ $isPostContext ? 'Enter Event Title' : 'Enter Keyword Title' }}" class="form-control">
                                     </div>
 
                                     <div class="form-group">
@@ -74,21 +83,25 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="heading_two">Heading 2</label>
-                                        <input id="heading_two" type="text" name="heading_two" value="{{ old('heading_two', $pageData['heading_two']) }}" placeholder="Enter Heading 2" class="form-control">
+                                        <label for="heading_two">{{ $isPostContext ? 'Brief Heading' : 'Heading 2' }}</label>
+                                        <input id="heading_two" type="text" name="heading_two" value="{{ old('heading_two', $pageData['heading_two']) }}" placeholder="{{ $isPostContext ? 'Brief' : 'Enter Heading 2' }}" class="form-control">
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="type">Type</label>
-                                        <select id="type" name="type" class="form-control select2">
-                                            @foreach ($pageTypes as $type)
-                                                <option value="{{ $type }}" @selected(old('type', $pageData['type']) === $type)>{{ $type }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    @if ($isPostContext)
+                                        <input type="hidden" name="type" value="Post">
+                                    @else
+                                        <div class="form-group">
+                                            <label for="type">Type</label>
+                                            <select id="type" name="type" class="form-control select2">
+                                                @foreach ($pageTypes as $type)
+                                                    <option value="{{ $type }}" @selected(old('type', $pageData['type']) === $type)>{{ $type }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
 
                                     <div class="form-group">
-                                        <label>Page Description:</label>
+                                        <label>{{ $isPostContext ? 'Brief:' : 'Page Description:' }}</label>
                                         <div class="pages-editor" data-editor-root>
                                             <div class="pages-editor-menubar" aria-label="Editor menu">
                                                 <div class="pages-editor-menu" data-editor-menu>
@@ -174,8 +187,20 @@
                                         <textarea id="textarea" name="description" class="pages-editor-textarea" data-editor-textarea>{{ $descriptionValue }}</textarea>
                                     </div>
 
+                                    @if ($isPostContext)
+                                        <div class="form-group">
+                                            <label for="delivery_heading">Delivery Heading</label>
+                                            <input id="delivery_heading" type="text" name="delivery_heading" value="{{ old('delivery_heading', $pageData['delivery_heading'] ?? 'Delivery') }}" placeholder="Delivery" class="form-control">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="delivery_description">Delivery:</label>
+                                            <textarea id="delivery_description" name="delivery_description" rows="8" class="form-control pages-post-textarea" placeholder="Enter delivery details">{{ $deliveryDescriptionValue }}</textarea>
+                                        </div>
+                                    @endif
+
                                     <div class="form-group">
-                                        <label for="image_file">Upload Image (optional, only for Posts)</label>
+                                        <label for="image_file">{{ $isPostContext ? 'Hero Image' : 'Upload Image (optional, only for Posts)' }}</label>
                                         <input type="hidden" name="image_path" value="{{ $imagePath }}">
                                         <div class="custom-file">
                                             <input id="image_file" type="file" name="image_file" accept="image/*" class="custom-file-input" data-file-input>

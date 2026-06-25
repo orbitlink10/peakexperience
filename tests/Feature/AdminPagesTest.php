@@ -28,7 +28,7 @@ class AdminPagesTest extends TestCase
                     'image' => '',
                     'image_alt' => 'Starlink Dish',
                     'heading_two' => 'Why Starlink matters',
-                    'type' => 'Post',
+                    'type' => 'Page',
                     'description' => '<p>Body copy</p>',
                     'created_at' => now()->toIso8601String(),
                     'updated_at' => now()->toIso8601String(),
@@ -158,9 +158,12 @@ class AdminPagesTest extends TestCase
                 'meta_title' => 'Starlink Nairobi Meta',
                 'meta_description' => 'Starlink Nairobi meta description',
                 'title' => 'Starlink Nairobi',
+                'event_date' => '2026-03-20',
                 'image_file' => UploadedFile::fake()->createWithContent('starlink.png', base64_decode(self::TINY_PNG)),
                 'image_alt' => 'Starlink Nairobi',
                 'heading_two' => 'Starlink Nairobi Heading',
+                'delivery_heading' => 'Delivery',
+                'delivery_description' => 'Delivered a complete conference experience.',
                 'type' => 'Post',
                 'description' => '<p>Detailed post description.</p>',
             ]);
@@ -173,6 +176,8 @@ class AdminPagesTest extends TestCase
         $this->assertNotNull($pages);
         $this->assertSame('starlink-nairobi', $pages->value[0]['slug']);
         $this->assertSame('Post', $pages->value[0]['type']);
+        $this->assertSame('2026-03-20', $pages->value[0]['event_date']);
+        $this->assertSame('Delivered a complete conference experience.', $pages->value[0]['delivery_description']);
         $this->assertStringStartsWith('homepage/pages/', $pages->value[0]['image']);
         Storage::disk('public')->assertExists($pages->value[0]['image']);
     }
@@ -201,7 +206,7 @@ class AdminPagesTest extends TestCase
                     'image' => $imagePath,
                     'image_alt' => 'Old alt',
                     'heading_two' => 'Old heading',
-                    'type' => 'Post',
+                    'type' => 'Page',
                     'description' => '<p>Old body</p>',
                     'created_at' => now()->subDay()->toIso8601String(),
                     'updated_at' => now()->subDay()->toIso8601String(),
@@ -257,7 +262,7 @@ class AdminPagesTest extends TestCase
                     'image_alt' => 'Starlink Nairobi',
                     'gallery_images' => [$galleryPath],
                     'heading_two' => 'Stay connected in Nairobi',
-                    'type' => 'Post',
+                    'type' => 'Page',
                     'description' => '<p>Rendered page content</p>',
                     'created_at' => now()->toIso8601String(),
                     'updated_at' => now()->toIso8601String(),
@@ -277,6 +282,49 @@ class AdminPagesTest extends TestCase
         $response->assertDontSee('<p class="block-head__subtitle">Starlink Nairobi description</p>', false);
         $response->assertDontSee('<p>Starlink Nairobi description</p>', false);
         $response->assertSee('Rendered page content', false);
+    }
+
+    public function test_public_post_preview_renders_story_event_structure(): void
+    {
+        HomepageSetting::query()->create([
+            'key' => 'pages',
+            'value' => [
+                [
+                    'id' => 'post-1',
+                    'slug' => 'conference-with-difference',
+                    'meta_title' => 'Conference with Difference',
+                    'meta_description' => 'A 400-person conference designed to empower and inspire employees.',
+                    'title' => 'A Conference with a Difference',
+                    'image' => 'https://example.com/hero.jpg',
+                    'image_alt' => 'Conference event',
+                    'gallery_images' => [
+                        'https://example.com/gallery-one.jpg',
+                        'https://example.com/gallery-two.jpg',
+                    ],
+                    'event_date' => '2026-03-20',
+                    'heading_two' => 'Brief',
+                    'delivery_heading' => 'Delivery',
+                    'delivery_description' => 'We created a bold people-first event.',
+                    'type' => 'Post',
+                    'description' => '<p>The client wanted a company-wide conference.</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+            ],
+        ]);
+
+        $response = $this->get(route('pages.show', ['page' => 'conference-with-difference']));
+
+        $response->assertOk();
+        $response->assertSee('FRIDAY 20 MARCH 2026');
+        $response->assertSee('A Conference with a Difference');
+        $response->assertSee('A 400-person conference designed to empower and inspire employees.');
+        $response->assertSee('class="post-hero-image"', false);
+        $response->assertSee('class="post-gallery__grid"', false);
+        $response->assertSee('Brief');
+        $response->assertSee('Delivery');
+        $response->assertSee('We created a bold people-first event.');
+        $response->assertSee('https://example.com/gallery-one.jpg', false);
     }
 
     public function test_public_navigation_lists_saved_pages_under_what_we_do(): void

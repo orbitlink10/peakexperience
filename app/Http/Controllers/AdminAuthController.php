@@ -221,7 +221,11 @@ class AdminAuthController extends Controller
     public function createPost(Request $request): View
     {
         return view('admin.pages.form', $this->sharedData($request, 'posts') + $this->pageAdminContext('posts') + [
-            'pageData' => array_merge(PageContent::defaults(), ['type' => 'Post']),
+            'pageData' => array_merge(PageContent::defaults(), [
+                'heading_two' => 'Brief',
+                'delivery_heading' => 'Delivery',
+                'type' => 'Post',
+            ]),
             'pageTypes' => ['Post'],
             'formMode' => 'create',
         ]);
@@ -393,7 +397,7 @@ class AdminAuthController extends Controller
         abort_unless(is_array($page), 404);
         abort_unless($adminContext !== 'posts' || $page['type'] === 'Post', 404);
 
-        $payload = $this->validatedPagePayload($request);
+        $payload = $this->validatedPagePayload($request, $adminContext);
         if ($adminContext === 'posts') {
             $payload['type'] = 'Post';
         }
@@ -409,7 +413,10 @@ class AdminAuthController extends Controller
             'image' => $imagePath,
             'image_alt' => $payload['image_alt'],
             'gallery_images' => $galleryImages,
+            'event_date' => $payload['event_date'],
             'heading_two' => $payload['heading_two'],
+            'delivery_heading' => $payload['delivery_heading'],
+            'delivery_description' => $payload['delivery_description'],
             'type' => $payload['type'],
             'description' => $payload['description'],
             'created_at' => (string) ($page['created_at'] ?? now()->toIso8601String()),
@@ -712,7 +719,7 @@ class AdminAuthController extends Controller
     private function storePageLikeContent(Request $request, string $adminContext): RedirectResponse
     {
         $pages = PageContent::load();
-        $payload = $this->validatedPagePayload($request);
+        $payload = $this->validatedPagePayload($request, $adminContext);
         if ($adminContext === 'posts') {
             $payload['type'] = 'Post';
         }
@@ -730,7 +737,10 @@ class AdminAuthController extends Controller
             'image' => $imagePath,
             'image_alt' => $payload['image_alt'],
             'gallery_images' => $galleryImages,
+            'event_date' => $payload['event_date'],
             'heading_two' => $payload['heading_two'],
+            'delivery_heading' => $payload['delivery_heading'],
+            'delivery_description' => $payload['delivery_description'],
             'type' => $payload['type'],
             'description' => $payload['description'],
             'created_at' => $timestamp,
@@ -798,10 +808,12 @@ class AdminAuthController extends Controller
         return $adminContext === 'posts' ? 'Posts' : 'Pages';
     }
 
-    private function validatedPagePayload(Request $request): array
+    private function validatedPagePayload(Request $request, string $adminContext = 'pages'): array
     {
+        $isPosts = $adminContext === 'posts';
         $validated = $request->validate([
-            'meta_title' => ['required', 'string', 'max:160'],
+            'event_date' => [$isPosts ? 'required' : 'nullable', 'date'],
+            'meta_title' => [$isPosts ? 'nullable' : 'required', 'string', 'max:160'],
             'meta_description' => ['required', 'string', 'max:320'],
             'title' => ['required', 'string', 'max:180'],
             'image_path' => ['nullable', 'string', 'max:255'],
@@ -814,17 +826,24 @@ class AdminAuthController extends Controller
             'gallery_remove' => ['nullable', 'array', 'max:6'],
             'gallery_remove.*' => ['nullable', 'boolean'],
             'image_alt' => ['nullable', 'string', 'max:180'],
-            'heading_two' => ['required', 'string', 'max:220'],
+            'heading_two' => [$isPosts ? 'nullable' : 'required', 'string', 'max:220'],
+            'delivery_heading' => ['nullable', 'string', 'max:220'],
+            'delivery_description' => ['nullable', 'string'],
             'type' => ['required', Rule::in($this->pageTypes())],
             'description' => ['required', 'string'],
         ]);
 
+        $title = trim((string) $validated['title']);
+
         return [
-            'meta_title' => trim((string) $validated['meta_title']),
+            'event_date' => trim((string) ($validated['event_date'] ?? '')),
+            'meta_title' => trim((string) ($validated['meta_title'] ?? '')) ?: $title,
             'meta_description' => trim((string) $validated['meta_description']),
-            'title' => trim((string) $validated['title']),
+            'title' => $title,
             'image_alt' => trim((string) ($validated['image_alt'] ?? '')),
-            'heading_two' => trim((string) $validated['heading_two']),
+            'heading_two' => trim((string) ($validated['heading_two'] ?? '')) ?: 'Brief',
+            'delivery_heading' => trim((string) ($validated['delivery_heading'] ?? '')) ?: 'Delivery',
+            'delivery_description' => trim((string) ($validated['delivery_description'] ?? '')),
             'type' => trim((string) $validated['type']),
             'description' => trim((string) $validated['description']),
         ];

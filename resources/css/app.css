@@ -648,6 +648,13 @@
         pointer-events: none;
     }
 
+    .pages-post-textarea {
+        height: auto;
+        min-height: 220px;
+        line-height: 1.6;
+        resize: vertical;
+    }
+
     .pages-form-actions {
         @apply flex flex-col gap-3 pt-2 sm:flex-row;
     }
