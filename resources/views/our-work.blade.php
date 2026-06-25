@@ -5,10 +5,12 @@
     $socialLinks = is_array($socialLinks ?? null) ? $socialLinks : [];
     $whatsappUrl = trim((string) ($whatsappUrl ?? ''));
     $hasWhatsapp = filled($whatsappUrl);
-    $navPages = array_values(array_filter(
-        is_array($navPages ?? null) ? $navPages : [],
-        fn ($item) => is_array($item) && filled($item['title'] ?? '') && filled($item['slug'] ?? '')
-    ));
+    $navPages = [
+        ['slug' => 'conferences', 'title' => 'Conferences'],
+        ['slug' => 'brand-experiences', 'title' => 'Brand Experience'],
+        ['slug' => 'exhibitions', 'title' => 'Exhibitions'],
+    ];
+    $caseStudyCategories = ['Conferences', 'Brand Experience', 'Exhibitions', 'Award Nights', 'Hybrid Events', 'Roadshows', 'Outdoor Builds'];
     $logoUrl = \App\Support\HomepageContent::assetUrl(
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
@@ -19,7 +21,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Our Work | Peak Experience</title>
+    <title>Case Studies | Peak Experience</title>
     <meta name="description" content="Explore Peak Experience case studies across conferences, exhibitions, brand experiences, and live event production in Kenya.">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,12 +29,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('story-home.css') }}">
     <style>
-        .work-page-main{background:#f7f3ec}
-        .work-page-hero{padding:clamp(70px,8vw,120px) 0 48px}
-        .work-page-kicker{display:block;margin-bottom:16px;color:#0f766e;font-size:14px;font-weight:800;letter-spacing:.22em;text-transform:uppercase}
-        .work-page-hero h1{max-width:860px;margin:0;color:#202633;font-size:clamp(54px,8vw,118px);line-height:.92;letter-spacing:0;text-transform:uppercase}
-        .work-page-hero p{max-width:720px;margin:28px 0 0;color:#667085;font-size:clamp(20px,2vw,30px);line-height:1.35}
-        .work-list-section{padding:0 0 clamp(72px,8vw,120px)}
+        @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Light.woff2") format("woff2");font-weight:300;font-style:normal;font-display:swap}
+        @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+        .work-page-main{background:#f7f3ec;font-family:"GT Walsheim",Helvetica,Arial,sans-serif}
+        .work-page-hero{padding:clamp(78px,8vw,128px) 0 48px;text-align:center}
+        .work-page-kicker{display:block;margin-bottom:18px;color:#0f766e;font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+        .work-page-hero h1{max-width:1040px;margin:0 auto;color:#202633;font-size:clamp(64px,10vw,150px);font-weight:300;line-height:.9;letter-spacing:0;text-transform:uppercase}
+        .work-page-hero p{max-width:760px;margin:28px auto 0;color:#667085;font-size:clamp(21px,2.4vw,30px);font-weight:300;line-height:1.35}
+        .work-list-section{padding:clamp(54px,6vw,88px) 0 clamp(72px,8vw,120px)}
         .work-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
         .work-card{overflow:hidden;border-radius:8px;background:#fff;color:#202633;text-decoration:none;box-shadow:0 18px 45px rgba(32,38,51,.08)}
         .work-card-media{aspect-ratio:4/3;background:#d9d9d9}
@@ -43,7 +48,7 @@
         .work-card-body p{margin:14px 0 0;color:#667085;font-size:17px;line-height:1.55}
         .work-empty{border:1px solid rgba(32,38,51,.12);border-radius:8px;background:#fff;padding:48px;color:#667085;font-size:20px}
         @media(max-width:980px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-        @media(max-width:640px){.work-grid{grid-template-columns:1fr}.work-page-hero{padding-top:48px}.work-card-body{padding:20px}}
+        @media(max-width:640px){.work-grid{grid-template-columns:1fr}.work-page-hero{padding-top:48px}.work-page-hero h1{font-size:48px}.work-card-body{padding:20px}}
     </style>
 </head>
 <body id="top">
@@ -77,7 +82,7 @@
                                 </ul>
                             @endif
                         </li>
-                        <li><a href="{{ route('our-work') }}">Our Work</a></li>
+                        <li><a href="{{ route('our-work') }}">Case Studies</a></li>
                         <li><a href="{{ route('home') }}#services">Our Services</a></li>
                         <li><a href="{{ route('home') }}#process">Our Stories</a></li>
                         <li><a href="{{ route('home') }}#intro">About Us</a></li>
@@ -111,7 +116,7 @@
                                     </ul>
                                 @endif
                             </li>
-                            <li><a href="{{ route('our-work') }}">Our Work</a></li>
+                            <li><a href="{{ route('our-work') }}">Case Studies</a></li>
                             <li><a href="{{ route('home') }}#services">Our Services</a></li>
                             <li><a href="{{ route('home') }}#process">Our Stories</a></li>
                             <li><a href="{{ route('home') }}#intro">About Us</a></li>
@@ -125,9 +130,21 @@
         <main class="work-page-main">
             <section class="work-page-hero">
                 <div class="wrap">
-                    <span class="work-page-kicker">Peak Experience Case Studies</span>
-                    <h1>Our Work</h1>
+                    <span class="work-page-kicker">Peak Experience</span>
+                    <h1>Case Studies</h1>
                     <p>Explore the live moments Peak Experience has shaped for conferences, exhibitions, brand experiences, and corporate events across Kenya.</p>
+                </div>
+            </section>
+
+            <section class="strip" aria-label="Case study categories">
+                <div class="wrap strip-overflow">
+                    <ul class="strip-track">
+                        @for ($i = 0; $i < 2; $i++)
+                            @foreach ($caseStudyCategories as $category)
+                                <li>{{ $category }}</li>
+                            @endforeach
+                        @endfor
+                    </ul>
                 </div>
             </section>
 
@@ -165,36 +182,59 @@
             </section>
         </main>
 
-        <footer class="footer">
-            <div class="wrap">
-                <div class="footer-panel">
-                    <div class="footer-copy">
-                        <span class="footer-kicker">Peak Experience</span>
-                        <strong>Creative production for live experiences that need polish.</strong>
-                        <p>Event staging, media systems, exhibition builds, and disciplined show-day delivery for brands and organisers across Kenya.</p>
+        <footer class="se-footer-brand block block--colored">
+            <div class="se-block-padding">
+                <div class="se-footer-inner">
+                    <div class="se-footer-logo">
+                        @if ($hasLogo)
+                            <img src="{{ $logoUrl }}" alt="Peak Experience logo">
+                        @else
+                            <strong>Peak Experience</strong>
+                        @endif
                     </div>
 
-                    <nav class="footer-links" aria-label="Footer navigation">
-                        <a href="{{ route('home') }}#intro">About</a>
-                        <a href="{{ route('home') }}#services">Services</a>
-                        <a href="{{ route('our-work') }}">Our Work</a>
-                        <a href="{{ route('home') }}#contact">Contact Us</a>
-                    </nav>
-
-                    <div class="footer-links">
-                        @if ($hasContactEmail)
-                            <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
-                        @endif
-                        @foreach ($contactPhones as $phone)
-                            <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
-                        @endforeach
+                    <nav class="se-footer-social" aria-label="Social links">
                         @foreach ($socialLinks as $socialLink)
                             <a href="{{ $socialLink['url'] }}" target="_blank" rel="noreferrer">{{ $socialLink['label'] }}</a>
                         @endforeach
                         @if ($hasWhatsapp)
                             <a href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer">WhatsApp</a>
                         @endif
-                        <a href="#top">Back To Top</a>
+                    </nav>
+
+                    <div class="se-footer-contact">
+                        @if ($hasContactEmail)
+                            <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
+                        @endif
+                        @foreach ($contactPhones as $phone)
+                            <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <footer class="se-footer-group block block--light">
+            <div class="se-block-padding">
+                <div class="se-footer-columns">
+                    <div>
+                        <h3>What We Do</h3>
+                        <a href="{{ route('home') }}#services">Event Production</a>
+                        <a href="{{ route('home') }}#services">Audio Systems</a>
+                        <a href="{{ route('home') }}#services">Media</a>
+                    </div>
+                    <div>
+                        <h3>Company</h3>
+                        <a href="{{ route('home') }}#intro">About Us</a>
+                        <a href="{{ route('our-work') }}">Case Studies</a>
+                        <a href="{{ route('home') }}#contact">Contact</a>
+                    </div>
+                    <div>
+                        <h3>Enquiries</h3>
+                        <a href="{{ route('home') }}#contact">Start a Brief</a>
+                        @if ($hasContactEmail)
+                            <a href="mailto:{{ $contactEmail }}">Email Us</a>
+                        @endif
                     </div>
                 </div>
             </div>

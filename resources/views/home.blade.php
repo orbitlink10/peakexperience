@@ -33,10 +33,11 @@
     $paymentUrl = trim((string) ($paymentUrl ?? ''));
     $paymentLabel = trim((string) ($paymentLabel ?? 'Make Payment'));
     $hasPaymentUrl = filled($paymentUrl);
-    $navPages = array_values(array_filter(
-        is_array($navPages ?? null) ? $navPages : [],
-        fn ($item) => is_array($item) && filled($item['title'] ?? '') && filled($item['slug'] ?? '')
-    ));
+    $navPages = [
+        ['slug' => 'conferences', 'title' => 'Conferences'],
+        ['slug' => 'brand-experiences', 'title' => 'Brand Experience'],
+        ['slug' => 'exhibitions', 'title' => 'Exhibitions'],
+    ];
     $logoUrl = \App\Support\HomepageContent::assetUrl(
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
@@ -120,7 +121,7 @@
                                 </ul>
                             @endif
                         </li>
-                        <li><a href="{{ route('our-work') }}">Our Work</a></li>
+                        <li><a href="{{ route('our-work') }}">Case Studies</a></li>
                         <li><a href="#services">Our Services</a></li>
                         <li><a href="#process">Our Stories</a></li>
                         <li><a href="#intro">About Us</a></li>
@@ -154,7 +155,7 @@
                                     </ul>
                                 @endif
                             </li>
-                            <li><a href="{{ route('our-work') }}">Our Work</a></li>
+                            <li><a href="{{ route('our-work') }}">Case Studies</a></li>
                             <li><a href="#services">Our Services</a></li>
                             <li><a href="#process">Our Stories</a></li>
                             <li><a href="#intro">About Us</a></li>
@@ -243,7 +244,7 @@
 
                         <p>Peak Experience combines creative direction, staging, media systems, and venue execution so audiences experience one coherent story instead of a room full of disconnected details. From venue planning and show flow to media support and live delivery, every layer is built to feel polished, calm, and intentional from the first arrival to the final cue.</p>
 
-                        <a class="button button-primary intro-button" href="{{ route('our-work') }}">Discover Our Work</a>
+                        <a class="button button-primary intro-button" href="{{ route('our-work') }}">View Case Studies</a>
                     </div>
                 </div>
             </section>
@@ -325,7 +326,7 @@
 
                         <div class="proof-stage-copy">
                             <span class="proof-stage-kicker">Innovative. Impactful. Seamless.</span>
-                            <h2>Our Work</h2>
+                            <h2>Case Studies</h2>
                             <p>Explore the conferences, launches, exhibitions, executive forums, and hybrid productions Peak Experience has shaped across Kenya. Every brief is translated into an environment that feels polished, immersive, and tightly executed from the first guest arrival to the final cue.</p>
                             <a class="button proof-stage-button" href="{{ route('our-work') }}">Discover More</a>
                         </div>
@@ -528,38 +529,59 @@
             </section>
         </main>
 
-        <footer class="footer">
-            <div class="wrap">
-                <div class="footer-panel">
-                    <div class="footer-copy">
-                        <span class="footer-kicker">Peak Experience</span>
-                        <strong>Creative production for live experiences that need polish.</strong>
-                        <p>Event staging, media systems, exhibition builds, and disciplined show-day delivery for brands and organisers across Kenya.</p>
+        <footer class="se-footer-brand block block--colored">
+            <div class="se-block-padding">
+                <div class="se-footer-inner">
+                    <div class="se-footer-logo">
+                        @if ($hasLogo)
+                            <img src="{{ $logoUrl }}" alt="Peak Experience logo">
+                        @else
+                            <strong>Peak Experience</strong>
+                        @endif
                     </div>
 
-                    <nav class="footer-links" aria-label="Footer navigation">
-                        <a href="#intro">About</a>
-                        <a href="#services">Services</a>
-                        <a href="{{ route('our-work') }}">Our Work</a>
-                        <a href="#process">Process</a>
-                        <a href="#contact">Contact Us</a>
-                    </nav>
-
-                    <div class="footer-links">
-                        @if ($hasContactEmail)
-                            <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
-                        @endif
-                        @foreach ($contactPhones as $phone)
-                            <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
-                        @endforeach
+                    <nav class="se-footer-social" aria-label="Social links">
                         @foreach ($socialLinks as $socialLink)
                             <a href="{{ $socialLink['url'] }}" target="_blank" rel="noreferrer">{{ $socialLink['label'] }}</a>
                         @endforeach
                         @if ($hasWhatsapp)
                             <a href="{{ $whatsappUrl }}" target="_blank" rel="noreferrer">WhatsApp</a>
                         @endif
-                        <a href="#top">Back To Top</a>
-                        <span>Live event delivery across Kenya</span>
+                    </nav>
+
+                    <div class="se-footer-contact">
+                        @if ($hasContactEmail)
+                            <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
+                        @endif
+                        @foreach ($contactPhones as $phone)
+                            <a href="tel:{{ $phone['dial'] }}">{{ $phone['display'] }}</a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <footer class="se-footer-group block block--light">
+            <div class="se-block-padding">
+                <div class="se-footer-columns">
+                    <div>
+                        <h3>What We Do</h3>
+                        <a href="#services">Event Production</a>
+                        <a href="#services">Audio Systems</a>
+                        <a href="#services">Media</a>
+                    </div>
+                    <div>
+                        <h3>Company</h3>
+                        <a href="#intro">About Us</a>
+                        <a href="{{ route('our-work') }}">Case Studies</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                    <div>
+                        <h3>Enquiries</h3>
+                        <a href="#contact">Start a Brief</a>
+                        @if ($hasContactEmail)
+                            <a href="mailto:{{ $contactEmail }}">Email Us</a>
+                        @endif
                     </div>
                 </div>
             </div>

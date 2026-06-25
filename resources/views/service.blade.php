@@ -12,10 +12,11 @@
     $socialLinks = is_array($socialLinks ?? null) ? $socialLinks : [];
     $whatsappUrl = trim((string) ($whatsappUrl ?? ''));
     $hasWhatsapp = filled($whatsappUrl);
-    $navPages = array_values(array_filter(
-        is_array($navPages ?? null) ? $navPages : [],
-        fn ($item) => is_array($item) && filled($item['title'] ?? '') && filled($item['slug'] ?? '')
-    ));
+    $navPages = [
+        ['slug' => 'conferences', 'title' => 'Conferences'],
+        ['slug' => 'brand-experiences', 'title' => 'Brand Experience'],
+        ['slug' => 'exhibitions', 'title' => 'Exhibitions'],
+    ];
     $logoUrl = \App\Support\HomepageContent::assetUrl(
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
@@ -70,7 +71,7 @@
                             @endif
                         </li>
                         <li><a href="{{ route('home') }}#services">Our Services</a></li>
-                        <li><a href="{{ route('our-work') }}">Our Work</a></li>
+                        <li><a href="{{ route('our-work') }}">Case Studies</a></li>
                         <li><a href="{{ route('home') }}#process">Our Stories</a></li>
                         <li><a href="{{ route('home') }}#contact">Contact Us</a></li>
                     </ul>
@@ -104,7 +105,7 @@
                                 @endif
                             </li>
                             <li><a href="{{ route('home') }}#services">Our Services</a></li>
-                            <li><a href="{{ route('our-work') }}">Our Work</a></li>
+                            <li><a href="{{ route('our-work') }}">Case Studies</a></li>
                             <li><a href="{{ route('home') }}#process">Our Stories</a></li>
                             <li><a href="{{ route('home') }}#contact">Contact Us</a></li>
                         </ul>
