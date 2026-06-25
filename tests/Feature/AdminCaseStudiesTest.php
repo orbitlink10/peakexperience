@@ -39,8 +39,8 @@ class AdminCaseStudiesTest extends TestCase
             ->get(route('admin.case-studies.index'));
 
         $response->assertOk();
-        $response->assertSee('Case Study List');
-        $response->assertSee('Add Case Study');
+        $response->assertSee('Our Work List');
+        $response->assertSee('Add Our Work');
         $response->assertSee('Summit Production');
         $response->assertDontSee('<th>Heading</th>', false);
         $response->assertSee('<th>Title</th>', false);

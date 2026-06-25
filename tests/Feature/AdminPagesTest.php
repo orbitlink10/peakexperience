@@ -102,9 +102,9 @@ class AdminPagesTest extends TestCase
             ->get(route('admin.posts.index'));
 
         $response->assertOk();
-        $response->assertSee('Posts');
-        $response->assertSee('Post List');
-        $response->assertSee('Add Post');
+        $response->assertSee('Case Study');
+        $response->assertSee('Case Study List');
+        $response->assertSee('Add Case Study');
         $response->assertSee(route('admin.posts.create'), false);
         $response->assertSee(route('admin.posts.edit', ['postId' => 'post-1']), false);
         $response->assertSee('Starlink in Kenya');
@@ -169,7 +169,7 @@ class AdminPagesTest extends TestCase
             ]);
 
         $response->assertRedirect(route('admin.posts.index'));
-        $response->assertSessionHas('status', 'Post created successfully.');
+        $response->assertSessionHas('status', 'Case study created successfully.');
 
         $pages = HomepageSetting::query()->where('key', 'pages')->first();
 

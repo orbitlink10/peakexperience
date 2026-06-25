@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Case Studies | Peak Experience')
-@section('badge', 'Case Study')
+@section('title', 'Our Work | Peak Experience')
+@section('badge', 'Our Work')
 
 @section('content')
     <div class="pages-admin-shell">
@@ -21,13 +21,13 @@
             <div class="container-fluid">
                 <div class="row align-items-center">
                     <div class="col-sm-6">
-                        <h1 class="page-title">Case Studies</h1>
-                        <p class="text-muted">Manage the case studies shown on the Our Work page.</p>
+                        <h1 class="page-title">Our Work</h1>
+                        <p class="text-muted">Manage the work highlights shown on the Our Work page.</p>
                     </div>
                     <div class="col-sm-6 text-right">
                         <a href="{{ route('admin.case-studies.create') }}" class="btn btn-primary font-weight-bold">
                             <i class="fas fa-plus"></i>
-                            Add Case Study
+                            Add Our Work
                         </a>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
             <div class="container-fluid">
                 <div class="card shadow-lg rounded-lg border-0">
                     <div class="card-header">
-                        <h3 class="card-title">Case Study List</h3>
+                        <h3 class="card-title">Our Work List</h3>
                     </div>
 
                     <div class="card-body">
@@ -102,7 +102,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="6" class="pages-empty-state">
-                                                No case studies created yet. Use <strong>Add Case Study</strong> to publish the first item on Our Work.
+                                                No work highlights created yet. Use <strong>Add Our Work</strong> to publish the first item on Our Work.
                                             </td>
                                         </tr>
                                     @endforelse

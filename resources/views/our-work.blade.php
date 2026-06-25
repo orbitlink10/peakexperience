@@ -20,7 +20,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Our Work | Peak Experience</title>
-    <meta name="description" content="Explore Peak Experience posts across conferences, exhibitions, brand experiences, and live event production in Kenya.">
+    <meta name="description" content="Explore Peak Experience case studies across conferences, exhibitions, brand experiences, and live event production in Kenya.">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -125,7 +125,7 @@
         <main class="work-page-main">
             <section class="work-page-hero">
                 <div class="wrap">
-                    <span class="work-page-kicker">Peak Experience Posts</span>
+                    <span class="work-page-kicker">Peak Experience Case Studies</span>
                     <h1>Our Work</h1>
                     <p>Explore the live moments Peak Experience has shaped for conferences, exhibitions, brand experiences, and corporate events across Kenya.</p>
                 </div>
@@ -144,7 +144,7 @@
                                         @if ($imageUrl !== '')
                                             <img src="{{ $imageUrl }}" alt="{{ $post['image_alt'] !== '' ? $post['image_alt'] : $post['title'] }}">
                                         @else
-                                            <div class="work-card-placeholder">Post</div>
+                                            <div class="work-card-placeholder">Case Study</div>
                                         @endif
                                     </div>
                                     <div class="work-card-body">
@@ -159,7 +159,7 @@
                             @endforeach
                         </div>
                     @else
-                        <div class="work-empty">Posts will be published here once they are added in the dashboard.</div>
+                        <div class="work-empty">Case studies will be published here once they are added in the dashboard.</div>
                     @endif
                 </div>
             </section>

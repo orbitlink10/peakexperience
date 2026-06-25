@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', ($formMode === 'edit' ? 'Edit Case Study' : 'Add Case Study') . ' | Peak Experience')
-@section('badge', 'Case Study')
+@section('title', ($formMode === 'edit' ? 'Edit Our Work' : 'Add Our Work') . ' | Peak Experience')
+@section('badge', 'Our Work')
 
 @section('content')
     @php
@@ -23,12 +23,12 @@
             <div class="container-fluid">
                 <div class="row mb-3">
                     <div class="col-sm-6">
-                        <h1 class="font-weight-bold">{{ $isEditing ? 'Edit Case Study' : 'Add Case Study' }}</h1>
+                        <h1 class="font-weight-bold">{{ $isEditing ? 'Edit Our Work' : 'Add Our Work' }}</h1>
                     </div>
                     <div class="col-sm-6 text-right">
                         <a href="{{ route('admin.case-studies.index') }}" class="btn btn-light">
                             <i class="fas fa-arrow-left"></i>
-                            Back to Case Studies
+                            Back to Our Work
                         </a>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                     <div class="col-md-10">
                         <div class="card shadow-sm">
                             <div class="card-header bg-primary text-white">
-                                <h3 class="card-title font-weight-bold">{{ $isEditing ? 'Update Case Study' : 'Add New Case Study' }}</h3>
+                                <h3 class="card-title font-weight-bold">{{ $isEditing ? 'Update Our Work' : 'Add New Work' }}</h3>
                             </div>
 
                             <div class="card-body">
@@ -83,7 +83,7 @@
 
                                     <div class="form-group">
                                         <label for="description">Content</label>
-                                        <textarea id="description" name="description" rows="8" class="form-control" placeholder="Write the short case study summary shown on Our Work.">{{ old('description', $caseStudy['description']) }}</textarea>
+                                        <textarea id="description" name="description" rows="8" class="form-control" placeholder="Write the short work summary shown on Our Work.">{{ old('description', $caseStudy['description']) }}</textarea>
                                     </div>
 
                                     <div class="form-group">

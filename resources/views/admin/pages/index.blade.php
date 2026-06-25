@@ -32,7 +32,7 @@
             <div class="container-fluid">
                 <div class="card shadow-lg rounded-lg border-0">
                     <div class="card-header">
-                        <h3 class="card-title">Post List</h3>
+                        <h3 class="card-title">{{ $listTitle }}</h3>
                         <a href="{{ route($createRouteName) }}" class="btn btn-light btn-sm text-primary font-weight-bold">
                             <i class="fas fa-plus"></i>
                             {{ $createButtonLabel }}

@@ -63,9 +63,9 @@ class AdminAuthController extends Controller
                 'description' => 'Use this area for standalone page management when those editors are added.',
             ],
             'posts' => [
-                'label' => 'Posts',
-                'heading' => 'Posts',
-                'description' => 'Use this area for blog post management when those editors are added.',
+                'label' => 'Case Study',
+                'heading' => 'Case Study',
+                'description' => 'Use this area for case study management.',
             ],
             'contact-page' => [
                 'label' => 'Contact Page',
@@ -773,8 +773,9 @@ class AdminAuthController extends Controller
 
         return [
             'adminContext' => $adminContext,
-            'pageHeading' => $isPosts ? 'Posts' : 'Pages',
-            'pageDescription' => $isPosts ? 'Manage site posts and published content.' : 'Manage site pages and published content.',
+            'pageHeading' => $isPosts ? 'Case Study' : 'Pages',
+            'pageDescription' => $isPosts ? 'Manage case studies and published content.' : 'Manage site pages and published content.',
+            'listTitle' => $isPosts ? 'Case Study List' : 'Post List',
             'createRouteName' => $isPosts ? 'admin.posts.create' : 'admin.pages.create',
             'storeRouteName' => $isPosts ? 'admin.posts.store' : 'admin.pages.store',
             'editRouteName' => $isPosts ? 'admin.posts.edit' : 'admin.pages.edit',
@@ -782,10 +783,10 @@ class AdminAuthController extends Controller
             'deleteRouteName' => $isPosts ? 'admin.posts.delete' : 'admin.pages.delete',
             'bulkDeleteRouteName' => $isPosts ? 'admin.posts.bulk-delete' : 'admin.pages.bulk-delete',
             'routeIdName' => $isPosts ? 'postId' : 'pageId',
-            'contentLabel' => $isPosts ? 'Post' : 'Page',
-            'createButtonLabel' => $isPosts ? 'Add Post' : 'Add Page',
+            'contentLabel' => $isPosts ? 'Case Study' : 'Page',
+            'createButtonLabel' => $isPosts ? 'Add Case Study' : 'Add Page',
             'emptyMessage' => $isPosts
-                ? 'No posts created yet. Use Add Post to create the first one with the new template.'
+                ? 'No case studies created yet. Use Add Case Study to create the first one with the new template.'
                 : 'No pages created yet. Use Add Page to create the first one with the new template.',
             'cancelUrl' => $this->pageAdminRedirectUrl($adminContext),
         ];
@@ -800,12 +801,12 @@ class AdminAuthController extends Controller
 
     private function pageAdminLabel(string $adminContext): string
     {
-        return $adminContext === 'posts' ? 'Post' : 'Page';
+        return $adminContext === 'posts' ? 'Case study' : 'Page';
     }
 
     private function pageAdminPluralLabel(string $adminContext): string
     {
-        return $adminContext === 'posts' ? 'Posts' : 'Pages';
+        return $adminContext === 'posts' ? 'Case studies' : 'Pages';
     }
 
     private function validatedPagePayload(Request $request, string $adminContext = 'pages'): array
@@ -1019,8 +1020,8 @@ class AdminAuthController extends Controller
         $menu = [
             ['key' => 'overview', 'label' => 'Overview', 'href' => route('admin.section', ['section' => 'overview'])],
             ['key' => 'services', 'label' => 'Services', 'href' => route('admin.section', ['section' => 'services'])],
-            ['key' => 'case-study', 'label' => 'Case Study', 'href' => route('admin.case-studies.index')],
-            ['key' => 'posts', 'label' => 'Posts', 'href' => route('admin.posts.index')],
+            ['key' => 'case-study', 'label' => 'Our Work', 'href' => route('admin.case-studies.index')],
+            ['key' => 'posts', 'label' => 'Case Study', 'href' => route('admin.posts.index')],
             ['key' => 'team', 'label' => 'Team', 'href' => route('admin.section', ['section' => 'team'])],
             ['key' => 'gallery', 'label' => 'Gallery', 'href' => route('admin.gallery')],
             ['key' => 'sliders', 'label' => 'Sliders', 'href' => route('admin.section', ['section' => 'sliders'])],

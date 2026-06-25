@@ -13,7 +13,7 @@ class AdminSidebarTest extends TestCase
         foreach ([
             'overview' => 'Overview',
             'services' => 'Services',
-            'case-study' => 'Case Study',
+            'case-study' => 'Our Work',
             'team' => 'Team',
             'sliders' => 'Sliders',
             'clients' => 'Clients',

@@ -200,7 +200,7 @@
                                     @endif
 
                                     <div class="form-group">
-                                        <label for="image_file">{{ $isPostContext ? 'Hero Image' : 'Upload Image (optional, only for Posts)' }}</label>
+                                        <label for="image_file">{{ $isPostContext ? 'Hero Image' : 'Upload Image (optional)' }}</label>
                                         <input type="hidden" name="image_path" value="{{ $imagePath }}">
                                         <div class="custom-file">
                                             <input id="image_file" type="file" name="image_file" accept="image/*" class="custom-file-input" data-file-input>
