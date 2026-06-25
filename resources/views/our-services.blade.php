@@ -42,17 +42,17 @@
         @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
         .services-page{background:#fff;color:#686264;font-family:"GT Walsheim",Helvetica,Arial,sans-serif}
         .services-hero{padding:clamp(86px,10vw,150px) 0 clamp(72px,9vw,128px)}
-        .services-hero .wrap{width:min(1180px,calc(100% - 100px))}
+        .services-hero .wrap{width:min(1280px,calc(100% - 140px))}
         .services-eyebrow{display:block;margin:0 0 34px;color:#7a7e81;font-size:18px;font-weight:500;letter-spacing:.02em;text-transform:uppercase}
-        .services-hero h1{margin:0;color:#686264;font-size:clamp(58px,6.4vw,108px);font-weight:300;line-height:.92;letter-spacing:0;text-transform:uppercase}
-        .services-hero p{max-width:760px;margin:34px 0 0;color:#686264;font-size:clamp(26px,2.1vw,38px);font-weight:300;line-height:1.28}
+        .services-hero h1{margin:0;color:#686264;font-size:clamp(52px,5.4vw,96px);font-weight:300;line-height:.92;letter-spacing:0;text-transform:uppercase}
+        .services-hero p{max-width:980px;margin:34px 0 0;color:#686264;font-size:clamp(24px,1.85vw,34px);font-weight:300;line-height:1.32}
         .services-grid-section{padding:0 0 clamp(78px,8vw,128px)}
         .services-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(46px,5vw,76px) clamp(34px,4vw,60px)}
         .service-item{display:grid;gap:28px;align-content:start}
         .service-item-media{overflow:hidden;border-radius:8px;aspect-ratio:1.5;background:#e9e9e9}
         .service-item-media img{width:100%;height:100%;object-fit:cover}
-        .service-item h2{margin:0;color:#686264;font-size:clamp(32px,2.5vw,42px);font-weight:500;line-height:1.02;text-transform:uppercase}
-        .service-item p{margin:0;color:#686264;font-size:clamp(22px,1.7vw,30px);font-weight:300;line-height:1.35}
+        .service-item h2{margin:0;color:#686264;font-size:clamp(28px,2.15vw,38px);font-weight:500;line-height:1.02;text-transform:uppercase}
+        .service-item p{margin:0;color:#686264;font-size:clamp(20px,1.45vw,27px);font-weight:300;line-height:1.38}
         .services-page .se-footer-brand{background:#10808f;color:#fff}
         .site-nav a[aria-current="page"]{background:rgba(32,38,51,.06);border-radius:8px}
         @media(max-width:980px){.services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.services-hero .wrap{width:min(1180px,calc(100% - 48px))}}
