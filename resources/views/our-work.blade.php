@@ -37,11 +37,12 @@
         @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Light.woff2") format("woff2");font-weight:300;font-style:normal;font-display:swap}
         @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
         @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
-        .work-page-main{background:#f7f3ec;font-family:"GT Walsheim",Helvetica,Arial,sans-serif}
-        .work-page-hero{padding:clamp(78px,8vw,128px) 0 48px;text-align:center}
-        .work-page-kicker{display:block;margin-bottom:18px;color:#0f766e;font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
-        .work-page-hero h1{max-width:1040px;margin:0 auto;color:#202633;font-size:clamp(64px,10vw,150px);font-weight:300;line-height:.9;letter-spacing:0;text-transform:uppercase}
-        .work-page-hero p{max-width:760px;margin:28px auto 0;color:#667085;font-size:clamp(21px,2.4vw,30px);font-weight:300;line-height:1.35}
+        .work-page-main{background:#fff;font-family:"GT Walsheim",Helvetica,Arial,sans-serif}
+        .work-page-hero{padding:clamp(92px,10vw,150px) 0 clamp(72px,9vw,128px)}
+        .work-page-hero .wrap{display:grid;grid-template-columns:minmax(0,760px) minmax(220px,1fr);gap:clamp(44px,8vw,130px);align-items:start;width:min(1180px,calc(100% - 100px))}
+        .work-page-kicker{display:block;margin-top:18px;color:#686264;font-size:clamp(26px,2vw,34px);font-weight:300;line-height:1.2;text-transform:uppercase}
+        .work-page-hero h1{margin:0;color:#686264;font-size:clamp(58px,6.4vw,108px);font-weight:300;line-height:.92;letter-spacing:0;text-transform:uppercase}
+        .work-page-hero p{max-width:760px;margin:34px 0 0;color:#686264;font-size:clamp(26px,2.1vw,38px);font-weight:300;line-height:1.28}
         .work-list-section{padding:clamp(54px,6vw,88px) 0 clamp(72px,8vw,120px)}
         .work-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
         .work-card{overflow:hidden;border-radius:8px;background:#fff;color:#202633;text-decoration:none;box-shadow:0 18px 45px rgba(32,38,51,.08)}
@@ -52,8 +53,8 @@
         .work-card-body h2{margin:0;color:#202633;font-size:clamp(23px,2vw,32px);line-height:1.05}
         .work-card-body p{margin:14px 0 0;color:#667085;font-size:17px;line-height:1.55}
         .work-empty{border:1px solid rgba(32,38,51,.12);border-radius:8px;background:#fff;padding:48px;color:#667085;font-size:20px}
-        @media(max-width:980px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-        @media(max-width:640px){.work-grid{grid-template-columns:1fr}.work-page-hero{padding-top:48px}.work-page-hero h1{font-size:48px}.work-card-body{padding:20px}}
+        @media(max-width:980px){.work-page-hero .wrap{grid-template-columns:1fr;width:min(1180px,calc(100% - 48px));gap:24px}.work-page-kicker{order:-1;margin-top:0}.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:640px){.work-grid{grid-template-columns:1fr}.work-page-hero{padding-top:58px}.work-page-hero .wrap{width:min(1180px,calc(100% - 32px))}.work-page-hero h1{font-size:48px}.work-page-hero p{font-size:24px}.work-page-kicker{font-size:22px}.work-card-body{padding:20px}}
     </style>
 </head>
 <body id="top">
@@ -135,9 +136,11 @@
         <main class="work-page-main">
             <section class="work-page-hero">
                 <div class="wrap">
+                    <div>
+                        <h1>{{ $pageContent['title'] }}</h1>
+                        <p>{{ $pageContent['description'] }}</p>
+                    </div>
                     <span class="work-page-kicker">{{ $pageContent['eyebrow'] }}</span>
-                    <h1>{{ $pageContent['title'] }}</h1>
-                    <p>{{ $pageContent['description'] }}</p>
                 </div>
             </section>
 

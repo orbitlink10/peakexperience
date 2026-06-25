@@ -44,15 +44,16 @@
         .services-hero{padding:clamp(86px,10vw,150px) 0 clamp(72px,9vw,128px)}
         .services-hero .wrap{width:min(1180px,calc(100% - 100px))}
         .services-eyebrow{display:block;margin:0 0 34px;color:#7a7e81;font-size:18px;font-weight:500;letter-spacing:.02em;text-transform:uppercase}
-        .services-hero h1{margin:0;color:#686264;font-size:clamp(74px,8vw,132px);font-weight:300;line-height:.92;letter-spacing:0;text-transform:uppercase}
-        .services-hero p{max-width:760px;margin:34px 0 0;color:#686264;font-size:clamp(30px,3vw,44px);font-weight:300;line-height:1.28}
+        .services-hero h1{margin:0;color:#686264;font-size:clamp(58px,6.4vw,108px);font-weight:300;line-height:.92;letter-spacing:0;text-transform:uppercase}
+        .services-hero p{max-width:760px;margin:34px 0 0;color:#686264;font-size:clamp(26px,2.1vw,38px);font-weight:300;line-height:1.28}
         .services-grid-section{padding:0 0 clamp(78px,8vw,128px)}
         .services-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(46px,5vw,76px) clamp(34px,4vw,60px)}
         .service-item{display:grid;gap:28px;align-content:start}
         .service-item-media{overflow:hidden;border-radius:8px;aspect-ratio:1.5;background:#e9e9e9}
         .service-item-media img{width:100%;height:100%;object-fit:cover}
-        .service-item h2{margin:0;color:#686264;font-size:clamp(34px,3vw,48px);font-weight:500;line-height:1.02;text-transform:uppercase}
-        .service-item p{margin:0;color:#686264;font-size:clamp(23px,2vw,32px);font-weight:300;line-height:1.35}
+        .service-item h2{margin:0;color:#686264;font-size:clamp(32px,2.5vw,42px);font-weight:500;line-height:1.02;text-transform:uppercase}
+        .service-item p{margin:0;color:#686264;font-size:clamp(22px,1.7vw,30px);font-weight:300;line-height:1.35}
+        .services-page .se-footer-brand{background:#10808f;color:#fff}
         .site-nav a[aria-current="page"]{background:rgba(32,38,51,.06);border-radius:8px}
         @media(max-width:980px){.services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.services-hero .wrap{width:min(1180px,calc(100% - 48px))}}
         @media(max-width:680px){.services-hero{padding:64px 0 58px}.services-hero .wrap{width:min(1180px,calc(100% - 32px))}.services-hero h1{font-size:48px}.services-hero p{font-size:24px}.services-grid{grid-template-columns:1fr}.service-item h2{font-size:32px}.service-item p{font-size:23px}}

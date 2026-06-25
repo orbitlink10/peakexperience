@@ -2807,6 +2807,10 @@ section[id] {
     text-align: center;
 }
 
+.page-shell .se-footer-brand {
+    background: #10808f;
+}
+
 .se-footer-brand .se-block-padding {
     padding: 76px 24px;
 }
