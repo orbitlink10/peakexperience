@@ -36,6 +36,41 @@
 
         <section class="content">
             <div class="container-fluid">
+                <div class="card shadow-lg rounded-lg border-0 mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Our Work Page Intro</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <form method="POST" action="{{ route('admin.case-studies.page.update') }}" class="row">
+                            @csrf
+
+                            <div class="form-group col-md-6">
+                                <label for="our_work_eyebrow">Small Heading</label>
+                                <input id="our_work_eyebrow" type="text" name="eyebrow" class="form-control" value="{{ old('eyebrow', $pageContent['eyebrow']) }}" required>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="our_work_title">Main Heading</label>
+                                <input id="our_work_title" type="text" name="title" class="form-control" value="{{ old('title', $pageContent['title']) }}" required>
+                            </div>
+
+                            <div class="form-group col-12">
+                                <label for="our_work_description">Description</label>
+                                <textarea id="our_work_description" name="description" rows="4" class="form-control" required>{{ old('description', $pageContent['description']) }}</textarea>
+                                <small class="form-text text-muted">This controls the highlighted intro area at the top of the public Our Work page.</small>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary font-weight-bold">
+                                    <i class="fas fa-save"></i>
+                                    Save Intro Content
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <div class="card shadow-lg rounded-lg border-0">
                     <div class="card-header">
                         <h3 class="card-title">Our Work List</h3>

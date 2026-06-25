@@ -381,7 +381,7 @@ class AdminPagesTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('class="nav-dropdown"', false);
-        $response->assertSee('Brand Experiences');
+        $response->assertSee('Brand Experience');
         $response->assertSee('Exhibitions');
         $response->assertSee('Conferences');
         $response->assertSee(route('pages.show', ['page' => 'exhibitions']), false);

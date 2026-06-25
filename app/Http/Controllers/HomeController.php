@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ContactInquiryMail;
 use App\Support\HomepageContent;
 use App\Support\PageContent;
+use App\Support\PublicPageContent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -58,6 +59,18 @@ class HomeController extends Controller
         return view('our-work', [
             'logo' => $content['logo'],
             'posts' => PageContent::posts(),
+            'pageContent' => PublicPageContent::ourWork(),
+            'navPages' => PageContent::load(),
+        ] + $this->contactData($content));
+    }
+
+    public function ourServices(): View
+    {
+        $content = HomepageContent::load();
+
+        return view('our-services', [
+            'logo' => $content['logo'],
+            'pageContent' => PublicPageContent::services(),
             'navPages' => PageContent::load(),
         ] + $this->contactData($content));
     }

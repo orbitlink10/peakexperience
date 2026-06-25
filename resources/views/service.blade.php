@@ -70,8 +70,8 @@
                                 </ul>
                             @endif
                         </li>
-                        <li><a href="{{ route('home') }}#services">Our Services</a></li>
-                        <li><a href="{{ route('our-work') }}">Case Studies</a></li>
+                        <li><a href="{{ route('our-services') }}">Our Services</a></li>
+                        <li><a href="{{ route('our-work') }}">Our Work</a></li>
                         <li><a href="{{ route('home') }}#process">Our Stories</a></li>
                         <li><a href="{{ route('home') }}#contact">Contact Us</a></li>
                     </ul>
@@ -104,8 +104,8 @@
                                     </ul>
                                 @endif
                             </li>
-                            <li><a href="{{ route('home') }}#services">Our Services</a></li>
-                            <li><a href="{{ route('our-work') }}">Case Studies</a></li>
+                            <li><a href="{{ route('our-services') }}">Our Services</a></li>
+                            <li><a href="{{ route('our-work') }}">Our Work</a></li>
                             <li><a href="{{ route('home') }}#process">Our Stories</a></li>
                             <li><a href="{{ route('home') }}#contact">Contact Us</a></li>
                         </ul>

@@ -6,6 +6,7 @@ use App\Support\CaseStudyContent;
 use App\Support\GalleryContent;
 use App\Support\HomepageContent;
 use App\Support\PageContent;
+use App\Support\PublicPageContent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -235,7 +236,77 @@ class AdminAuthController extends Controller
     {
         return view('admin.case-studies.index', $this->sharedData($request, 'case-study') + [
             'caseStudies' => CaseStudyContent::load(),
+            'pageContent' => PublicPageContent::ourWork(),
         ]);
+    }
+
+    public function updateCaseStudiesPage(Request $request): RedirectResponse
+    {
+        $payload = $request->validate([
+            'eyebrow' => ['required', 'string', 'max:120'],
+            'title' => ['required', 'string', 'max:120'],
+            'description' => ['required', 'string', 'max:700'],
+        ]);
+
+        PublicPageContent::saveOurWork($payload);
+
+        return redirect()->route('admin.case-studies.index')->with('status', 'Our Work page intro updated successfully.');
+    }
+
+    public function servicesPage(Request $request): View
+    {
+        return view('admin.services-page', $this->sharedData($request, 'services') + [
+            'pageContent' => PublicPageContent::services(),
+        ]);
+    }
+
+    public function updateServicesPage(Request $request): RedirectResponse
+    {
+        $existingContent = PublicPageContent::services();
+
+        $request->validate([
+            'eyebrow' => ['required', 'string', 'max:120'],
+            'title' => ['required', 'string', 'max:120'],
+            'description' => ['required', 'string', 'max:900'],
+            'cards' => ['required', 'array', 'min:1'],
+            'cards.*.title' => ['required', 'string', 'max:140'],
+            'cards.*.description' => ['required', 'string', 'max:700'],
+            'cards.*.image' => ['nullable', 'string', 'max:255'],
+            'cards.*.image_alt' => ['nullable', 'string', 'max:180'],
+            'cards.*.image_file' => ['nullable', 'image', 'max:5120'],
+            'cards.*.remove_image' => ['nullable', 'boolean'],
+        ]);
+
+        $cards = [];
+        foreach ((array) $request->input('cards', []) as $index => $card) {
+            $imagePath = trim((string) ($card['image'] ?? data_get($existingContent, "cards.$index.image", '')));
+
+            if ((bool) ($card['remove_image'] ?? false)) {
+                $this->deletePublicAsset(HomepageContent::storedPath($imagePath));
+                $imagePath = '';
+            }
+
+            if ($request->hasFile("cards.$index.image_file")) {
+                $this->deletePublicAsset(HomepageContent::storedPath($imagePath));
+                $imagePath = $request->file("cards.$index.image_file")->store('homepage/services-page', 'public');
+            }
+
+            $cards[] = [
+                'title' => trim((string) $card['title']),
+                'description' => trim((string) $card['description']),
+                'image' => $imagePath,
+                'image_alt' => trim((string) ($card['image_alt'] ?? '')),
+            ];
+        }
+
+        PublicPageContent::saveServices([
+            'eyebrow' => trim((string) $request->input('eyebrow')),
+            'title' => trim((string) $request->input('title')),
+            'description' => trim((string) $request->input('description')),
+            'cards' => $cards,
+        ]);
+
+        return redirect()->route('admin.section', ['section' => 'services'])->with('status', 'Our Services page updated successfully.');
     }
 
     public function createCaseStudy(Request $request): View
@@ -510,6 +581,10 @@ class AdminAuthController extends Controller
 
     public function section(Request $request, string $section): View
     {
+        if ($section === 'services') {
+            return $this->servicesPage($request);
+        }
+
         if ($section === 'pages') {
             return $this->pages($request);
         }
@@ -1008,7 +1083,7 @@ class AdminAuthController extends Controller
     {
         $publicNav = [
             ['label' => 'Home', 'href' => url('/')],
-            ['label' => 'Our Services', 'href' => '#'],
+            ['label' => 'Our Services', 'href' => route('our-services')],
             ['label' => 'Our Process', 'href' => '#'],
             ['label' => 'Our Team', 'href' => '#'],
             ['label' => 'Media', 'href' => '#'],
@@ -1019,8 +1094,8 @@ class AdminAuthController extends Controller
 
         $menu = [
             ['key' => 'overview', 'label' => 'Overview', 'href' => route('admin.section', ['section' => 'overview'])],
-            ['key' => 'services', 'label' => 'Services', 'href' => route('admin.section', ['section' => 'services'])],
             ['key' => 'case-study', 'label' => 'Our Work', 'href' => route('admin.case-studies.index')],
+            ['key' => 'services', 'label' => 'Our Services', 'href' => route('admin.section', ['section' => 'services'])],
             ['key' => 'posts', 'label' => 'Case Study', 'href' => route('admin.posts.index')],
             ['key' => 'team', 'label' => 'Team', 'href' => route('admin.section', ['section' => 'team'])],
             ['key' => 'gallery', 'label' => 'Gallery', 'href' => route('admin.gallery')],

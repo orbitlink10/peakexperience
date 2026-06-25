@@ -10,15 +10,18 @@
         ['slug' => 'brand-experiences', 'title' => 'Brand Experience'],
         ['slug' => 'exhibitions', 'title' => 'Exhibitions'],
     ];
-    $caseStudyCategories = ['Conferences', 'Brand Experience', 'Exhibitions', 'Award Nights', 'Hybrid Events', 'Roadshows', 'Outdoor Builds'];
     $logoUrl = \App\Support\HomepageContent::assetUrl(
         (string) data_get($logo ?? [], 'path', data_get($logo ?? [], 'url', ''))
     );
     $hasLogo = filled($logoUrl);
-    $pageContent = is_array($pageContent ?? null) ? $pageContent : [
-        'eyebrow' => 'Peak Experience Case Studies',
-        'title' => 'Our Work',
-        'description' => 'Explore the live moments Peak Experience has shaped for conferences, exhibitions, brand experiences, and corporate events across Kenya.',
+    $pageContent = is_array($pageContent ?? null) ? $pageContent : [];
+    $serviceFallbacks = [
+        'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1100&q=80',
+        'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1100&q=80',
+        'https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=1100&q=80',
+        'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1100&q=80',
+        'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=1100&q=80',
+        'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1100&q=80',
     ];
 @endphp
 <!DOCTYPE html>
@@ -37,27 +40,26 @@
         @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Light.woff2") format("woff2");font-weight:300;font-style:normal;font-display:swap}
         @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
         @font-face{font-family:"GT Walsheim";src:url("https://www.storyevents.co.uk/wp-content/themes/primary-theme/assets/fonts/gt-walsheim/GT-Walsheim-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
-        .work-page-main{background:#f7f3ec;font-family:"GT Walsheim",Helvetica,Arial,sans-serif}
-        .work-page-hero{padding:clamp(78px,8vw,128px) 0 48px;text-align:center}
-        .work-page-kicker{display:block;margin-bottom:18px;color:#0f766e;font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
-        .work-page-hero h1{max-width:1040px;margin:0 auto;color:#202633;font-size:clamp(64px,10vw,150px);font-weight:300;line-height:.9;letter-spacing:0;text-transform:uppercase}
-        .work-page-hero p{max-width:760px;margin:28px auto 0;color:#667085;font-size:clamp(21px,2.4vw,30px);font-weight:300;line-height:1.35}
-        .work-list-section{padding:clamp(54px,6vw,88px) 0 clamp(72px,8vw,120px)}
-        .work-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-        .work-card{overflow:hidden;border-radius:8px;background:#fff;color:#202633;text-decoration:none;box-shadow:0 18px 45px rgba(32,38,51,.08)}
-        .work-card-media{aspect-ratio:4/3;background:#d9d9d9}
-        .work-card-media img{width:100%;height:100%;object-fit:cover}
-        .work-card-placeholder{display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:#8b929c;font-size:13px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
-        .work-card-body{padding:24px}
-        .work-card-body h2{margin:0;color:#202633;font-size:clamp(23px,2vw,32px);line-height:1.05}
-        .work-card-body p{margin:14px 0 0;color:#667085;font-size:17px;line-height:1.55}
-        .work-empty{border:1px solid rgba(32,38,51,.12);border-radius:8px;background:#fff;padding:48px;color:#667085;font-size:20px}
-        @media(max-width:980px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-        @media(max-width:640px){.work-grid{grid-template-columns:1fr}.work-page-hero{padding-top:48px}.work-page-hero h1{font-size:48px}.work-card-body{padding:20px}}
+        .services-page{background:#fff;color:#686264;font-family:"GT Walsheim",Helvetica,Arial,sans-serif}
+        .services-hero{padding:clamp(86px,10vw,150px) 0 clamp(72px,9vw,128px)}
+        .services-hero .wrap{width:min(1180px,calc(100% - 100px))}
+        .services-eyebrow{display:block;margin:0 0 34px;color:#7a7e81;font-size:18px;font-weight:500;letter-spacing:.02em;text-transform:uppercase}
+        .services-hero h1{margin:0;color:#686264;font-size:clamp(74px,8vw,132px);font-weight:300;line-height:.92;letter-spacing:0;text-transform:uppercase}
+        .services-hero p{max-width:760px;margin:34px 0 0;color:#686264;font-size:clamp(30px,3vw,44px);font-weight:300;line-height:1.28}
+        .services-grid-section{padding:0 0 clamp(78px,8vw,128px)}
+        .services-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(46px,5vw,76px) clamp(34px,4vw,60px)}
+        .service-item{display:grid;gap:28px;align-content:start}
+        .service-item-media{overflow:hidden;border-radius:8px;aspect-ratio:1.5;background:#e9e9e9}
+        .service-item-media img{width:100%;height:100%;object-fit:cover}
+        .service-item h2{margin:0;color:#686264;font-size:clamp(34px,3vw,48px);font-weight:500;line-height:1.02;text-transform:uppercase}
+        .service-item p{margin:0;color:#686264;font-size:clamp(23px,2vw,32px);font-weight:300;line-height:1.35}
+        .site-nav a[aria-current="page"]{background:rgba(32,38,51,.06);border-radius:8px}
+        @media(max-width:980px){.services-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.services-hero .wrap{width:min(1180px,calc(100% - 48px))}}
+        @media(max-width:680px){.services-hero{padding:64px 0 58px}.services-hero .wrap{width:min(1180px,calc(100% - 32px))}.services-hero h1{font-size:48px}.services-hero p{font-size:24px}.services-grid{grid-template-columns:1fr}.service-item h2{font-size:32px}.service-item p{font-size:23px}}
     </style>
 </head>
 <body id="top">
-    <div class="page-shell">
+    <div class="page-shell services-page">
         <header class="site-header">
             <div class="wrap header-row">
                 <a class="brand" href="{{ route('home') }}" aria-label="Peak Experience home">
@@ -66,11 +68,7 @@
                     @else
                         <span class="brand-copy">
                             <strong>Peak Experience</strong>
-                            <span class="brand-dots" aria-hidden="true">
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                            </span>
+                            <span class="brand-dots" aria-hidden="true"><i></i><i></i><i></i></span>
                         </span>
                     @endif
                 </a>
@@ -79,16 +77,14 @@
                     <ul>
                         <li class="nav-item--dropdown">
                             <a class="nav-link--caret" href="{{ route('home') }}#services">What We Do</a>
-                            @if (count($navPages) > 0)
-                                <ul class="nav-dropdown" aria-label="What We Do pages">
-                                    @foreach ($navPages as $navPage)
-                                        <li><a href="{{ route('pages.show', ['page' => $navPage['slug']]) }}">{{ $navPage['title'] }}</a></li>
-                                    @endforeach
-                                </ul>
-                            @endif
+                            <ul class="nav-dropdown" aria-label="What We Do pages">
+                                @foreach ($navPages as $navPage)
+                                    <li><a href="{{ route('pages.show', ['page' => $navPage['slug']]) }}">{{ $navPage['title'] }}</a></li>
+                                @endforeach
+                            </ul>
                         </li>
                         <li><a href="{{ route('our-work') }}">Our Work</a></li>
-                        <li><a href="{{ route('our-services') }}">Our Services</a></li>
+                        <li><a href="{{ route('our-services') }}" aria-current="page">Our Services</a></li>
                         <li><a href="{{ route('home') }}#process">Our Stories</a></li>
                         <li><a href="{{ route('home') }}#intro">About Us</a></li>
                     </ul>
@@ -99,11 +95,7 @@
                 </div>
 
                 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>
-                    <span class="nav-toggle-box" aria-hidden="true">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
+                    <span class="nav-toggle-box" aria-hidden="true"><span></span><span></span><span></span></span>
                 </button>
             </div>
 
@@ -113,16 +105,14 @@
                         <ul>
                             <li>
                                 <a href="{{ route('home') }}#services">What We Do</a>
-                                @if (count($navPages) > 0)
-                                    <ul class="nav-mobile-children" aria-label="What We Do pages">
-                                        @foreach ($navPages as $navPage)
-                                            <li><a href="{{ route('pages.show', ['page' => $navPage['slug']]) }}">{{ $navPage['title'] }}</a></li>
-                                        @endforeach
-                                    </ul>
-                                @endif
+                                <ul class="nav-mobile-children" aria-label="What We Do pages">
+                                    @foreach ($navPages as $navPage)
+                                        <li><a href="{{ route('pages.show', ['page' => $navPage['slug']]) }}">{{ $navPage['title'] }}</a></li>
+                                    @endforeach
+                                </ul>
                             </li>
                             <li><a href="{{ route('our-work') }}">Our Work</a></li>
-                            <li><a href="{{ route('our-services') }}">Our Services</a></li>
+                            <li><a href="{{ route('our-services') }}" aria-current="page">Our Services</a></li>
                             <li><a href="{{ route('home') }}#process">Our Stories</a></li>
                             <li><a href="{{ route('home') }}#intro">About Us</a></li>
                             <li><a href="{{ route('home') }}#contact">Contact Us</a></li>
@@ -132,57 +122,34 @@
             </div>
         </header>
 
-        <main class="work-page-main">
-            <section class="work-page-hero">
+        <main>
+            <section class="services-hero">
                 <div class="wrap">
-                    <span class="work-page-kicker">{{ $pageContent['eyebrow'] }}</span>
+                    <span class="services-eyebrow">{{ $pageContent['eyebrow'] }}</span>
                     <h1>{{ $pageContent['title'] }}</h1>
                     <p>{{ $pageContent['description'] }}</p>
                 </div>
             </section>
 
-            <section class="strip" aria-label="Case study categories">
-                <div class="wrap strip-overflow">
-                    <ul class="strip-track">
-                        @for ($i = 0; $i < 2; $i++)
-                            @foreach ($caseStudyCategories as $category)
-                                <li>{{ $category }}</li>
-                            @endforeach
-                        @endfor
-                    </ul>
-                </div>
-            </section>
-
-            <section class="work-list-section">
+            <section class="services-grid-section" aria-label="Services">
                 <div class="wrap">
-                    @if (count($posts) > 0)
-                        <div class="work-grid">
-                            @foreach ($posts as $post)
-                                @php
-                                    $imageUrl = \App\Support\HomepageContent::assetUrl((string) ($post['image'] ?? ''));
-                                @endphp
-                                <a class="work-card" href="{{ route('pages.show', ['page' => $post['slug']]) }}">
-                                    <div class="work-card-media">
-                                        @if ($imageUrl !== '')
-                                            <img src="{{ $imageUrl }}" alt="{{ $post['image_alt'] !== '' ? $post['image_alt'] : $post['title'] }}">
-                                        @else
-                                            <div class="work-card-placeholder">Case Study</div>
-                                        @endif
-                                    </div>
-                                    <div class="work-card-body">
-                                        <h2>{{ $post['title'] }}</h2>
-                                        @if ($post['meta_description'] !== '')
-                                            <p>{{ \Illuminate\Support\Str::limit($post['meta_description'], 150) }}</p>
-                                        @elseif ($post['description'] !== '')
-                                            <p>{{ \Illuminate\Support\Str::limit(strip_tags($post['description']), 150) }}</p>
-                                        @endif
-                                    </div>
-                                </a>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="work-empty">Case studies will be published here once they are added in the dashboard.</div>
-                    @endif
+                    <div class="services-grid">
+                        @foreach ($pageContent['cards'] as $index => $card)
+                            @php
+                                $imageUrl = \App\Support\HomepageContent::assetUrl((string) ($card['image'] ?? ''));
+                                if ($imageUrl === '') {
+                                    $imageUrl = $serviceFallbacks[$index % count($serviceFallbacks)];
+                                }
+                            @endphp
+                            <article class="service-item">
+                                <figure class="service-item-media">
+                                    <img src="{{ $imageUrl }}" alt="{{ $card['image_alt'] !== '' ? $card['image_alt'] : $card['title'] }}">
+                                </figure>
+                                <h2>{{ $card['title'] }}</h2>
+                                <p>{{ $card['description'] }}</p>
+                            </article>
+                        @endforeach
+                    </div>
                 </div>
             </section>
         </main>

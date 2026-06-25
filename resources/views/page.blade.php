@@ -179,8 +179,8 @@
                                 </ul>
                             @endif
                         </li>
-                        <li><a href="{{ route('our-work') }}">Case Studies</a></li>
-                        <li><a href="{{ route('home') }}#services">Our Services</a></li>
+                        <li><a href="{{ route('our-work') }}">Our Work</a></li>
+                        <li><a href="{{ route('our-services') }}">Our Services</a></li>
                         <li><a href="{{ route('home') }}#process">Our Stories</a></li>
                         <li><a href="{{ route('home') }}#intro">About Us</a></li>
                     </ul>
@@ -213,8 +213,8 @@
                                     </ul>
                                 @endif
                             </li>
-                            <li><a href="{{ route('our-work') }}">Case Studies</a></li>
-                            <li><a href="{{ route('home') }}#services">Our Services</a></li>
+                            <li><a href="{{ route('our-work') }}">Our Work</a></li>
+                            <li><a href="{{ route('our-services') }}">Our Services</a></li>
                             <li><a href="{{ route('home') }}#process">Our Stories</a></li>
                             <li><a href="{{ route('home') }}#intro">About Us</a></li>
                             <li><a href="{{ route('home') }}#contact">Contact Us</a></li>
@@ -397,7 +397,7 @@
                 <div>
                     <h3>Company</h3>
                     <a href="{{ route('home') }}#intro">About Us</a>
-                    <a href="{{ route('our-work') }}">Case Studies</a>
+                    <a href="{{ route('our-work') }}">Our Work</a>
                     <a href="{{ route('home') }}#contact">Contact</a>
                 </div>
                 <div>
