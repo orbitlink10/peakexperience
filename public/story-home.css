@@ -85,7 +85,7 @@ section[id] {
     z-index: 10000;
     display: grid;
     place-items: center;
-    width: 100vw;
+    width: 100%;
     min-height: 100vh;
     min-height: 100dvh;
     padding: clamp(1.5rem, 5vw, 3rem);
@@ -2970,10 +2970,13 @@ body.page-leaving .page-transition__content {
 }
 
 .se-footer-logo strong {
-    font-size: 54px;
-    line-height: 54px;
+    display: block;
+    max-width: 100%;
+    font-size: clamp(32px, 10vw, 54px);
+    line-height: 1;
     font-weight: 400;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
 }
 
 .se-footer-social,

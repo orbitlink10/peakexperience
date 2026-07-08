@@ -281,7 +281,97 @@ class AdminPagesTest extends TestCase
         $response->assertSee($galleryPath, false);
         $response->assertDontSee('<p class="block-head__subtitle">Starlink Nairobi description</p>', false);
         $response->assertDontSee('<p>Starlink Nairobi description</p>', false);
+        $response->assertDontSee('<span class="hero__preheading">PAGE</span>', false);
+        $response->assertDontSee('<span class="block-head__eyebrow">Page</span>', false);
         $response->assertSee('Rendered page content', false);
+    }
+
+    public function test_public_service_pages_use_service_layout_without_page_labels(): void
+    {
+        HomepageSetting::query()->create([
+            'key' => 'pages',
+            'value' => [
+                [
+                    'id' => 'page-1',
+                    'slug' => 'conferences',
+                    'meta_title' => 'Conferences',
+                    'meta_description' => '',
+                    'title' => 'Conferences',
+                    'image' => 'https://example.com/conference-hero.jpg',
+                    'image_alt' => 'Conference event',
+                    'gallery_images' => [
+                        'https://example.com/conference-gallery-one.jpg',
+                        'https://example.com/conference-gallery-two.jpg',
+                    ],
+                    'heading_two' => 'Interactive and impactful conferences',
+                    'type' => 'Page',
+                    'description' => '<p>Conference content</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+                [
+                    'id' => 'page-2',
+                    'slug' => 'brand-experiences',
+                    'meta_title' => 'Brand Experiences',
+                    'meta_description' => '',
+                    'title' => 'Brand Experience',
+                    'image' => 'https://example.com/brand-hero.jpg',
+                    'image_alt' => 'Brand experience event',
+                    'gallery_images' => [
+                        'https://example.com/brand-gallery-one.jpg',
+                    ],
+                    'heading_two' => 'Brand moments people remember',
+                    'type' => 'Page',
+                    'description' => '<p>Brand experience content</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+                [
+                    'id' => 'page-3',
+                    'slug' => 'exhibitions',
+                    'meta_title' => 'Exhibitions',
+                    'meta_description' => '',
+                    'title' => 'Exhibitions',
+                    'image' => '',
+                    'image_alt' => 'Exhibitions',
+                    'gallery_images' => [],
+                    'heading_two' => 'Exhibition experiences',
+                    'type' => 'Page',
+                    'description' => '<p>Exhibition content</p>',
+                    'created_at' => now()->toIso8601String(),
+                    'updated_at' => now()->toIso8601String(),
+                ],
+            ],
+        ]);
+
+        $conferenceResponse = $this->get(route('pages.show', ['page' => 'conferences']));
+
+        $conferenceResponse->assertOk();
+        $conferenceResponse->assertSee('<body id="top" class="story-page theme-se story-page--service-format">', false);
+        $conferenceResponse->assertSee('INSPIRE &amp; CONNECT', false);
+        $conferenceResponse->assertSee('Giving big ideas the platform they deserve.');
+        $conferenceResponse->assertSee('class="b-section service-work-section', false);
+        $conferenceResponse->assertSee('Conference Strategy');
+        $conferenceResponse->assertDontSee('<span class="hero__preheading">PAGE</span>', false);
+        $conferenceResponse->assertDontSee('<span class="block-head__eyebrow">Page</span>', false);
+
+        $brandResponse = $this->get(route('pages.show', ['page' => 'brand-experiences']));
+
+        $brandResponse->assertOk();
+        $brandResponse->assertSee('<body id="top" class="story-page theme-se story-page--service-format">', false);
+        $brandResponse->assertSee('LAUNCH, IMMERSE &amp; ENGAGE', false);
+        $brandResponse->assertSee('Brand experiences shaped to make audiences feel the story.');
+        $brandResponse->assertSee('Immersive Launches');
+        $brandResponse->assertDontSee('<span class="hero__preheading">PAGE</span>', false);
+        $brandResponse->assertDontSee('<span class="block-head__eyebrow">Page</span>', false);
+
+        $exhibitionResponse = $this->get(route('pages.show', ['page' => 'exhibitions']));
+
+        $exhibitionResponse->assertOk();
+        $exhibitionResponse->assertSee('<body id="top" class="story-page theme-se">', false);
+        $exhibitionResponse->assertDontSee('<body id="top" class="story-page theme-se story-page--service-format">', false);
+        $exhibitionResponse->assertDontSee('<span class="hero__preheading">PAGE</span>', false);
+        $exhibitionResponse->assertDontSee('<span class="block-head__eyebrow">Page</span>', false);
     }
 
     public function test_public_post_preview_renders_story_event_structure(): void

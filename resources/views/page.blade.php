@@ -23,7 +23,53 @@
         fn ($image) => \App\Support\HomepageContent::assetUrl((string) $image),
         is_array($page['gallery_images'] ?? null) ? $page['gallery_images'] : []
     )));
-    $isPost = (string) ($page['type'] ?? '') === 'Post';
+    $routePageSlug = request()->route('page');
+    $pageSlug = trim((string) ($page['slug'] ?? (is_string($routePageSlug) ? $routePageSlug : '')));
+    $pageType = trim((string) ($page['type'] ?? ''));
+    $pageTypeLabel = strcasecmp($pageType, 'Page') === 0 ? '' : $pageType;
+    $isPost = $pageType === 'Post';
+    $isServiceFormatPage = in_array($pageSlug, ['conferences', 'brand-experiences'], true);
+    $serviceHeroKickers = [
+        'conferences' => 'Inspire & Connect',
+        'brand-experiences' => 'Launch, Immerse & Engage',
+    ];
+    $serviceHeroCopyDefaults = [
+        'conferences' => 'Giving big ideas the platform they deserve.',
+        'brand-experiences' => 'Brand experiences shaped to make audiences feel the story.',
+    ];
+    $serviceWorkDescriptions = [
+        'conferences' => 'From audience flow and stage production to speaker moments and live technical delivery, we shape conferences that feel clear, polished, and purposeful.',
+        'brand-experiences' => 'We design environments, journeys, and live moments that turn brand messages into experiences people can see, feel, and remember.',
+    ];
+    $serviceWorkCardContent = [
+        'conferences' => [
+            ['title' => 'Conference Strategy', 'text' => 'A clear structure for the agenda, audience journey, and live moments that carry the message.'],
+            ['title' => 'Stage & Technical Production', 'text' => 'Sound, lighting, screens, staging, and show flow managed as one joined-up experience.'],
+            ['title' => 'Guest Experience', 'text' => 'Registration, wayfinding, content touchpoints, and on-site details that keep guests engaged.'],
+        ],
+        'brand-experiences' => [
+            ['title' => 'Immersive Launches', 'text' => 'Launch environments that reveal the product or brand story with intention and energy.'],
+            ['title' => 'Brand Storytelling', 'text' => 'Spatial, visual, and live content moments that make the message easy to understand.'],
+            ['title' => 'Audience Engagement', 'text' => 'Interactive details and guest journeys designed to keep the brand memorable after the event.'],
+        ],
+    ];
+    $heroKicker = $isServiceFormatPage ? ($serviceHeroKickers[$pageSlug] ?? $pageTypeLabel) : $pageTypeLabel;
+    $serviceHeroCopy = $isServiceFormatPage
+        ? (trim((string) ($page['meta_description'] ?? '')) ?: ($serviceHeroCopyDefaults[$pageSlug] ?? 'Experiences designed around your audience.'))
+        : '';
+    $pageIntroHeading = trim((string) ($page['heading_two'] ?? '')) ?: (string) ($page['title'] ?? '');
+    $serviceImagePool = array_values(array_filter(array_merge($galleryImages, [$heroImage, $fallbackIntro, $fallbackProof])));
+    $serviceImageCount = count($serviceImagePool);
+    $serviceWorkCards = [];
+    if ($isServiceFormatPage) {
+        foreach ($serviceWorkCardContent[$pageSlug] ?? [] as $index => $card) {
+            $serviceWorkCards[] = [
+                'title' => $card['title'],
+                'text' => $card['text'],
+                'image' => $serviceImageCount > 0 ? $serviceImagePool[$index % $serviceImageCount] : '',
+            ];
+        }
+    }
     $eventDate = trim((string) ($page['event_date'] ?? ''));
     $eventDateLabel = '';
     if ($eventDate !== '') {
@@ -64,7 +110,7 @@
         .hero{position:relative;overflow:hidden;width:calc(100% - (var(--page-image-gutter) * 2));min-height:calc(100vh - 132px);margin:0 auto;border-radius:16px;font-size:27px;line-height:27px;font-weight:300;text-wrap:balance}
         .hero__bg,.bg{position:absolute;top:0;left:0;width:100%;height:100%}
         .bg--embed{overflow:hidden}.u-bg-cover{background-size:cover;background-position:center 40%;background-repeat:no-repeat}
-        .hero__bg img,.u-bg-cover img{width:100%;height:100%;object-fit:cover;margin:0;filter:saturate(.95) contrast(1.02)}
+        .story-page main .hero__bg img,.story-page main .u-bg-cover img{display:block;width:100%;max-width:none;height:100%;object-fit:cover;margin:0;filter:saturate(.95) contrast(1.02)}
         .bg--opacity{background:#000}
         .block__padding{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:90px 24px}
         .block__hero-height{min-height:inherit}.u-flex-column-middle{display:flex;flex-direction:column;align-items:center;justify-content:center}
@@ -101,6 +147,26 @@
         .gmasonry__download{display:none}
         .b-section.block--dark{background:#7a7e81;color:#fff}
         .b-section .block__padding{padding-top:96px;padding-bottom:96px;text-align:center}
+        .story-page--service-format .hero{min-height:calc(100vh - 156px)}
+        .story-page--service-format .hero__body{max-width:860px;margin-bottom:0}
+        .story-page--service-format .hero__body .hero__title{font-size:clamp(62px,8vw,132px);line-height:.94;font-weight:300}
+        .story-page--service-format .hero__preheading{margin-bottom:24px;font-size:15px;letter-spacing:.16em}
+        .story-page--service-format .hero__copy{max-width:760px;margin:28px auto 0;font-size:clamp(24px,2.1vw,36px);line-height:1.2}
+        .story-page--service-format .bg--opacity{background:#061f26}
+        .b-section.service-work-section.block--dark{overflow:hidden;background:linear-gradient(135deg,#074f64 0%,#10808f 48%,#2b7786 100%)}
+        .service-work-section::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 16%,rgba(255,255,255,.16),transparent 32%),linear-gradient(90deg,rgba(0,0,0,.24),rgba(0,0,0,.04));pointer-events:none}
+        .service-work-section .block__padding{max-width:1320px;text-align:left}
+        .service-work-head{display:grid;grid-template-columns:minmax(220px,.62fr) minmax(0,1fr);gap:clamp(36px,7vw,120px);width:100%;margin:0 0 56px;text-align:left}
+        .service-work-head .block-head__title{font-size:clamp(48px,6vw,94px);line-height:.94;font-weight:300}
+        .service-work-head .block-head__subtitle{margin:0;color:#fff;font-size:clamp(22px,2vw,34px);line-height:1.34}
+        .service-work-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+        .service-work-card{position:relative;overflow:hidden;min-height:430px;border-radius:10px;background:#0b5968;color:#fff}
+        .story-page main .service-work-card img{position:absolute;inset:0;width:100%;max-width:none;height:100%;object-fit:cover;filter:saturate(.95) contrast(1.05)}
+        .service-work-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.74))}
+        .service-work-card__body{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:28px}
+        .service-work-card__index{display:block;margin-bottom:12px;font-size:13px;line-height:1;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+        .service-work-card h3{margin:0 0 12px;font-size:25px;line-height:1.08;font-weight:500;text-transform:uppercase}
+        .service-work-card p{margin:0;color:rgba(255,255,255,.88);font-size:16px;line-height:24px}
         .post-hero-intro{padding:clamp(120px,15vh,190px) 24px 58px;text-align:center;background:#fff}
         .post-hero-intro__date{display:block;margin:0 0 30px;color:#777;font-size:18px;line-height:22px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
         .post-hero-intro__title{max-width:1240px;margin:0 auto;color:#5d5759;font-size:clamp(54px,7.1vw,122px);line-height:1.03;font-weight:300;text-transform:uppercase;letter-spacing:0}
@@ -132,7 +198,7 @@
         .se-footer-brand .block__padding,.se-footer-brand .se-block-padding{padding:76px 24px}
         .se-footer-inner{display:grid;justify-items:center;gap:24px}
         .se-footer-logo img{max-width:420px;max-height:110px;filter:brightness(0) invert(1);margin:0 auto}
-        .se-footer-logo strong{font-size:54px;line-height:54px;font-weight:400;text-transform:uppercase}
+        .se-footer-logo strong{display:block;max-width:100%;font-size:clamp(32px,10vw,54px);line-height:1;font-weight:400;text-transform:uppercase;overflow-wrap:anywhere}
         .se-footer-social,.se-footer-contact{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 24px}
         .se-footer-social a,.se-footer-contact a{color:#fff;text-decoration:none;text-transform:uppercase;font-size:14px;line-height:18px}
         .se-footer-group{background:#f4f4f4;color:#333}
@@ -143,13 +209,13 @@
         .story-page .whatsapp-widget-label,.story-page .whatsapp-widget-button{pointer-events:auto}
         .story-page .whatsapp-widget-button{display:inline-flex;align-items:center;justify-content:center;width:84px;height:84px;min-width:84px;min-height:84px;border-radius:50%}
         .story-page .whatsapp-widget-icon{display:block;width:35px;height:35px;max-width:35px;max-height:35px;flex:0 0 35px}
-        @media(max-width:899px){.b-intro .block-head{grid-template-columns:1fr;gap:30px}.b-intro .block__padding{padding-top:76px;padding-bottom:36px}.gmasonry__wrap{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:899px){.b-intro .block-head,.service-work-head{grid-template-columns:1fr;gap:30px}.b-intro .block__padding{padding-top:76px;padding-bottom:36px}.gmasonry__wrap{grid-template-columns:repeat(2,minmax(0,1fr))}.service-work-grid{grid-template-columns:1fr}.service-work-card{min-height:360px}}
         @media(max-width:899px){.post-section__inner{grid-template-columns:1fr;gap:26px}.post-gallery__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media(max-width:799px){.hero__body .hero__title{font-size:53px;line-height:50px}.hero__copy{font-size:24px;line-height:28px}.se-footer-columns{grid-template-columns:1fr}.body--section{width:100%;margin-bottom:34px}.block-head__title{font-size:38px;line-height:42px}.post-hero-intro{padding-top:86px}.post-hero-image img{border-radius:16px}}
-        @media(max-width:599px){body.story-page{--page-image-gutter:14px;font-size:16px;line-height:24px}.hero{min-height:72vh;border-radius:12px}.hero__body .hero__title{font-size:40px;line-height:36px}.hero__copy{font-size:21px;line-height:25px}.block__padding{padding:70px 18px}.b-intro .block-head__subtitle{font-size:23px;line-height:28px}.b-intro .block-head__body{font-size:17px;line-height:27px}.gmasonry__wrap,.post-gallery__grid{grid-template-columns:1fr}.b-gallery-masonry .block__padding{padding:0 var(--page-image-gutter) 70px}.gmasonry__item,.post-gallery__item{min-height:230px}.post-section{padding:58px 20px}.post-section__copy{font-size:20px;line-height:1.5}}
+        @media(max-width:599px){body.story-page{--page-image-gutter:14px;font-size:16px;line-height:24px}.hero{min-height:72vh;border-radius:12px}.hero__body .hero__title{font-size:40px;line-height:36px}.story-page--service-format .hero__body .hero__title{font-size:clamp(34px,10.5vw,44px);line-height:1;overflow-wrap:break-word}.hero__copy{font-size:21px;line-height:25px}.story-page--service-format .hero__copy{font-size:22px}.block__padding{padding:70px 18px}.b-intro .block-head__subtitle{font-size:23px;line-height:28px}.b-intro .block-head__body{font-size:17px;line-height:27px}.gmasonry__wrap,.post-gallery__grid{grid-template-columns:1fr}.b-gallery-masonry .block__padding{padding:0 var(--page-image-gutter) 70px}.gmasonry__item,.post-gallery__item{min-height:230px}.service-work-card{min-height:320px}.service-work-card__body{padding:22px}.post-section{padding:58px 20px}.post-section__copy{font-size:20px;line-height:1.5}}
     </style>
 </head>
-<body id="top" class="story-page theme-se">
+<body id="top" class="story-page theme-se{{ $isServiceFormatPage ? ' story-page--service-format' : '' }}">
     @include('partials.page-transition')
     <div class="page-shell">
         <header class="site-header">
@@ -305,9 +371,15 @@
 
                 <div class="block__padding block__hero-height u-flex-column-middle">
                     <div class="hero__body">
-                        <span class="hero__preheading">{{ strtoupper($page['type']) }}</span>
+                        @if ($heroKicker !== '')
+                            <span class="hero__preheading">{{ strtoupper($heroKicker) }}</span>
+                        @endif
                         <h1 class="hero__title theme-title">{{ $page['title'] }}</h1>
-                        <hr class="hero__hr">
+                        @if ($serviceHeroCopy !== '')
+                            <p class="hero__copy">{{ $serviceHeroCopy }}</p>
+                        @else
+                            <hr class="hero__hr">
+                        @endif
                     </div>
                 </div>
 
@@ -318,8 +390,10 @@
                 <div class="block__padding">
                     <div class="block-head u-max-width-med">
                         <div class="block-heading">
-                            <span class="block-head__eyebrow">{{ $page['type'] }}</span>
-                            <h2 class="block-head__title">{{ $page['heading_two'] }}</h2>
+                            @if ($pageTypeLabel !== '')
+                                <span class="block-head__eyebrow">{{ $pageTypeLabel }}</span>
+                            @endif
+                            <h2 class="block-head__title">{{ $pageIntroHeading }}</h2>
                         </div>
 
                         <div class="block-copy">
@@ -348,6 +422,37 @@
                             </div>
                         @endforeach
                         </div>
+                    </div>
+                </section>
+            @endif
+
+            @if ($isServiceFormatPage)
+                <section class="b-section service-work-section block block--dark block--fg-colored block--has-bg">
+                    <div class="block__padding">
+                        <div class="block-head service-work-head">
+                            <div>
+                                <div class="block-head__prefix">Peak Experience</div>
+                                <h2 class="block-head__title">Our Work</h2>
+                            </div>
+                            <p class="block-head__subtitle">{{ $serviceWorkDescriptions[$pageSlug] ?? 'Selected moments shaped with clarity, energy, and technical precision.' }}</p>
+                        </div>
+
+                        @if (count($serviceWorkCards) > 0)
+                            <div class="service-work-grid">
+                                @foreach ($serviceWorkCards as $index => $card)
+                                    <article class="service-work-card">
+                                        @if ($card['image'] !== '')
+                                            <img src="{{ $card['image'] }}" alt="{{ $card['title'] }}">
+                                        @endif
+                                        <div class="service-work-card__body">
+                                            <span class="service-work-card__index">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
+                                            <h3>{{ $card['title'] }}</h3>
+                                            <p>{{ $card['text'] }}</p>
+                                        </div>
+                                    </article>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
                 </section>
             @endif
