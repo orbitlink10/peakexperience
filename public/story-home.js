@@ -1,5 +1,6 @@
 (() => {
     const storageKey = 'peak-page-transition-active';
+    const minimumTransitionMs = 1000;
     const root = document.documentElement;
     const transition = document.querySelector('[data-page-transition]');
     const reduceMotionQuery = window.matchMedia
@@ -17,15 +18,24 @@
 
     const hasStoredTransition = () => {
         try {
-            return window.sessionStorage.getItem(storageKey) === '1';
+            return window.sessionStorage.getItem(storageKey) !== null;
         } catch (error) {
             return false;
         }
     };
 
+    const storedTransitionStartedAt = () => {
+        try {
+            const value = Number(window.sessionStorage.getItem(storageKey));
+            return Number.isFinite(value) && value > 0 ? value : Date.now();
+        } catch (error) {
+            return Date.now();
+        }
+    };
+
     const storeTransition = () => {
         try {
-            window.sessionStorage.setItem(storageKey, '1');
+            window.sessionStorage.setItem(storageKey, String(Date.now()));
         } catch (error) {
             return;
         }
@@ -40,7 +50,8 @@
     };
 
     const hideAfterLoad = () => {
-        const delay = reduceMotionQuery.matches ? 0 : 140;
+        const elapsed = Date.now() - storedTransitionStartedAt();
+        const delay = reduceMotionQuery.matches ? 0 : Math.max(0, minimumTransitionMs - elapsed);
 
         window.setTimeout(() => {
             setTransitionVisible(false);
