@@ -71,6 +71,91 @@ section[id] {
     margin: 0 auto;
 }
 
+.page-transition {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: grid;
+    place-items: center;
+    width: 100vw;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    color: #ffffff;
+    background:
+        radial-gradient(circle at 20% 18%, rgba(208, 105, 43, 0.34), transparent 28%),
+        radial-gradient(circle at 78% 74%, rgba(255, 255, 255, 0.14), transparent 24%),
+        linear-gradient(135deg, var(--ink-strong) 0%, var(--brand-green) 58%, #10808f 100%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.42s ease, visibility 0.42s ease;
+}
+
+.page-transition::before {
+    content: "";
+    position: absolute;
+    inset: clamp(1rem, 2vw, 1.8rem);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: clamp(1rem, 2vw, 1.8rem);
+    pointer-events: none;
+}
+
+.page-transition__content {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: clamp(1rem, 2.6vw, 1.7rem);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+    transition: opacity 0.42s ease, transform 0.42s ease;
+}
+
+.page-transition__brand {
+    font: 800 clamp(2.8rem, 11vw, 8.5rem)/0.85 'Outfit', sans-serif;
+    letter-spacing: 0.14em;
+    text-indent: 0.14em;
+    text-transform: uppercase;
+    text-shadow: 0 24px 55px rgba(0, 0, 0, 0.2);
+}
+
+.page-transition__dots {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 1.1rem;
+}
+
+.page-transition__dots span {
+    width: 0.68rem;
+    height: 0.68rem;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.42;
+    animation: page-transition-dot 0.95s ease-in-out infinite;
+}
+
+.page-transition__dots span:nth-child(2) {
+    animation-delay: 0.14s;
+}
+
+.page-transition__dots span:nth-child(3) {
+    animation-delay: 0.28s;
+}
+
+.is-page-transitioning .page-transition {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.is-page-transitioning .page-transition__content {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
 .floating-enquire {
     position: fixed;
     right: -1.55rem;
@@ -2054,6 +2139,20 @@ section[id] {
     }
 }
 
+@keyframes page-transition-dot {
+    0%,
+    80%,
+    100% {
+        opacity: 0.42;
+        transform: translateY(0);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translateY(-0.42rem);
+    }
+}
+
 @media (max-width: 1120px) {
     .header-row {
         display: grid;
@@ -2412,8 +2511,16 @@ section[id] {
     .button,
     .site-nav a,
     .nav-meta a,
-    .nav-toggle-box span {
+    .nav-toggle-box span,
+    .page-transition,
+    .page-transition__content {
         transition: none;
+    }
+
+    .page-transition__dots span {
+        animation: none;
+        opacity: 1;
+        transform: none;
     }
 }
 
@@ -2921,6 +3028,21 @@ section[id] {
 }
 
 @media (max-width: 640px) {
+    .page-transition {
+        padding: 1.25rem;
+    }
+
+    .page-transition::before {
+        inset: 0.8rem;
+        border-radius: 1rem;
+    }
+
+    .page-transition__brand {
+        font-size: clamp(2.4rem, 19vw, 5rem);
+        letter-spacing: 0.1em;
+        text-indent: 0.1em;
+    }
+
     .se-header {
         padding: 0.9rem 1rem;
     }

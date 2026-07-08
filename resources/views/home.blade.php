@@ -82,6 +82,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('partials.page-transition-head')
     <title>Peak Experience | Creative Event Production in Kenya</title>
     <meta name="description" content="Peak Experience delivers conferences, launches, exhibitions, and live brand events with creative production, staging, and show-day precision across Kenya.">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
@@ -91,6 +92,7 @@
     <link rel="stylesheet" href="{{ asset('story-home.css') }}">
 </head>
 <body id="top">
+    @include('partials.page-transition')
     <div class="page-shell">
         <header class="site-header">
             <div class="wrap header-row">

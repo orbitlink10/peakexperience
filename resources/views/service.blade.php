@@ -31,6 +31,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('partials.page-transition-head')
     <title>{{ $service['title'] }} | Peak Experience</title>
     <meta name="description" content="{{ $service['text'] }}">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
@@ -40,6 +41,7 @@
     <link rel="stylesheet" href="{{ asset('story-home.css') }}">
 </head>
 <body id="top">
+    @include('partials.page-transition')
     <div class="page-shell">
         <header class="site-header">
             <div class="wrap header-row">

@@ -1,4 +1,158 @@
 (() => {
+    const storageKey = 'peak-page-transition-active';
+    const root = document.documentElement;
+    const transition = document.querySelector('[data-page-transition]');
+    const reduceMotionQuery = window.matchMedia
+        ? window.matchMedia('(prefers-reduced-motion: reduce)')
+        : { matches: false };
+    let navigationQueued = false;
+
+    const setTransitionVisible = (isVisible) => {
+        root.classList.toggle('is-page-transitioning', isVisible);
+
+        if (transition) {
+            transition.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
+        }
+    };
+
+    const hasStoredTransition = () => {
+        try {
+            return window.sessionStorage.getItem(storageKey) === '1';
+        } catch (error) {
+            return false;
+        }
+    };
+
+    const storeTransition = () => {
+        try {
+            window.sessionStorage.setItem(storageKey, '1');
+        } catch (error) {
+            return;
+        }
+    };
+
+    const clearStoredTransition = () => {
+        try {
+            window.sessionStorage.removeItem(storageKey);
+        } catch (error) {
+            return;
+        }
+    };
+
+    const hideAfterLoad = () => {
+        const delay = reduceMotionQuery.matches ? 0 : 140;
+
+        window.setTimeout(() => {
+            setTransitionVisible(false);
+            clearStoredTransition();
+            navigationQueued = false;
+        }, delay);
+    };
+
+    if (hasStoredTransition()) {
+        setTransitionVisible(true);
+
+        if (document.readyState === 'complete') {
+            hideAfterLoad();
+        } else {
+            window.addEventListener('load', hideAfterLoad, { once: true });
+        }
+    } else {
+        setTransitionVisible(false);
+    }
+
+    const shouldHandleLink = (link, event) => {
+        if (
+            event.defaultPrevented ||
+            event.button !== 0 ||
+            event.metaKey ||
+            event.ctrlKey ||
+            event.shiftKey ||
+            event.altKey
+        ) {
+            return false;
+        }
+
+        if (link.hasAttribute('download') || link.hasAttribute('data-no-transition')) {
+            return false;
+        }
+
+        const target = (link.getAttribute('target') || '').trim().toLowerCase();
+        if (target && target !== '_self') {
+            return false;
+        }
+
+        const rawHref = (link.getAttribute('href') || '').trim();
+        if (!rawHref || rawHref.charAt(0) === '#') {
+            return false;
+        }
+
+        let nextUrl;
+        try {
+            nextUrl = new URL(rawHref, window.location.href);
+        } catch (error) {
+            return false;
+        }
+
+        if (!['http:', 'https:'].includes(nextUrl.protocol)) {
+            return false;
+        }
+
+        const currentUrl = new URL(window.location.href);
+        if (nextUrl.origin !== currentUrl.origin || nextUrl.href === currentUrl.href) {
+            return false;
+        }
+
+        if (
+            nextUrl.pathname === currentUrl.pathname &&
+            nextUrl.search === currentUrl.search &&
+            nextUrl.hash
+        ) {
+            return false;
+        }
+
+        return nextUrl;
+    };
+
+    document.addEventListener('click', (event) => {
+        const target = event.target;
+        const link = target instanceof Element ? target.closest('a[href]') : null;
+
+        if (!link) {
+            return;
+        }
+
+        const nextUrl = shouldHandleLink(link, event);
+        if (!nextUrl) {
+            return;
+        }
+
+        event.preventDefault();
+
+        if (navigationQueued) {
+            return;
+        }
+
+        navigationQueued = true;
+        storeTransition();
+        setTransitionVisible(true);
+
+        const delay = reduceMotionQuery.matches ? 0 : 180;
+        window.setTimeout(() => {
+            window.location.assign(nextUrl.href);
+        }, delay);
+    });
+
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+            clearStoredTransition();
+            setTransitionVisible(false);
+            navigationQueued = false;
+        }
+    });
+})();
+
+(() => {
     const root = document.documentElement;
     const toggle = document.querySelector('[data-nav-toggle]');
     const panel = document.querySelector('[data-nav-panel]');

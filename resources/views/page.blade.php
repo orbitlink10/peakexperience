@@ -42,6 +42,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('partials.page-transition-head')
     <title>{{ $page['meta_title'] !== '' ? $page['meta_title'] : $page['title'] }}</title>
     @if ($page['meta_description'] !== '')
         <meta name="description" content="{{ $page['meta_description'] }}">
@@ -149,6 +150,7 @@
     </style>
 </head>
 <body id="top" class="story-page theme-se">
+    @include('partials.page-transition')
     <div class="page-shell">
         <header class="site-header">
             <div class="wrap header-row">
