@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <title>Peak Experience favicon</title>
-  <rect width="64" height="64" rx="10" fill="#ffffff"/>
-  <text
-    x="50%"
-    y="52%"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    fill="#111111"
-    font-family="Georgia, 'Times New Roman', serif"
-    font-size="42"
-  >S</text>
+  <rect width="64" height="64" rx="12" fill="#fffaf2"/>
+  <path fill="#df5b10" d="M7 12h22l12 13-17 7L7 12Z"/>
+  <path fill="#f28a00" d="M29 12h14l9 10-11 5-12-15Z"/>
+  <path fill="#d94205" d="M7 52h22l12-13-17-7L7 52Z"/>
+  <path fill="#e86f00" d="M24 32 41 25v14L24 32Z"/>
+  <path fill="#009aa6" d="M31 32h11v20L31 32Z"/>
+  <path fill="#00b5bd" d="M43 13h14v14H43V13Z"/>
+  <path fill="#f5a400" d="M43 37h14v15H43V37Z"/>
+  <path fill="#ffffff" d="M47 16h3v8h-3zM53 16h3v3h-3zM44 29h7v4h-7zM52 29h5v5h-5zM46 41h8v3h-8zM46 47h4v3h-4z"/>
+  <path fill="#111827" fill-opacity=".18" d="M43 13h3v39h-3zM54 13h3v39h-3zM43 25h14v3H43zM43 36h14v3H43z"/>
 </svg>

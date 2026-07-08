@@ -85,7 +85,7 @@
     @include('partials.page-transition-head')
     <title>Peak Experience | Creative Event Production in Kenya</title>
     <meta name="description" content="Peak Experience delivers conferences, launches, exhibitions, and live brand events with creative production, staging, and show-day precision across Kenya.">
-    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
