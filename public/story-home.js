@@ -1,75 +1,29 @@
 (() => {
-    const storageKey = 'peak-page-transition-active';
-    const minimumTransitionMs = 1000;
-    const root = document.documentElement;
+    const transitionDuration = 750;
+    const body = document.body;
     const transition = document.querySelector('[data-page-transition]');
     const reduceMotionQuery = window.matchMedia
         ? window.matchMedia('(prefers-reduced-motion: reduce)')
         : { matches: false };
     let navigationQueued = false;
 
-    const setTransitionVisible = (isVisible) => {
-        root.classList.toggle('is-page-transitioning', isVisible);
-
+    const setTransitionHidden = (isHidden) => {
         if (transition) {
-            transition.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
+            transition.setAttribute('aria-hidden', isHidden ? 'true' : 'false');
         }
     };
 
-    const hasStoredTransition = () => {
-        try {
-            return window.sessionStorage.getItem(storageKey) !== null;
-        } catch (error) {
-            return false;
-        }
+    const markLoaded = () => {
+        body.classList.add('loaded');
+        body.classList.remove('page-leaving');
+        setTransitionHidden(true);
     };
 
-    const storedTransitionStartedAt = () => {
-        try {
-            const value = Number(window.sessionStorage.getItem(storageKey));
-            return Number.isFinite(value) && value > 0 ? value : Date.now();
-        } catch (error) {
-            return Date.now();
-        }
-    };
-
-    const storeTransition = () => {
-        try {
-            window.sessionStorage.setItem(storageKey, String(Date.now()));
-        } catch (error) {
-            return;
-        }
-    };
-
-    const clearStoredTransition = () => {
-        try {
-            window.sessionStorage.removeItem(storageKey);
-        } catch (error) {
-            return;
-        }
-    };
-
-    const hideAfterLoad = () => {
-        const elapsed = Date.now() - storedTransitionStartedAt();
-        const delay = reduceMotionQuery.matches ? 0 : Math.max(0, minimumTransitionMs - elapsed);
-
-        window.setTimeout(() => {
-            setTransitionVisible(false);
-            clearStoredTransition();
-            navigationQueued = false;
-        }, delay);
-    };
-
-    if (hasStoredTransition()) {
-        setTransitionVisible(true);
-
-        if (document.readyState === 'complete') {
-            hideAfterLoad();
-        } else {
-            window.addEventListener('load', hideAfterLoad, { once: true });
-        }
+    setTransitionHidden(false);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', markLoaded, { once: true });
     } else {
-        setTransitionVisible(false);
+        markLoaded();
     }
 
     const shouldHandleLink = (link, event) => {
@@ -145,10 +99,10 @@
         }
 
         navigationQueued = true;
-        storeTransition();
-        setTransitionVisible(true);
+        setTransitionHidden(false);
+        body.classList.add('page-leaving');
 
-        const delay = reduceMotionQuery.matches ? 0 : 180;
+        const delay = reduceMotionQuery.matches ? 0 : transitionDuration;
         window.setTimeout(() => {
             window.location.assign(nextUrl.href);
         }, delay);
@@ -156,8 +110,7 @@
 
     window.addEventListener('pageshow', (event) => {
         if (event.persisted) {
-            clearStoredTransition();
-            setTransitionVisible(false);
+            markLoaded();
             navigationQueued = false;
         }
     });
